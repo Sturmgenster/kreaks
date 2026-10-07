@@ -68,10 +68,12 @@ const AdmZip = require('adm-zip');
   // 3) Schlüssel mit dem öffentlichen Spielschlüssel verpacken
   const openpgp = await import('openpgp');
   const pub = await openpgp.readKey({ armoredKey: fs.readFileSync(path.join(__dirname, 'game-public-key.asc'), 'utf8') });
-  const wrappedKey = await openpgp.encrypt({
-    message: await openpgp.createMessage({ text: key.toString('hex') }), encryptionKeys: pub,
+  // Binär (Base64, eine Zeile) statt ASCII-Armor – robust gegen veränderte Zeilenumbrüche
+  const wrappedBin = await openpgp.encrypt({
+    message: await openpgp.createMessage({ text: key.toString('hex') }), encryptionKeys: pub, format: 'binary',
     config: { preferredSymmetricAlgorithm: openpgp.enums.symmetric.aes256, preferredCompressionAlgorithm: openpgp.enums.compression.uncompressed, aeadProtect: false }
   });
+  const wrappedKey = Buffer.from(wrappedBin).toString('base64');
 
   const label = opt.label || '';
   const entry = {

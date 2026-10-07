@@ -125,14 +125,21 @@ grant execute on function public.my_status() to authenticated;
 -- Schlüssel einer Spielversion freigeben – nur für freigeschaltete Konten
 create or replace function public.unwrap_game_key(wrapped text)
 returns text language plpgsql stable security definer set search_path = public, private, extensions as $$
-declare pk text;
+declare pk text; kb bytea; wb bytea;
 begin
   if not exists (select 1 from public.profiles where id = auth.uid() and licensed) then
     raise exception 'KREAKS_NICHT_FREIGESCHALTET';
   end if;
-  select value into pk from private.secrets where name = 'game_private_key';
+  select value into pk from private.secrets where name = 'game_private_key_bin';
   if pk is null then raise exception 'KREAKS_KEIN_SPIELSCHLUESSEL'; end if;
-  return extensions.pgp_pub_decrypt(extensions.dearmor(wrapped), extensions.dearmor(pk));
+  -- Schlüssel liegen binär als Base64 vor (ohne ASCII-Armor, robust gegen Zeilenumbrüche)
+  kb := decode(regexp_replace(pk, '\s', '', 'g'), 'base64');
+  if wrapped like '-----BEGIN%' then
+    wb := extensions.dearmor(replace(wrapped, chr(13), ''));
+  else
+    wb := decode(regexp_replace(wrapped, '\s', '', 'g'), 'base64');
+  end if;
+  return extensions.pgp_pub_decrypt(wb, kb);
 end $$;
 grant execute on function public.unwrap_game_key(text) to authenticated;
 
@@ -185,5 +192,5 @@ update public.profiles set licensed = true, is_admin = true
  where id in (select id from auth.users where lower(email) = lower('%%ADMIN_EMAIL%%'));
 
 -- ---------- Privater Spielschlüssel (nur in der ausgefüllten Fassung) ----------
-insert into private.secrets (name, value) values ('game_private_key', '%%PRIVATE_KEY%%')
+insert into private.secrets (name, value) values ('game_private_key_bin', '%%PRIVATE_KEY_B64%%')
 on conflict (name) do update set value = excluded.value;
