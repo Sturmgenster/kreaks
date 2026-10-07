@@ -1,4 +1,4 @@
-# KREAKS – Quellcode des Spiels (Stand 0.0.74)
+# KREAKS – Quellcode des Spiels (Stand Beta-1.0 (0.0.75))
 
 - `game.js` + `parts/*.js` – Spielcode (Teile werden in Namensreihenfolge angehängt)
 - `head.html`, `tail.html` – HTML-Gerüst, Oberfläche und Styles
@@ -7,4 +7,4 @@
 - `gamefonts/` – Schriften für das Spielpaket
 - `tests/` – automatische Tests (Playwright)
 
-Musik und Sounds (`assets/music`, `assets/sfx`) stecken im Spielpaket `spiel/KREAKS-V74.zip` im Repository.
+Musik und Sounds (`assets/music`, `assets/sfx`) stecken im Spielpaket den Spielversionen im Repository.

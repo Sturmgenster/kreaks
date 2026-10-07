@@ -42,17 +42,28 @@ Der Launcher lädt diese Dateien direkt von `raw.githubusercontent.com`. Release
 
 ## 3. Neue Spielversion veröffentlichen
 
-```
-npm run release-game -- KREAKS-Spiel.zip V75 --notes "Neue Höhlen, bessere Boote"
-```
+Versionsnummern: Die ersten beiden Stellen und den Namen (z. B. „Beta-1.0“) legt Jonas fest, die dritte Stelle zählt bei jeder neuen Version hoch.
 
-1. Lege vorher die aktuelle `versions.json` aus dem Repository in den Ordner `dist-game`, damit die alten Einträge erhalten bleiben.
-2. Danach `dist-game/KREAKS-V75.zip` nach `spiel/` kopieren und `dist-game/versions.json` ins Hauptverzeichnis des Repositorys.
+```
+npm run release-game -- <Spielordner> 0.0.76 --label Beta-1.0 --notes "Was ist neu?"
+```
+1. Vorher die aktuelle `versions.json` aus dem Repository in den Ordner `dist-game` legen, damit die alten Einträge erhalten bleiben.
+2. Danach `dist-game/KREAKS-0.0.76.kreaks` nach `spiel/` kopieren und `dist-game/versions.json` ins Hauptverzeichnis des Repositorys.
 3. Committen und pushen.
 
-Optionen:
-- `--channel beta` für Beta-Versionen
-- `--news-title "…" --news-text "…"` für eine Nachricht auf der Startseite
+Jede Version wird **verschlüsselt**. Den Schlüssel bekommt der Launcher nur von der Datenbank, und nur für freigeschaltete Konten. Mit `--revoke "0.0.74"` nimmst du alte Versionen aus der Liste. Launcher löschen sie dann auch von der Festplatte.
+
+## 3b. Keys und Freischaltung (Datenbank)
+
+`supabase/update-2-keys.sql` richtet Folgendes ein:
+- Keys
+- Freischaltung
+- Admin-Rechte
+- die Schlüsselfreigabe
+
+Die öffentliche Fassung enthält nur Platzhalter. Die ausgefüllte Fassung mit dem privaten Spielschlüssel gehört **nie** ins Repository.
+
+Codes erstellst du im Launcher unter **Admin · Codes** oder mit `werkzeuge/KREAKS-Codes.html`.
 
 ## 4. Launcher bauen
 

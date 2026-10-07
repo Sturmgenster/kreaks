@@ -1,7 +1,7 @@
 {
   "name": "kreaks-launcher",
   "productName": "KREAKS Launcher",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Launcher für KREAKS",
   "main": "src/main.js",
   "author": "Jonas Tim Hoppe",
@@ -22,7 +22,8 @@
     "@fontsource/pixelify-sans": "^5.3.0",
     "@fontsource/silkscreen": "^5.3.0",
     "electron": "^33.0.0",
-    "electron-builder": "^25.1.0"
+    "electron-builder": "^25.1.0",
+    "openpgp": "^5.11.3"
   },
   "build": {
     "appId": "de.kreaks.launcher",

@@ -7,6 +7,20 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-play" viewBox="0 0 16 16"><path d="M4 2h2v1h2v1h2v1h2v1h1v4h-1v1h-2v1H8v1H6v1H4z"/></symbol>
+    <symbol id="i-box" viewBox="0 0 16 16"><path d="M2 3h12v3H2zM3 7h10v7H3zm3 2v1h4V9z"/></symbol>
+    <symbol id="i-user" viewBox="0 0 16 16"><path d="M6 1h4v1h1v4h-1v1H6V6H5V2h1zM3 9h10v1h1v5H2v-5h1z"/></symbol>
+    <symbol id="i-crown" viewBox="0 0 16 16"><path d="M1 4h2v2h1v1h1V5h2V3h2v2h2v2h1V6h1V4h2v9H1zm1 10h12v1H2z"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 16 16"><path d="M7 1h2v2h2V2h1v1h1v1h-1v2h2v2h-2v2h1v1h-1v1h-1v-1H9v2H7v-2H5v1H4v-1H3v-1h1V8H2V6h2V4H3V3h1V2h1v1h2zm0 5v3h2V6z"/></symbol>
+    <symbol id="i-key" viewBox="0 0 16 16"><path d="M3 4h4v1h1v1h7v2h-1v2h-2V8h-1v1H9V8H8v1H7v1H3V9H2V5h1zm1 2v2h2V6z"/></symbol>
+    <symbol id="i-cart" viewBox="0 0 16 16"><path d="M1 2h3v2h11v1h-1v3h-1v1H5v1h9v1H4v-1H3V4H1zm4 11h2v2H5zm6 0h2v2h-2z"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 16 16"><path d="M5 1h9v10h-2V3H5zM2 5h8v10H2zm2 2v6h4V7z"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 16 16"><path d="M6 1h4v2h4v2H2V3h4zM3 6h10v9H3zm2 2v5h2V8zm4 0v5h2V8z"/></symbol>
+  </defs>
+</svg>
+
 <header id="titlebar">
   <div class="tb-logo"><img src="../../assets/icon.png" alt=""><b>KREAKS</b><span>Launcher</span></div>
   <div class="tb-drag"></div>
@@ -24,10 +38,11 @@
   <div class="hero">
     <h1 class="logo">KREAKS</h1>
     <p class="tag">Eine Welt aus Pixeln – für dich und deine Freunde.</p>
+    <span class="chip" id="loginVer">Beta-1.0</span>
   </div>
 
   <div class="card notch" id="authCard">
-    <div class="demo" id="demoNote" hidden><b>Demo-Modus</b> Supabase ist noch nicht verbunden. Konten werden nur auf diesem PC gespeichert, und der Code erscheint hier statt per E-Mail.</div>
+    <div class="demo" id="demoNote" hidden><b>Demo-Modus</b> Konten werden nur auf diesem PC gespeichert, und der Code erscheint hier statt per E-Mail. Test-Key: KRKS-DEMO-TEST-2345</div>
 
     <div class="tabs" id="authTabs">
       <button type="button" data-auth="login" class="on">Anmelden</button>
@@ -35,24 +50,30 @@
     </div>
 
     <form id="fLogin" class="af" autocomplete="on">
-      <label>E-Mail<input name="email" type="email" autocomplete="email" required></label>
-      <label>Passwort<span class="pw"><input name="password" type="password" autocomplete="current-password" required><button type="button" class="eye" tabindex="-1" title="Passwort anzeigen"></button></span></label>
+      <label>E-Mail<input name="email" id="liMail" type="email" autocomplete="email" required></label>
+      <label>Passwort<span class="pw"><input name="password" id="liPw" type="password" autocomplete="current-password" required><button type="button" class="eye" tabindex="-1" title="Passwort anzeigen"></button></span></label>
       <button class="btn gold notch" type="submit">Anmelden</button>
       <button class="link" type="button" data-go="forgot">Passwort vergessen?</button>
     </form>
 
     <form id="fRegister" class="af" hidden autocomplete="on">
-      <label>Spielername <em id="nameState"></em><input name="username" maxlength="16" autocomplete="nickname" required placeholder="3–16 Zeichen: Buchstaben, Zahlen, _"></label>
-      <label>E-Mail<input name="email" type="email" autocomplete="email" required></label>
-      <label>Passwort<span class="pw"><input name="password" type="password" autocomplete="new-password" required placeholder="mindestens 8 Zeichen"><button type="button" class="eye" tabindex="-1" title="Passwort anzeigen"></button></span></label>
-      <label>Passwort wiederholen<input name="password2" type="password" autocomplete="new-password" required></label>
+      <label>Dein KREAKS-Key <em id="keyState"></em><input name="key" id="reKey" class="keyin" maxlength="19" autocomplete="off" spellcheck="false" required placeholder="KRKS-XXXX-XXXX-XXXX"></label>
+      <label>Spielername <em id="nameState"></em><input name="username" id="reName" maxlength="16" autocomplete="nickname" required placeholder="3–16 Zeichen: Buchstaben, Zahlen, _"></label>
+      <label>E-Mail<input name="email" id="reMail" type="email" autocomplete="email" required></label>
+      <div class="two">
+        <label>Passwort<span class="pw"><input name="password" id="rePw" type="password" autocomplete="new-password" required placeholder="mind. 8 Zeichen"><button type="button" class="eye" tabindex="-1" title="Passwort anzeigen"></button></span></label>
+        <label>Wiederholen<input name="password2" id="rePw2" type="password" autocomplete="new-password" required></label>
+      </div>
       <button class="btn gold notch" type="submit">Konto erstellen</button>
+      <button class="buyline" type="button" data-buy>
+        <svg class="ic"><use href="#i-cart"/></svg><span>Noch keinen Key? <b>KREAKS kaufen</b></span><em class="price"></em>
+      </button>
     </form>
 
     <form id="fCode" class="af" hidden>
       <h2>E-Mail bestätigen</h2>
       <p class="hint">Wir haben dir eine E-Mail an <b id="codeMail"></b> geschickt. Gib den Code daraus hier ein.</p>
-      <label>Bestätigungscode<input name="code" class="code" inputmode="numeric" autocomplete="one-time-code" maxlength="10" required placeholder="••••••"></label>
+      <label>Bestätigungscode<input name="code" id="coCode" class="code" inputmode="numeric" autocomplete="one-time-code" maxlength="10" required placeholder="••••••"></label>
       <button class="btn gold notch" type="submit">Bestätigen</button>
       <div class="row2">
         <button class="link" type="button" id="resendBtn">E-Mail erneut senden</button>
@@ -63,11 +84,11 @@
     <form id="fForgot" class="af" hidden>
       <h2>Passwort vergessen</h2>
       <p class="hint" id="forgotHint">Gib deine E-Mail ein. Wir schicken dir einen Code, mit dem du ein neues Passwort setzen kannst.</p>
-      <label>E-Mail<input name="email" type="email" autocomplete="email" required></label>
+      <label>E-Mail<input name="email" id="fgMail" type="email" autocomplete="email" required></label>
       <div id="forgotStep2" hidden>
-        <label>Code aus der E-Mail<input name="code" class="code" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="••••••"></label>
-        <label>Neues Passwort<input name="password" type="password" autocomplete="new-password" placeholder="mindestens 8 Zeichen"></label>
-        <label>Neues Passwort wiederholen<input name="password2" type="password" autocomplete="new-password"></label>
+        <label>Code aus der E-Mail<input name="code" id="fgCode" class="code" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="••••••"></label>
+        <label>Neues Passwort<input name="password" id="fgPw" type="password" autocomplete="new-password" placeholder="mindestens 8 Zeichen"></label>
+        <label>Neues Passwort wiederholen<input name="password2" id="fgPw2" type="password" autocomplete="new-password"></label>
       </div>
       <button class="btn gold notch" type="submit" id="forgotBtn">Code senden</button>
       <button class="link" type="button" data-go="login">Zurück zur Anmeldung</button>
@@ -79,82 +100,159 @@
 
 <!-- ====================== Hauptbildschirm ====================== -->
 <section id="scrMain" class="screen" hidden>
-  <nav id="nav">
-    <button data-tab="play" class="on">Spielen</button>
-    <button data-tab="versions">Versionen</button>
-    <button data-tab="settings">Einstellungen</button>
+  <aside id="side">
+    <div class="side-head">
+      <span class="side-logo">KREAKS</span>
+      <span class="chip small" id="sideVer">Beta-1.0</span>
+    </div>
+    <nav id="nav">
+      <button data-tab="play" class="on"><svg class="ic"><use href="#i-play"/></svg>Spielen</button>
+      <button data-tab="versions"><svg class="ic"><use href="#i-box"/></svg>Versionen</button>
+      <button data-tab="account"><svg class="ic"><use href="#i-user"/></svg>Konto<i class="dot" id="navAccDot" hidden></i></button>
+      <button data-tab="admin" id="navAdmin" hidden><svg class="ic"><use href="#i-crown"/></svg>Admin · Codes</button>
+      <button data-tab="settings"><svg class="ic"><use href="#i-gear"/></svg>Einstellungen</button>
+    </nav>
     <div class="sp"></div>
-    <div id="netState" class="net"></div>
-    <div class="accWrap">
-      <button id="accBtn" class="acc notch"><i id="accAv"></i><span id="accName"></span><svg viewBox="0 0 10 10"><path d="M2 3h6L5 7z"/></svg></button>
-      <div id="accMenu" class="menu notch" hidden>
-        <div class="who"><b id="accMenuName"></b><span id="accMenuMail"></span></div>
-        <button data-acc="settings">Konto &amp; Einstellungen</button>
-        <button data-acc="logout" class="danger">Abmelden</button>
-      </div>
+    <div class="profile notch">
+      <i class="av" id="accAv"></i>
+      <div class="pinfo"><b id="accName"></b><span id="accState" class="state"></span></div>
     </div>
-  </nav>
+    <div class="side-foot"><span id="netState" class="net"></span><span id="lVer"></span></div>
+  </aside>
 
-  <div id="tabPlay" class="tab">
-    <div class="hero2">
-      <h1 class="logo big">KREAKS</h1>
-      <p class="welcome" id="welcome"></p>
-    </div>
-    <article class="news card notch" id="news">
-      <span class="kicker" id="newsKicker">Neu</span>
-      <h3 id="newsTitle"></h3>
-      <p id="newsText"></p>
-    </article>
-    <div id="playBar">
-      <div class="verPick">
-        <span class="lbl">Version</span>
-        <button id="verBtn" class="verBtn notch"><span id="verCur"></span><svg viewBox="0 0 10 10"><path d="M2 6h6L5 2z"/></svg></button>
-        <div id="verList" class="menu up notch" hidden></div>
+  <main id="content">
+    <!-- Spielen -->
+    <div id="tabPlay" class="tab">
+      <div class="hero2">
+        <h1 class="logo big">KREAKS</h1>
+        <p class="welcome" id="welcome"></p>
       </div>
-      <button id="playBtn" class="play notch"><span class="fill" id="playFill"></span><span class="txt" id="playTxt">Spielen</span></button>
-      <div class="playInfo" id="playInfo"></div>
+      <article class="news card notch" id="news">
+        <span class="kicker" id="newsKicker">Neu</span>
+        <h3 id="newsTitle"></h3>
+        <p id="newsText"></p>
+      </article>
+      <div id="playBar">
+        <div class="verPick">
+          <span class="lbl">Version</span>
+          <button id="verBtn" class="verBtn notch"><span id="verCur"></span><svg viewBox="0 0 10 10"><path d="M2 6h6L5 2z"/></svg></button>
+          <div id="verList" class="menu up notch" hidden></div>
+        </div>
+        <button id="playBtn" class="play notch"><span class="fill" id="playFill"></span><span class="txt" id="playTxt">Spielen</span></button>
+        <div class="playInfo" id="playInfo"></div>
+      </div>
     </div>
-  </div>
 
-  <div id="tabVersions" class="tab page" hidden>
-    <div class="pageHead">
-      <h2>Spielversionen</h2>
-      <div class="sp"></div>
-      <label class="tog"><input type="checkbox" id="optBeta"><span></span>Beta-Versionen anzeigen</label>
-      <button class="btn small notch" id="importBtn">Zip importieren</button>
-      <button class="btn small notch" id="folderBtn">Ordner öffnen</button>
+    <!-- Versionen -->
+    <div id="tabVersions" class="tab page" hidden>
+      <div class="pageHead">
+        <h2>Spielversionen</h2>
+        <div class="sp"></div>
+        <label class="tog"><input type="checkbox" id="optBeta"><span></span>Beta-Versionen anzeigen</label>
+        <button class="btn small notch" id="importBtn">Zip importieren</button>
+        <button class="btn small notch" id="folderBtn">Ordner öffnen</button>
+      </div>
+      <p class="sub" id="verSub"></p>
+      <div id="verRows" class="rows"></div>
     </div>
-    <p class="sub" id="verSub"></p>
-    <div id="verRows" class="rows"></div>
-  </div>
 
-  <div id="tabSettings" class="tab page" hidden>
-    <div class="pageHead"><h2>Einstellungen</h2></div>
-    <div class="cols">
-      <div class="card notch box">
-        <h3>Spiel</h3>
-        <label class="tog"><input type="checkbox" id="optAuto"><span></span>Neueste Version automatisch herunterladen</label>
-        <label class="tog"><input type="checkbox" id="optFull"><span></span>Spiel im Vollbild starten (F11 wechselt)</label>
-        <label class="tog"><input type="checkbox" id="optKeep"><span></span>Launcher während des Spielens geöffnet lassen</label>
-      </div>
-      <div class="card notch box">
-        <h3>Konto</h3>
-        <dl class="kv">
-          <dt>Spielername</dt><dd id="setName"></dd>
-          <dt>E-Mail</dt><dd id="setMail"></dd>
-          <dt>Konto-ID</dt><dd><code id="setUuid"></code> <button class="link" id="copyUuid">kopieren</button></dd>
-        </dl>
-        <button class="btn small notch danger" data-acc="logout">Abmelden</button>
-      </div>
-      <div class="card notch box">
-        <h3>Launcher</h3>
-        <dl class="kv">
-          <dt>Version</dt><dd id="setLVer"></dd>
-          <dt>Updates</dt><dd id="setUpd">–</dd>
-        </dl>
+    <!-- Konto -->
+    <div id="tabAccount" class="tab page" hidden>
+      <div class="pageHead"><h2>Dein Konto</h2></div>
+      <div class="cols">
+        <div class="card notch box">
+          <h3>Konto</h3>
+          <dl class="kv">
+            <dt>Spielername</dt><dd id="setName"></dd>
+            <dt>E-Mail</dt><dd id="setMail"></dd>
+            <dt>Status</dt><dd id="setState"></dd>
+            <dt>Konto-ID</dt><dd><code id="setUuid"></code> <button class="link" id="copyUuid">kopieren</button></dd>
+          </dl>
+          <button class="btn small notch danger" data-acc="logout">Abmelden</button>
+        </div>
+
+        <div class="card notch box" id="unlockBox">
+          <h3><svg class="ic"><use href="#i-key"/></svg> Freischalten</h3>
+          <div id="unlockOpen">
+            <p class="txt">Mit einem Key schaltest du KREAKS für dieses Konto frei – für immer und auf jedem PC.</p>
+            <form id="fUnlock" class="af">
+              <input name="key" id="ulKey" class="keyin" maxlength="19" autocomplete="off" spellcheck="false" placeholder="KRKS-XXXX-XXXX-XXXX" required>
+              <button class="btn gold notch" type="submit">Key einlösen</button>
+            </form>
+            <p class="msg" id="unlockMsg"></p>
+          </div>
+          <div id="unlockDone" hidden>
+            <p class="okline">✓ KREAKS ist für dieses Konto freigeschaltet.</p>
+            <p class="txt">Viel Spaß! Updates lädt der Launcher automatisch.</p>
+          </div>
+        </div>
+
+        <div class="card notch box buy">
+          <h3><svg class="ic"><use href="#i-cart"/></svg> KREAKS kaufen</h3>
+          <div class="price big" id="buyPrice"></div>
+          <ul class="feat">
+            <li>Vollständiges Spiel mit allen Updates</li>
+            <li>Mehrspieler mit bis zu 6 Freunden</li>
+            <li>Bezahlen mit PayPal, Karte und mehr</li>
+          </ul>
+          <button class="btn gold notch" data-buy>Jetzt kaufen</button>
+          <p class="soon" id="buySoon" hidden>Der Kauf ist bald verfügbar. Bis dahin bekommst du Keys direkt von Jonas.</p>
+        </div>
       </div>
     </div>
-  </div>
+
+    <!-- Admin -->
+    <div id="tabAdmin" class="tab page" hidden>
+      <div class="pageHead"><h2>Codes verwalten</h2><div class="sp"></div><span class="sub" id="keyStats"></span></div>
+      <div class="cols admin">
+        <div class="card notch box">
+          <h3>Neuen Code erstellen</h3>
+          <p class="txt">Ein Code schaltet genau ein Konto frei. Gib ihn einem Freund – er trägt ihn beim Erstellen seines Kontos ein.</p>
+          <form id="fKeys" class="af">
+            <label>Für wen? (nur für dich)<input id="kNote" maxlength="60" placeholder="z. B. Max aus Discord"></label>
+            <div class="seg" id="kCount">
+              <button type="button" data-n="1" class="on">1 Code</button>
+              <button type="button" data-n="5">5 Codes</button>
+              <button type="button" data-n="10">10 Codes</button>
+            </div>
+            <button class="btn gold notch" type="submit" id="kMake">Code erstellen</button>
+          </form>
+          <div id="newKeys" class="newkeys"></div>
+        </div>
+        <div class="card notch box listbox">
+          <div class="lhead">
+            <h3>Alle Codes</h3>
+            <div class="seg small" id="kFilter">
+              <button type="button" data-f="all" class="on">Alle</button>
+              <button type="button" data-f="free">Frei</button>
+              <button type="button" data-f="used">Benutzt</button>
+            </div>
+          </div>
+          <div id="keyRows" class="krows"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Einstellungen -->
+    <div id="tabSettings" class="tab page" hidden>
+      <div class="pageHead"><h2>Einstellungen</h2></div>
+      <div class="cols">
+        <div class="card notch box">
+          <h3>Spiel</h3>
+          <label class="tog"><input type="checkbox" id="optAuto"><span></span>Neueste Version automatisch herunterladen</label>
+          <label class="tog"><input type="checkbox" id="optFull"><span></span>Spiel im Vollbild starten (F11 wechselt)</label>
+          <label class="tog"><input type="checkbox" id="optKeep"><span></span>Launcher während des Spielens geöffnet lassen</label>
+        </div>
+        <div class="card notch box">
+          <h3>Launcher</h3>
+          <dl class="kv">
+            <dt>Version</dt><dd id="setLVer"></dd>
+            <dt>Updates</dt><dd id="setUpd">–</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </main>
 </section>
 
 <div id="toast" class="notch" role="status"></div>

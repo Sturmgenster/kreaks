@@ -1,8 +1,8 @@
-version: 1.0.0
+version: 1.0.1
 files:
-  - url: KREAKS-Launcher-Setup-1.0.0.exe
-    sha512: negG1k/6bzugJMR1f++o7JW695jYqKAmgKj3/cGLwqGSwbhYBPJrFQReOPakiFXaCG9nEvnR1CJZLRASlwRZ9A==
-    size: 82461369
-path: KREAKS-Launcher-Setup-1.0.0.exe
-sha512: negG1k/6bzugJMR1f++o7JW695jYqKAmgKj3/cGLwqGSwbhYBPJrFQReOPakiFXaCG9nEvnR1CJZLRASlwRZ9A==
-releaseDate: '2026-10-07T19:27:09.476Z'
+  - url: KREAKS-Launcher-Setup-1.0.1.exe
+    sha512: v+De4iYszgVURa/mg05BITXqcSCs+e65BbHHj9xOFR6rjO1xjjrNy1oyO242sApCA15KPE00NaRiul2WyiVhaQ==
+    size: 82770512
+path: KREAKS-Launcher-Setup-1.0.1.exe
+sha512: v+De4iYszgVURa/mg05BITXqcSCs+e65BbHHj9xOFR6rjO1xjjrNy1oyO242sApCA15KPE00NaRiul2WyiVhaQ==
+releaseDate: '2026-10-07T21:41:21.195Z'

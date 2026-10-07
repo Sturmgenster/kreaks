@@ -1,23 +1,30 @@
 {
-  "latest": "0.0.74",
+  "latest": "0.0.75",
   "latestBeta": null,
   "versions": [
     {
-      "id": "0.0.74",
-      "name": "KREAKS 0.0.74",
+      "id": "0.0.75",
+      "label": "Beta-1.0",
+      "name": "KREAKS Beta-1.0",
       "channel": "release",
       "date": "2026-10-07",
-      "notes": "Mehrspieler Runde 3: Chat, geteilte Drops, Schlafen für alle, Host-Rechte und Welt-Passwort.",
-      "url": "https://raw.githubusercontent.com/Sturmgenster/kreaks/main/spiel/KREAKS-0.0.74.zip",
-      "size": 22283241,
-      "sha256": "2bfe5782d886a159f0b92f65b9521faf8a60d75f78cdba198947421c82e2432d"
+      "notes": "Erste Beta: Konto mit Key, Weltnamen statt Spielernamen, Spielstände pro Konto, Mehrspieler mit Chat, geteilten Drops und Host-Rechten.",
+      "url": "https://raw.githubusercontent.com/Sturmgenster/kreaks/main/spiel/KREAKS-0.0.75.kreaks",
+      "size": 22284323,
+      "sha256": "e73326d541b40467c0324cf4c2a51379c978b4ba05bc4718b03921987ab23704",
+      "encrypted": true,
+      "wrappedKey": "-----BEGIN PGP MESSAGE-----\n\nwcDMA0K3SMKDFFIYAQwAwdh0gdEf1eZrMqKAzhE21sFchQ3LmippqTTeiUX9\nsjBoELGWfv2K8PhcRDYeDvlzibFFPEnB7lwt768bqFDHgXsqr0vFYVfq3ff0\nQRhDG1zFfxqed/4xm2nEEdX8jGAcT7AUioJd8jiJex94U5sOTXE4fJmv/Efp\nquV+1nM48pIsrXmpIfFLvfTXSs2wb6Hf33ZZEc07PslEKyoAvkxdKazpImVU\nTvoFKesraikxL+xTkg12jAQdlvAoHJcPKa3EZY3wbjRx/wE7g9P6wX5xfAEe\npIbx46v0+1VsRSKbtseig6lGOiSJTQvJZjjiP5sayRheEhSlU+CyYJXByiVj\nV2/CL5TvEr6CKEg5yw5SN3OP4edFlIN4Hh4fb1v59kH572MxLVgGk2gZvVcQ\nJ6N+7s8K3S33hOAFAnBzfUDCWzHtLx7wO5POICKM2bsKhKKkGoCS9B+J7Pc0\nFRYAiNHl7UL9HDGJVgFkrG8QFHR2rhqC6J7KCuYTqBkoI1qHfwZW0nEBwMjT\nmEolUl/0ZK0elqr3fhl2mqCGegdspRQXkmGRaFU9EqZ2BzMDTP8cX7E6K+IH\nYxtsDINkgXvj/Eq8/U837dNbyJLevYMJjngWSxJ2611NNcHaAa72LE/9fWEN\n/Cj/n6TCNTJQO50aGmiytcWnrg==\n=9sHu\n-----END PGP MESSAGE-----\n"
     }
+  ],
+  "revoked": [
+    "V74",
+    "0.0.74"
   ],
   "news": [
     {
       "kicker": "Neuigkeiten",
-      "title": "Willkommen im KREAKS Launcher",
-      "text": "Melde dich mit deinem KREAKS-Konto an. Neue Spielversionen lädt der Launcher automatisch."
+      "title": "KREAKS Beta-1.0 ist da",
+      "text": "Ab jetzt brauchst du einen Key. Deine Welt bekommt einen eigenen Namen – dein Spielername ist dein Kontoname."
     }
   ]
 }

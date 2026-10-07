@@ -4,7 +4,7 @@ const on = (ch) => (fn) => { const h = (_e, d) => fn(d); ipcRenderer.on(ch, h); 
 contextBridge.exposeInMainWorld('launcher', {
   state: () => ipcRenderer.invoke('state'),
   manifest: () => ipcRenderer.invoke('manifest'),
-  install: (v) => ipcRenderer.invoke('install', v),
+  install: (v, gameKey) => ipcRenderer.invoke('install', v, gameKey),
   remove: (id) => ipcRenderer.invoke('remove', id),
   importZip: () => ipcRenderer.invoke('import'),
   setSettings: (p) => ipcRenderer.invoke('settings', p),

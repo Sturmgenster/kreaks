@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KREAKS Codes</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Pixelify+Sans:wght@400;500;700&display=swap">
+<style>
+/* Ein Werkzeug: anmelden (Admin), Code erzeugen, kopieren. Bewusst nur dunkel wie das Spiel. */
+:root{--night:#0b110d;--panel:#15201a;--panel2:#1f2f24;--edge:#36503d;--edgeDark:#060a07;--ink:#e9efe3;--muted:#93a996;--gold:#f2cf6b;--goldDeep:#a8762e;--goldInk:#2b1a08;--ok:#8fd16a;--bad:#e07a5f;--sky:#9fb6ff;
+  --f-title:'Silkscreen','Courier New',monospace;--f-ui:'Pixelify Sans','Trebuchet MS',sans-serif;--f-mono:Consolas,'Cascadia Mono',ui-monospace,monospace;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--night);color:var(--ink);font:17px/1.45 var(--f-ui);padding-inline:16px;padding-block:28px 48px}
+.wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+.notch{clip-path:polygon(6px 0,calc(100% - 6px) 0,calc(100% - 6px) 3px,calc(100% - 3px) 3px,calc(100% - 3px) 6px,100% 6px,100% calc(100% - 6px),calc(100% - 3px) calc(100% - 6px),calc(100% - 3px) calc(100% - 3px),calc(100% - 6px) calc(100% - 3px),calc(100% - 6px) 100%,6px 100%,6px calc(100% - 3px),3px calc(100% - 3px),3px calc(100% - 6px),0 calc(100% - 6px),0 6px,3px 6px,3px 3px,6px 3px)}
+h1{margin:0;font:700 clamp(36px,8vw,52px)/1 var(--f-title);color:var(--gold);letter-spacing:.04em;text-shadow:0 4px 0 var(--goldDeep),0 8px 0 #3b220f}
+.sub{margin:10px 0 0;color:var(--muted)}
+.card{background:var(--panel);box-shadow:inset 0 -4px 0 var(--edgeDark),inset 0 3px 0 var(--edge);padding:18px 20px 20px;display:flex;flex-direction:column;gap:12px;min-width:0}
+h2{margin:0;font:700 15px var(--f-title);letter-spacing:.06em;color:#c3e6a0}
+label{display:flex;flex-direction:column;gap:5px;font-size:14px;color:var(--muted)}
+input{font:inherit;background:var(--night);border:0;color:var(--ink);padding:10px 12px;box-shadow:inset 0 3px 0 var(--edgeDark),inset 0 -2px 0 var(--edge);outline:none;width:100%}
+input:focus{box-shadow:inset 0 3px 0 var(--edgeDark),inset 0 -2px 0 var(--gold)}
+button{font:inherit;cursor:pointer;color:inherit}
+.btn{border:0;padding:11px 18px 13px;background:var(--panel2);box-shadow:inset 0 -4px 0 var(--edgeDark),inset 0 3px 0 var(--edge)}
+.btn.gold{background:var(--gold);color:var(--goldInk);font-weight:700;box-shadow:inset 0 -4px 0 var(--goldDeep),inset 0 3px 0 #fff1c1}
+.btn.big{font-size:22px;padding:16px 20px 18px}
+.btn.small{padding:5px 10px 7px;font-size:14px}
+.btn:disabled{opacity:.55;cursor:default}
+.btn:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.seg{display:flex;gap:4px;background:var(--edgeDark);padding:3px}
+.seg button{border:0;background:none;padding:6px 12px;color:var(--muted)}
+.seg button.on{background:var(--panel2);color:var(--gold)}
+.msg{margin:0;font-size:15px;min-height:1.2em}.msg.err{color:var(--bad)}.msg.ok{color:var(--ok)}
+.fresh{display:flex;flex-direction:column;gap:6px}
+.nk{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--night);box-shadow:inset 0 0 0 1px rgba(242,207,107,.4)}
+.nk code{flex:1;min-width:0;font:600 20px var(--f-mono);letter-spacing:.06em;color:var(--gold);user-select:all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.list{display:flex;flex-direction:column;gap:4px}
+.k{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;gap:10px;align-items:center;padding:7px 10px;background:rgba(11,17,13,.8)}
+.k code{font:14px var(--f-mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.k .m{font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.k .free{color:var(--ok)}.k .used{color:var(--sky)}
+.k.u code{color:var(--muted)}
+.stats{font-size:14px;color:var(--muted)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+[hidden]{display:none!important}
+@media (max-width:520px){.k{grid-template-columns:1fr auto}.k .m{grid-column:1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>KREAKS</h1>
+    <p class="sub">Codes für deine Freunde. Ein Code schaltet genau ein Konto frei.</p>
+  </header>
+
+  <section class="card notch" id="loginBox">
+    <h2>Als Admin anmelden</h2>
+    <form id="fLogin" class="row" style="flex-direction:column;align-items:stretch">
+      <label>E-Mail<input id="mail" type="email" autocomplete="email" required></label>
+      <label>Passwort<input id="pw" type="password" autocomplete="current-password" required></label>
+      <button class="btn gold notch" type="submit">Anmelden</button>
+    </form>
+    <p class="msg" id="loginMsg"></p>
+  </section>
+
+  <section class="card notch" id="makeBox" hidden>
+    <div class="top"><h2>Neuer Code</h2><span class="stats" id="who"></span></div>
+    <label>Für wen? (nur für dich)<input id="note" maxlength="60" placeholder="z. B. Max aus Discord"></label>
+    <div class="row">
+      <div class="seg" id="count"><button type="button" data-n="1" class="on">1</button><button type="button" data-n="5">5</button><button type="button" data-n="10">10</button></div>
+      <span class="stats">Codes auf einmal</span>
+    </div>
+    <button class="btn gold big notch" id="make">Code erstellen</button>
+    <p class="msg" id="makeMsg"></p>
+    <div class="fresh" id="fresh"></div>
+  </section>
+
+  <section class="card notch" id="listBox" hidden>
+    <div class="top"><h2>Alle Codes</h2><span class="stats" id="stats"></span></div>
+    <div class="list" id="list"></div>
+    <button class="btn small notch" id="logout" style="align-self:flex-start">Abmelden</button>
+  </section>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+const SB_URL='https://hniqsjdcbspabbimnwqt.supabase.co', SB_KEY='sb_publishable_FlopyldpKBhm4YqNmU0tIw_lZysbX1S';
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+const sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{storageKey:'kreaks-codes-tool'}});
+let n=1;
+async function copy(t,btn){try{await navigator.clipboard.writeText(t);if(btn){const o=btn.textContent;btn.textContent='Kopiert ✓';setTimeout(()=>btn.textContent=o,1400);}}catch{const r=document.createRange();const el=btn&&btn.previousElementSibling;if(el){r.selectNodeContents(el);getSelection().removeAllRanges();getSelection().addRange(r);}}}
+function err(e){const m=String(e&&e.message||e);if(/Invalid login/i.test(m))return'E-Mail oder Passwort ist falsch.';if(/Admin/i.test(m))return'Dieses Konto hat keine Admin-Rechte.';if(/fetch|network/i.test(m))return'Keine Verbindung.';return m;}
+async function show(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session){$('loginBox').hidden=false;$('makeBox').hidden=$('listBox').hidden=true;return;}
+  const {data:st,error}=await sb.rpc('my_status');
+  if(error||!st||!st.is_admin){$('loginMsg').textContent='Dieses Konto hat keine Admin-Rechte.';$('loginMsg').className='msg err';await sb.auth.signOut();return show();}
+  $('loginBox').hidden=true;$('makeBox').hidden=$('listBox').hidden=false;$('who').textContent='Angemeldet als '+st.username;
+  load();
+}
+async function load(){
+  const {data,error}=await sb.rpc('admin_list_keys');if(error){$('makeMsg').textContent=err(error);$('makeMsg').className='msg err';return;}
+  const used=data.filter(k=>k.used_by_name||k.used_at).length;$('stats').textContent=`${data.length} · ${data.length-used} frei · ${used} benutzt`;
+  $('list').innerHTML=data.map(k=>{const u=!!(k.used_by_name||k.used_at),d=new Date(u?k.used_at:k.created_at).toLocaleDateString('de-DE');
+    return `<div class="k notch ${u?'u':''}"><code>${esc(k.key)}</code><span class="m">${u?`<span class="used">benutzt von ${esc(k.used_by_name||'gelöschtem Konto')}</span>`:'<span class="free">frei</span>'} · ${d}${k.note?' · '+esc(k.note):''}</span><button class="btn small notch" data-c="${esc(k.key)}">Kopieren</button></div>`;}).join('')||'<p class="stats">Noch keine Codes.</p>';
+}
+$('fLogin').onsubmit=async e=>{e.preventDefault();$('loginMsg').textContent='';const {error}=await sb.auth.signInWithPassword({email:$('mail').value.trim(),password:$('pw').value});if(error){$('loginMsg').textContent=err(error);$('loginMsg').className='msg err';return;}$('pw').value='';show();};
+document.querySelectorAll('#count button').forEach(b=>b.onclick=()=>{n=+b.dataset.n;document.querySelectorAll('#count button').forEach(x=>x.classList.toggle('on',x===b));$('make').textContent=n===1?'Code erstellen':n+' Codes erstellen';});
+$('make').onclick=async()=>{const b=$('make');b.disabled=true;$('makeMsg').textContent='';
+  const {data,error}=await sb.rpc('admin_create_keys',{anzahl:n,notiz:$('note').value.trim()||null});b.disabled=false;
+  if(error){$('makeMsg').textContent=err(error);$('makeMsg').className='msg err';return;}
+  const keys=data.map(r=>typeof r==='string'?r:r.admin_create_keys);
+  $('fresh').innerHTML=keys.map(k=>`<div class="nk notch"><code>${esc(k)}</code><button class="btn gold small notch" data-c="${esc(k)}">Kopieren</button></div>`).join('');
+  if(keys.length===1){await copy(keys[0]);$('makeMsg').textContent='Erstellt und kopiert – schick ihn deinem Freund.';}else $('makeMsg').textContent=keys.length+' Codes erstellt.';
+  $('makeMsg').className='msg ok';load();};
+document.addEventListener('click',e=>{const b=e.target.closest('[data-c]');if(b)copy(b.dataset.c,b);});
+$('logout').onclick=async()=>{await sb.auth.signOut();show();};
+show();
+</script>
+</body>
+</html>

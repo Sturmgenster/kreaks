@@ -4,7 +4,7 @@ Ein 3D-Open-World-Spiel im Pixel-Stil – allein oder mit bis zu 6 Freunden.
 
 ## Herunterladen
 
-**[KREAKS Launcher für Windows herunterladen](https://github.com/Sturmgenster/kreaks/raw/main/launcher-update/KREAKS-Launcher-Setup-1.0.0.exe)**
+**[KREAKS Launcher für Windows herunterladen](https://github.com/Sturmgenster/kreaks/raw/main/launcher-update/KREAKS-Launcher-Setup-1.0.1.exe)**
 
 1. Installer starten. Windows zeigt eventuell „Der Computer wurde durch Windows geschützt“: auf **Weitere Informationen → Trotzdem ausführen** klicken.
 2. Im Launcher ein Konto erstellen und den Code aus der E-Mail eingeben.

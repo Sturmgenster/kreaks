@@ -13,9 +13,6 @@ const VER_DIR = path.join(DATA, 'versions');
 const TMP_DIR = path.join(DATA, 'tmp');
 const SETTINGS_FILE = path.join(DATA, 'settings.json');
 const MANIFEST_CACHE = path.join(DATA, 'versions-cache.json');
-const BUNDLED_DIR = app.isPackaged
-  ? path.join(process.resourcesPath, 'bundled-game')
-  : path.join(__dirname, '..', 'assets', 'bundled-game');
 fs.mkdirSync(VER_DIR, { recursive: true });
 // Zum Testen kann die Versionsliste per Umgebungsvariable umgeleitet werden (nur in der Entwicklerversion)
 const DEV = !app.isPackaged;
@@ -38,16 +35,6 @@ function installed() {
     out.push(Object.assign({ id, name: id }, readJSON(path.join(dir, 'kreaks-version.json'), {})));
   }
   return out;
-}
-
-// Mitgelieferte Version beim ersten Start einrichten
-function ensureBundled() {
-  const b = CONFIG.BUNDLED_VERSION;
-  if (!b || !fs.existsSync(path.join(BUNDLED_DIR, 'index.html'))) return;
-  const dst = verPath(b.id);
-  if (fs.existsSync(path.join(dst, 'index.html'))) return;
-  fs.cpSync(BUNDLED_DIR, dst, { recursive: true });
-  writeJSON(path.join(dst, 'kreaks-version.json'), Object.assign({}, b, { installedAt: Date.now(), bundled: true }));
 }
 
 // ---------- Spiel-Protokoll ----------
@@ -95,10 +82,31 @@ async function fetchManifest() {
     const data = await r.json();
     if (!data || !Array.isArray(data.versions)) throw new Error('Ungültige Versionsliste');
     writeJSON(MANIFEST_CACHE, data);
+    removeRevoked(data);
     return { ok: true, data };
   } catch (e) {
     return { ok: false, offline: true, error: String(e.message || e), data: readJSON(MANIFEST_CACHE, null) };
   }
+}
+
+// Zurückgezogene Versionen (z. B. alte, unverschlüsselte) von der Festplatte löschen
+function removeRevoked(data) {
+  for (const id of (data && Array.isArray(data.revoked)) ? data.revoked : []) {
+    try { const dir = verPath(id); if (gameWin && gameDir === dir) continue; fs.rmSync(dir, { recursive: true, force: true }); } catch { /* ungültige ID */ }
+  }
+}
+
+// ---------- Verschlüsselte Spielversionen ----------
+// Aufbau einer .kreaks-Datei: "KRKS" | Version (1 Byte) | IV (12) | Tag (16) | AES-256-GCM-Daten (= Zip)
+function decryptGame(file, keyHex) {
+  const buf = fs.readFileSync(file);
+  if (buf.length < 33 || buf.toString('latin1', 0, 4) !== 'KRKS' || buf[4] !== 1) throw new Error('Unbekanntes Dateiformat');
+  if (!/^[0-9a-f]{64}$/i.test(keyHex || '')) throw new Error('Kein gültiger Spielschlüssel');
+  const iv = buf.subarray(5, 17), tag = buf.subarray(17, 33), data = buf.subarray(33);
+  const d = crypto.createDecipheriv('aes-256-gcm', Buffer.from(keyHex, 'hex'), iv);
+  d.setAuthTag(tag);
+  try { return Buffer.concat([d.update(data), d.final()]); }
+  catch { throw new Error('Die Spielversion konnte nicht entschlüsselt werden'); }
 }
 
 // ---------- Herunterladen & Installieren ----------
@@ -152,7 +160,7 @@ function installFromZip(zipFile, meta) {
   } finally { fs.rmSync(work, { recursive: true, force: true }); }
 }
 
-async function installVersion(v) {
+async function installVersion(v, gameKey) {
   if (!v || !SAFE_ID.test(v.id) || !URL_OK.test(v.url || '')) throw new Error('Ungültige Version');
   if (busy.has(v.id)) return;
   busy.add(v.id);
@@ -163,7 +171,8 @@ async function installVersion(v) {
     const sha = await download(v.url, zipFile, (got, total) => send('install-progress', { id: v.id, phase: 'download', got, total: total || v.size || 0 }));
     if (v.sha256 && sha !== v.sha256.toLowerCase()) throw new Error('Die heruntergeladene Datei ist beschädigt (Prüfsumme stimmt nicht)');
     send('install-progress', { id: v.id, phase: 'extract' });
-    const { url, sha256, size, ...meta } = v;
+    const { url, sha256, size, wrappedKey, ...meta } = v;
+    if (v.encrypted) fs.writeFileSync(zipFile, decryptGame(zipFile, gameKey));
     installFromZip(zipFile, meta);
     send('install-progress', { id: v.id, phase: 'done' });
   } catch (e) {
@@ -175,6 +184,7 @@ async function installVersion(v) {
 // ---------- Spiel starten ----------
 function launchGame(id, account) {
   if (gameWin && !gameWin.isDestroyed()) { gameWin.focus(); return; }
+  if (!account || !account.uuid || !account.licensed) throw new Error('Dein Konto ist noch nicht freigeschaltet');
   const dir = verPath(id);
   if (!fs.existsSync(path.join(dir, 'index.html'))) throw new Error('Diese Version ist nicht installiert');
   gameDir = dir; gameAccount = account || null;
@@ -201,14 +211,14 @@ function launchGame(id, account) {
 }
 
 // ---------- IPC ----------
-function demoMode() { return /DEIN-PROJEKT|DEIN-ANON-KEY/.test(CONFIG.SUPABASE_URL + CONFIG.SUPABASE_ANON_KEY); }
+function demoMode() { return (DEV && process.env.KREAKS_DEMO === '1') || /DEIN-PROJEKT|DEIN-ANON-KEY/.test(CONFIG.SUPABASE_URL + CONFIG.SUPABASE_ANON_KEY); }
 ipcMain.handle('state', () => ({
   settings, installed: installed(), appVersion: app.getVersion(), demo: demoMode(),
-  supabase: { url: CONFIG.SUPABASE_URL, key: CONFIG.SUPABASE_ANON_KEY }, bundled: CONFIG.BUNDLED_VERSION,
+  supabase: { url: CONFIG.SUPABASE_URL, key: CONFIG.SUPABASE_ANON_KEY }, shopUrl: CONFIG.SHOP_URL || '', price: CONFIG.PRICE || '',
   gameRunning: !!(gameWin && !gameWin.isDestroyed())
 }));
 ipcMain.handle('manifest', () => fetchManifest());
-ipcMain.handle('install', async (_e, v) => { await installVersion(v); return installed(); });
+ipcMain.handle('install', async (_e, v, gameKey) => { await installVersion(v, gameKey); return installed(); });
 ipcMain.handle('remove', (_e, id) => {
   if (gameWin && gameDir === verPath(id)) throw new Error('Diese Version läuft gerade');
   fs.rmSync(verPath(id), { recursive: true, force: true }); return installed();
@@ -249,7 +259,6 @@ ipcMain.handle('updater:install', () => { if (autoUpdater) autoUpdater.quitAndIn
 if (!app.requestSingleInstanceLock()) app.quit();
 app.on('second-instance', () => { if (win) { if (win.isMinimized()) win.restore(); win.show(); win.focus(); } });
 app.whenReady().then(() => {
-  try { ensureBundled(); } catch (e) { console.error('Mitgelieferte Version', e); }
   setupProtocol();
   createWindow();
   win.webContents.once('did-finish-load', setupUpdater);

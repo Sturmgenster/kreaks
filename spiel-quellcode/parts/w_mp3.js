@@ -11,7 +11,7 @@
    10 Mitfahren im Boot eines anderen. 11 Händler haben bei allen dieselbe Ware.
    12 Host: Spieler rauswerfen, sperren, Passwort.
    ========================================================= */
-let GAME_VER='V74';
+let GAME_VER='0.0.75';
 // ---------- 3 · Version ----------
 {const s2=mpSend;mpSend=function(m,to){if(m&&(m.t==='hi'||m.t==='world'))m.ver=GAME_VER;if(m&&m.t==='hi'&&MP.pwHash)m.pw=MP.pwHash;if(m&&m.t==='pose'){m.cv=caveCur&&P.x>CAVE_X0-400?caveCur.i:-1;if(MP.passenger)m.pas=MP.passenger.d.id;}return s2(m,to);};}
 // ---------- 4 · TURN ----------

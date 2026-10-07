@@ -8662,12 +8662,12 @@ document.getElementById('creator').addEventListener('click',e=>{const b=e.target
   if(b.dataset.race){cc.race=b.dataset.race;renderCreator();}else if(b.dataset.sex){cc.sex=b.dataset.sex;renderCreator();}else if(b.dataset.age){cc.age=b.dataset.age;renderCreator();}
   else if(b.dataset.opt){const o=charOptions(cc).find(o=>o.key===b.dataset.opt),i=o.vals.findIndex(v=>v[0]===cc[o.key]),n=o.vals.length;cc[o.key]=o.vals[(i+(+b.dataset.d)+n)%n][0];renderCreator();}
   else if(b.id==='ccRandom')randomChar();else if(b.id==='ccBack'){closeCreator();openMenu();}
-  else if(b.id==='ccNext'){show('ccStep1',false);show('ccStep2',true);const inp=document.getElementById('ccName');inp.value=cc.name||'';inp.focus();inp.select();}
+  else if(b.id==='ccNext'){show('ccStep1',false);show('ccStep2',true);const inp=document.getElementById('ccName');inp.value=cc.world||'';inp.focus();inp.select();}
   else if(b.id==='ccBack2'){show('ccStep2',false);show('ccStep1',true);}
   else if(b.id==='ccStart')finishCreator();});
 document.getElementById('ccName').addEventListener('keydown',e=>{e.stopPropagation();if(e.key==='Enter')finishCreator();});
-function finishCreator(){const inp=document.getElementById('ccName'),n=inp.value.trim().replace(/\s+/g,' ').slice(0,16);
-  if(!n){document.getElementById('ccNameErr').hidden=false;inp.focus();return;}cc.name=n;const ch=JSON.parse(JSON.stringify(cc));if(document.getElementById('ccHard').checked)ch.hardcore=true;else if(document.getElementById('ccCheats').checked)ch.cheats=true;closeCreator();startGame(true,ch);}
+function finishCreator(){const inp=document.getElementById('ccName'),n=inp.value.trim().replace(/\s+/g,' ').slice(0,24);
+  if(!n){document.getElementById('ccNameErr').hidden=false;inp.focus();return;}cc.world=n;cc.name=(window.KREAKS_ACCOUNT&&window.KREAKS_ACCOUNT.name)||cc.name||'Kreak';const ch=JSON.parse(JSON.stringify(cc));if(document.getElementById('ccHard').checked)ch.hardcore=true;else if(document.getElementById('ccCheats').checked)ch.cheats=true;closeCreator();startGame(true,ch);}
 
 const animals=[];let animalMesh,animalMat;
 function animalSprites(list){for(const[t,vs]of[['cow',[0,1]],['horse',[0,1,2]],['donkey',[0]]])for(const v of vs)for(let f=0;f<3;f++)list.push(['an_'+t+v+'_'+f,drawFarm(t,f,v,22,false)]);
@@ -8736,7 +8736,7 @@ const SLOT_KEY=n=>'kreaks_slot_'+n,LAST_KEY='kreaks_last_slot';let curSlot=1;
 const anySave=()=>[1,2,3].some(n=>!!store.get(SLOT_KEY(n)));
 let hasSave=anySave();
 function saveGame(){if(state==='menu'||state==='loading'||(state==='dead'&&FLAGS.hardcore))return;syncPersist();
-  hasSave=store.set(SLOT_KEY(curSlot),{v:6,meta:{name:P.char&&P.char.name,race:P.char&&P.char.race,level:(FLAGS.level||0)+1,day:(FLAGS.day||0)+1,hc:!!FLAGS.hardcore,cheats:!!FLAGS.cheats,t:Date.now()},char:P.char,equip,stats:P.stats,quests:Object.fromEntries(Object.entries(QUESTS).map(([k,q])=>[k,q.state])),flags:FLAGS,p:[P.x,P.y,P.z],yaw:P.yaw,pitch:P.pitch,inv,sel,taken:pickups.map((p,i)=>p.active?-1:i).filter(i=>i>=0)})||hasSave;}
+  hasSave=store.set(SLOT_KEY(curSlot),{v:6,meta:{name:P.char&&P.char.name,world:P.char&&P.char.world,race:P.char&&P.char.race,level:(FLAGS.level||0)+1,day:(FLAGS.day||0)+1,hc:!!FLAGS.hardcore,cheats:!!FLAGS.cheats,t:Date.now()},char:P.char,equip,stats:P.stats,quests:Object.fromEntries(Object.entries(QUESTS).map(([k,q])=>[k,q.state])),flags:FLAGS,p:[P.x,P.y,P.z],yaw:P.yaw,pitch:P.pitch,inv,sel,taken:pickups.map((p,i)=>p.active?-1:i).filter(i=>i>=0)})||hasSave;}
 function loadGame(){const s=store.get(SLOT_KEY(curSlot));if(!s)return false;resetPlayer();
   [P.x,P.y,P.z]=s.p;P.yaw=s.yaw;P.pitch=s.pitch;inv=(s.inv||[]).slice(0,INV_N);while(inv.length<INV_N)inv.push(null);
   inv=inv.map(x=>x&&ITEMS[x.id]?x:null);sel=s.sel|0;pickups.forEach(p=>p.active=true);
@@ -8812,7 +8812,7 @@ function closeSlots(){show('slots',false);}
 const RACE_N={human:'Mensch',dwarf:'Zwerg',elf:'Elf',orc:'Orc',frog:'Froschmensch',kobold:'Kobold',dragon:'Drachenmensch'};
 function renderSlots(){const L=$('slotList');L.innerHTML='';for(const n of[1,2,3]){const I=slotInfo(n),b=document.createElement('button');b.className='sslot';
     if(I){const c=I.s.char||defaultChar(),pic=portraitOf(c).toDataURL(),d=I.m.t?new Date(I.m.t):null;
-      b.innerHTML=`<span class="num">${n}</span><img src="${pic}" alt=""><span><b>${I.m.name||'Unbenannt'}</b>${I.m.hc?'<span class="hc">HARDCORE</span>':''}<small>${RACE_N[I.m.race]||''} · Level ${I.m.level} · Tag ${I.m.day}${n===curSlot&&slotMode==='save'?' · aktueller Slot':''}</small>${d?`<small>Gespeichert ${d.toLocaleDateString('de-DE')} ${d.toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})}</small>`:''}</span>`;}
+      b.innerHTML=`<span class="num">${n}</span><img src="${pic}" alt=""><span><b>${esc(I.m.world||(I.m.name?'Welt von '+I.m.name:'Unbenannt'))}</b>${I.m.hc?'<span class="hc">HARDCORE</span>':''}<small>${RACE_N[I.m.race]||''} · Level ${I.m.level} · Tag ${I.m.day}${n===curSlot&&slotMode==='save'?' · aktueller Slot':''}</small>${d?`<small>Gespeichert ${d.toLocaleDateString('de-DE')} ${d.toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})}</small>`:''}</span>`;}
     else{b.innerHTML=`<span class="num">${n}</span><span><b>Leerer Slot</b><small>${slotMode==='load'?'Hier ist noch kein Spielstand.':'Frei'}</small></span>`;if(slotMode==='load')b.disabled=true;}
     b.onclick=()=>{Snd.click();slotClickN(n,!!I);};L.appendChild(b);}}
 function slotClickN(n,used){
