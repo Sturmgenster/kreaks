@@ -1,0 +1,23 @@
+{
+  "latest": "V74",
+  "latestBeta": null,
+  "versions": [
+    {
+      "id": "V74",
+      "name": "KREAKS V74",
+      "channel": "release",
+      "date": "2026-10-07",
+      "notes": "Mehrspieler Runde 3: Chat, geteilte Drops, Schlafen für alle, Host-Rechte und Welt-Passwort.",
+      "url": "https://raw.githubusercontent.com/Sturmgenster/kreaks/main/spiel/KREAKS-V74.zip",
+      "size": 22283241,
+      "sha256": "2bfe5782d886a159f0b92f65b9521faf8a60d75f78cdba198947421c82e2432d"
+    }
+  ],
+  "news": [
+    {
+      "kicker": "Neuigkeiten",
+      "title": "Willkommen im KREAKS Launcher",
+      "text": "Melde dich mit deinem KREAKS-Konto an. Neue Spielversionen lädt der Launcher automatisch."
+    }
+  ]
+}
