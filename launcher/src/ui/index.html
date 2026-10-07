@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src https: wss:">
+<title>KREAKS Launcher</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header id="titlebar">
+  <div class="tb-logo"><img src="../../assets/icon.png" alt=""><b>KREAKS</b><span>Launcher</span></div>
+  <div class="tb-drag"></div>
+  <div class="tb-btns">
+    <button data-w="min" title="Minimieren"><svg viewBox="0 0 10 10"><rect x="1" y="5" width="8" height="2"/></svg></button>
+    <button data-w="max" title="Maximieren"><svg viewBox="0 0 10 10"><path d="M1 1h8v8H1zM2.5 3v4.5h5V3z" fill-rule="evenodd"/></svg></button>
+    <button data-w="close" class="x" title="Schließen"><svg viewBox="0 0 10 10"><path d="M1 2l1-1 3 3 3-3 1 1-3 3 3 3-1 1-3-3-3 3-1-1 3-3z"/></svg></button>
+  </div>
+</header>
+
+<div id="bg"></div>
+
+<!-- ====================== Anmeldung ====================== -->
+<section id="scrLogin" class="screen">
+  <div class="hero">
+    <h1 class="logo">KREAKS</h1>
+    <p class="tag">Eine Welt aus Pixeln – für dich und deine Freunde.</p>
+  </div>
+
+  <div class="card notch" id="authCard">
+    <div class="demo" id="demoNote" hidden><b>Demo-Modus</b> Supabase ist noch nicht verbunden. Konten werden nur auf diesem PC gespeichert, und der Code erscheint hier statt per E-Mail.</div>
+
+    <div class="tabs" id="authTabs">
+      <button type="button" data-auth="login" class="on">Anmelden</button>
+      <button type="button" data-auth="register">Konto erstellen</button>
+    </div>
+
+    <form id="fLogin" class="af" autocomplete="on">
+      <label>E-Mail<input name="email" type="email" autocomplete="email" required></label>
+      <label>Passwort<span class="pw"><input name="password" type="password" autocomplete="current-password" required><button type="button" class="eye" tabindex="-1" title="Passwort anzeigen"></button></span></label>
+      <button class="btn gold notch" type="submit">Anmelden</button>
+      <button class="link" type="button" data-go="forgot">Passwort vergessen?</button>
+    </form>
+
+    <form id="fRegister" class="af" hidden autocomplete="on">
+      <label>Spielername <em id="nameState"></em><input name="username" maxlength="16" autocomplete="nickname" required placeholder="3–16 Zeichen: Buchstaben, Zahlen, _"></label>
+      <label>E-Mail<input name="email" type="email" autocomplete="email" required></label>
+      <label>Passwort<span class="pw"><input name="password" type="password" autocomplete="new-password" required placeholder="mindestens 8 Zeichen"><button type="button" class="eye" tabindex="-1" title="Passwort anzeigen"></button></span></label>
+      <label>Passwort wiederholen<input name="password2" type="password" autocomplete="new-password" required></label>
+      <button class="btn gold notch" type="submit">Konto erstellen</button>
+    </form>
+
+    <form id="fCode" class="af" hidden>
+      <h2>E-Mail bestätigen</h2>
+      <p class="hint">Wir haben dir eine E-Mail an <b id="codeMail"></b> geschickt. Gib den Code daraus hier ein.</p>
+      <label>Bestätigungscode<input name="code" class="code" inputmode="numeric" autocomplete="one-time-code" maxlength="10" required placeholder="••••••"></label>
+      <button class="btn gold notch" type="submit">Bestätigen</button>
+      <div class="row2">
+        <button class="link" type="button" id="resendBtn">E-Mail erneut senden</button>
+        <button class="link" type="button" data-go="login">Zurück zur Anmeldung</button>
+      </div>
+    </form>
+
+    <form id="fForgot" class="af" hidden>
+      <h2>Passwort vergessen</h2>
+      <p class="hint" id="forgotHint">Gib deine E-Mail ein. Wir schicken dir einen Code, mit dem du ein neues Passwort setzen kannst.</p>
+      <label>E-Mail<input name="email" type="email" autocomplete="email" required></label>
+      <div id="forgotStep2" hidden>
+        <label>Code aus der E-Mail<input name="code" class="code" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="••••••"></label>
+        <label>Neues Passwort<input name="password" type="password" autocomplete="new-password" placeholder="mindestens 8 Zeichen"></label>
+        <label>Neues Passwort wiederholen<input name="password2" type="password" autocomplete="new-password"></label>
+      </div>
+      <button class="btn gold notch" type="submit" id="forgotBtn">Code senden</button>
+      <button class="link" type="button" data-go="login">Zurück zur Anmeldung</button>
+    </form>
+
+    <div class="msg" id="authMsg" role="status"></div>
+  </div>
+</section>
+
+<!-- ====================== Hauptbildschirm ====================== -->
+<section id="scrMain" class="screen" hidden>
+  <nav id="nav">
+    <button data-tab="play" class="on">Spielen</button>
+    <button data-tab="versions">Versionen</button>
+    <button data-tab="settings">Einstellungen</button>
+    <div class="sp"></div>
+    <div id="netState" class="net"></div>
+    <div class="accWrap">
+      <button id="accBtn" class="acc notch"><i id="accAv"></i><span id="accName"></span><svg viewBox="0 0 10 10"><path d="M2 3h6L5 7z"/></svg></button>
+      <div id="accMenu" class="menu notch" hidden>
+        <div class="who"><b id="accMenuName"></b><span id="accMenuMail"></span></div>
+        <button data-acc="settings">Konto &amp; Einstellungen</button>
+        <button data-acc="logout" class="danger">Abmelden</button>
+      </div>
+    </div>
+  </nav>
+
+  <div id="tabPlay" class="tab">
+    <div class="hero2">
+      <h1 class="logo big">KREAKS</h1>
+      <p class="welcome" id="welcome"></p>
+    </div>
+    <article class="news card notch" id="news">
+      <span class="kicker" id="newsKicker">Neu</span>
+      <h3 id="newsTitle"></h3>
+      <p id="newsText"></p>
+    </article>
+    <div id="playBar">
+      <div class="verPick">
+        <span class="lbl">Version</span>
+        <button id="verBtn" class="verBtn notch"><span id="verCur"></span><svg viewBox="0 0 10 10"><path d="M2 6h6L5 2z"/></svg></button>
+        <div id="verList" class="menu up notch" hidden></div>
+      </div>
+      <button id="playBtn" class="play notch"><span class="fill" id="playFill"></span><span class="txt" id="playTxt">Spielen</span></button>
+      <div class="playInfo" id="playInfo"></div>
+    </div>
+  </div>
+
+  <div id="tabVersions" class="tab page" hidden>
+    <div class="pageHead">
+      <h2>Spielversionen</h2>
+      <div class="sp"></div>
+      <label class="tog"><input type="checkbox" id="optBeta"><span></span>Beta-Versionen anzeigen</label>
+      <button class="btn small notch" id="importBtn">Zip importieren</button>
+      <button class="btn small notch" id="folderBtn">Ordner öffnen</button>
+    </div>
+    <p class="sub" id="verSub"></p>
+    <div id="verRows" class="rows"></div>
+  </div>
+
+  <div id="tabSettings" class="tab page" hidden>
+    <div class="pageHead"><h2>Einstellungen</h2></div>
+    <div class="cols">
+      <div class="card notch box">
+        <h3>Spiel</h3>
+        <label class="tog"><input type="checkbox" id="optAuto"><span></span>Neueste Version automatisch herunterladen</label>
+        <label class="tog"><input type="checkbox" id="optFull"><span></span>Spiel im Vollbild starten (F11 wechselt)</label>
+        <label class="tog"><input type="checkbox" id="optKeep"><span></span>Launcher während des Spielens geöffnet lassen</label>
+      </div>
+      <div class="card notch box">
+        <h3>Konto</h3>
+        <dl class="kv">
+          <dt>Spielername</dt><dd id="setName"></dd>
+          <dt>E-Mail</dt><dd id="setMail"></dd>
+          <dt>Konto-ID</dt><dd><code id="setUuid"></code> <button class="link" id="copyUuid">kopieren</button></dd>
+        </dl>
+        <button class="btn small notch danger" data-acc="logout">Abmelden</button>
+      </div>
+      <div class="card notch box">
+        <h3>Launcher</h3>
+        <dl class="kv">
+          <dt>Version</dt><dd id="setLVer"></dd>
+          <dt>Updates</dt><dd id="setUpd">–</dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="toast" class="notch" role="status"></div>
+<div id="updBanner" class="notch" hidden><span id="updText"></span><button class="btn small gold notch" id="updBtn">Jetzt neu starten</button></div>
+
+<script src="../../node_modules/@supabase/supabase-js/dist/umd/supabase.js"></script>
+<script src="auth.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
