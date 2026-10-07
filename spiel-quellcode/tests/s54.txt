@@ -1,0 +1,2 @@
+d|0|(()=>{const v=villagers.find(q=>q.name==='Dofra');openDialog(v);const L=dlg.opts.map(o=>o.label+'>'+o.go);const i=dlg.opts.findIndex(o=>o.go==='kreak');choose(i);const t=dlg.full;const L2=dlg.opts.map(o=>o.label);choose(0);return L.join('/')+' || '+t.slice(0,80)+' || '+L2.join('/')+' || '+dlg.full.slice(-90)+' flag '+FLAGS.dofraAsked})()
+h|0|(()=>{closeDialog();const v=villagers.find(q=>q.name==='Hagen');openDialog(v);const t=dlg.full;const L=dlg.opts.map(o=>o.label);choose(0);return t.slice(0,60)+' || '+L.join('/')+' || mq '+FLAGS.mq})()

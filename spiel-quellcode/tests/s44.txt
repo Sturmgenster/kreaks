@@ -1,0 +1,6 @@
+tp|3000|P.x=1020;P.z=600;P.y=groundAt(P.x,P.z,1e4)+.1;P.yaw=-Math.PI/2;P.pitch=.3;FLAGS.clock=630;1
+shotE1|6000|[P.x,P.z,Math.round(P.y)]
+tp|3000|P.x=1120;P.z=600;P.y=groundAt(P.x,P.z,1e4)+.1;1
+shotE2|6000|[P.x,P.z,Math.round(P.y)]
+tp|3000|P.x=1000;P.z=600;P.y=groundAt(P.x,P.z,1e4)+.1;P.yaw=Math.PI/2;1
+shotE3|6000|[P.x,P.z,Math.round(P.y)]

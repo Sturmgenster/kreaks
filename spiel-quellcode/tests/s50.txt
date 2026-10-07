@@ -1,0 +1,15 @@
+door|0|[hallOut&&Math.round(hallOut.x),hallOut&&Math.round(hallOut.z),villagers.find(v=>v.name==='Albrecht').inside]
+tpDoor|2500|P.x=hallOut.x+hallOut.nx*2;P.z=hallOut.z+hallOut.nz*2;P.y=groundAt(P.x,P.z,1e4)+.1;P.yaw=Math.atan2(hallOut.nx,hallOut.nz);P.pitch=.1;FLAGS.clock=600;1
+shotH0|5000|[doorLooked()&&doorLooked().kind,storyPrompt2()]
+enter|2500|useDoor({kind:'hallEnter'});[P.x,P.z,interiorKind(P.x,P.z),areaAt(P.x,P.z)]
+shotH1|6000|1
+talk|1000|(()=>{const v=villagers.find(v=>v.name==='Albrecht');openDialog(v);return dlg.n.text+' || '+dlg.opts.map(o=>o.label).join(' / ')})()
+offer|500|choose(0);dlg.offer+' :: '+dlg.full
+shotH2|3000|1
+acc|500|(()=>{dlg.offer='cows';dlg.offerQ=null;goNode('offer');choose(0);return JSON.stringify(FLAGS.mayor)+' rope '+countItem('rope')+' runaways '+animals.filter(a=>a.runaway).map(a=>Math.round(a.x)+','+Math.round(a.z)).join(' ')})()
+close|300|closeDialog();state
+leash|0|(()=>{const a=animals.find(a=>a.runaway);P.x=a.x+2;P.z=a.z;P.y=groundAt(P.x,P.z,1e4);cowLeash(a);return a.leash})()
+walk|0|(()=>{const a=animals.find(a=>a.leash);for(let i=0;i<300;i++){const tx=-80,tz=800,dx=tx-P.x,dz=tz-P.z,d=Math.hypot(dx,dz);if(d<1)break;P.x+=dx/d*Math.min(d,.6);P.z+=dz/d*Math.min(d,.6);updateCows(.1);}return JSON.stringify(FLAGS.mayor.q)+' cow '+Math.round(a.x)+','+Math.round(a.z)+' pen '+!!a.pen})()
+quests|0|document.getElementById('quests').innerHTML
+night|0|(()=>{FLAGS.mayor.q={type:'night',need:2,have:0};const e=spawnEnt('nskel',P.x+3,P.z,{nm:1});NIGHTMOB.push(e);killEnt(e,'player');return JSON.stringify(FLAGS.mayor.q)})()
+fin|0|(()=>{const v=villagers.find(v=>v.name==='Albrecht');const w=wallet();FLAGS.mayor.q.have=2;openDialog(v);const L=dlg.opts.map(o=>o.label).join('/');choose(0);return L+' :: '+dlg.full+' wallet+'+(wallet()-w)+' '+JSON.stringify(FLAGS.mayor)})()

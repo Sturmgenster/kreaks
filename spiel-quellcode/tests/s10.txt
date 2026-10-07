@@ -1,0 +1,10 @@
+tp|7000|teleport(...prWorld(95,-20),0);P.yaw=Math.atan2(-(PROCK.x-P.x),-(PROCK.z-P.z));P.pitch=0.12;1
+shotR1|300|[!!PROCK.grp,PROCK.y0]
+tp2|5000|teleport(...prWorld(20,-70),0);P.yaw=Math.atan2(-(PROCK.x-P.x),-(PROCK.z-P.z));P.pitch=0.1;1
+shotR2|300|1
+tp3|5000|teleport(...prWorld(-95,10),0);P.yaw=Math.atan2(-(PROCK.x-P.x),-(PROCK.z-P.z));P.pitch=0.05;1
+shotR3|300|1
+tp4|4000|teleport(...prWorld(40,0),0);P.y=prideLedgeTop(P.x,P.z)+.05;P.yaw=Math.atan2(-(PROCK.x-P.x),-(PROCK.z-P.z))+Math.PI;P.pitch=-0.2;1
+shotR4|300|[P.y,getHeight(P.x,P.z),curArea]
+tp5|3000|const d=PROCK.den;teleport(d.x+Math.cos(d.ang)*14,d.z+Math.sin(d.ang)*14,0);P.yaw=Math.atan2(-(d.x-P.x),-(d.z-P.z));P.pitch=0.05;1
+shotR5|300|1

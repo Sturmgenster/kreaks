@@ -1,0 +1,2 @@
+tp|3000|teleport(-30,180,0);FLAGS.clock=23*60;P.yaw=0.5;P.pitch=0;1
+shotNight|8000|[DN.nightLight]

@@ -1,0 +1,5 @@
+setup|2000|(()=>{FLAGS.kreak=1;FLAGS.kreakNamed=1;ensureKreak();ensureMercs();const G=GF();G.hired.Fenn={until:gameMinutes()+3000,wait:false};G.hired.Lyra={until:gameMinutes()+3000,wait:false};for(const n of['Fenn','Lyra']){const e=mercEnts[MERC_BY[n].i];e.hired=true;e.mode='follow';const b=behindP(3);e.x=b[0]+Math.random()*2;e.z=b[1];}return [!!kreakE,mercEnts.length]})()
+mount|1500|(()=>{FLAGS.mounts={horse0:1};FLAGS.mountSel='horse0';summonMount('horse0');mount.x=P.x+1;mount.z=P.z+1;mount.state='idle';mount.delay=0;mountUp();return P.riding})()
+wait|3000|(()=>{show('pause',false);state='playing';for(let i=0;i<40;i++){time+=.05;updateDemons(.05);}return [kreakE.steed,mercEnts[MERC_BY.Fenn.i].steed,mercEnts[MERC_BY.Lyra.i].steed]})()
+look|300|(()=>{P.view=0;const e=mercEnts[MERC_BY.Fenn.i];const k=kreakE;const cx=(e.x+k.x)/2,cz=(e.z+k.z)/2;P.yaw=Math.atan2(-(cx-P.x),-(cz-P.z));P.pitch=-.05;return [Math.hypot(e.x-P.x,e.z-P.z).toFixed(1),Math.hypot(k.x-P.x,k.z-P.z).toFixed(1)]})()
+shotR1|2500|(()=>{show('pause',false);state='playing';return steedN})()

@@ -1,0 +1,5 @@
+tp|2500|P.x=0;P.z=700;P.y=groundAt(P.x,P.z,1e4)+.1;P.yaw=Math.PI;P.pitch=-.12;FLAGS.clock=11*60;1
+shotS1|5000|1
+tp2|2500|P.x=-30;P.z=735;P.y=groundAt(P.x,P.z,1e4)+.1;P.yaw=Math.PI*.75;P.pitch=-.05;1
+shotS2|5000|1
+stalls|0|MARKET.map(s=>[Math.round(s.x),Math.round(s.z),Math.round(roadDistAll(s.x,s.z)*10)/10].join(',')).join(' ')

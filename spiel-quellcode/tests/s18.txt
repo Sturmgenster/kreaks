@@ -1,0 +1,5 @@
+tp|3000|teleport(JVIL.x,JVIL.z+JVIL.r+6,0);FLAGS.clock=12*60;updateApes();1
+day|0|(()=>{for(let i=0;i<50;i++)updateDemons(.1);return apes.map(e=>e.name+(e.hidden?':Z':':-')).join(' ')})()
+night|0|(()=>{FLAGS.clock=22*60;for(let i=0;i<600;i++)updateDemons(.1);return apes.map(e=>e.name+(e.hidden?':Z':':-')+Math.round(e.y)).join(' ')})()
+morn|0|(()=>{FLAGS.clock=7*60;for(let i=0;i<20;i++)updateDemons(.1);return apes.map(e=>e.name+(e.hidden?':Z':':-')+Math.round(e.y)).join(' ')})()
+kc|3000|(()=>{teleport(KX0+60,(KZ0+KZ1)/2,0);updateKCitizens();FLAGS.clock=23*60;for(let i=0;i<900;i++)updateDemons(.1);return kCitizens.filter(e=>e.hidden).length+'/'+kCitizens.length})()

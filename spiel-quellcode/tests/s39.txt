@@ -1,0 +1,2 @@
+grid|0|(()=>{let o=[];for(let z=708;z<=735;z+=3){let r='';for(let x=-13;x<=13;x+=2){const d=roadDistAll(x,z);r+=d<0?'#':d<1.5?'+':'.';}o.push(z+' '+r);}return o.join(' | ')})()
+th|0|VB.filter(b=>['townhall','tavern','smithy','church'].includes(b.type)).map(b=>b.type+':'+Math.round(b.x)+','+Math.round(b.z)).join(' ')

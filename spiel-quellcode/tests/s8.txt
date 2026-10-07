@@ -1,0 +1,1 @@
+file_dlg|0|Object.entries(DIALOGS).map(([k,D])=>'## '+k+' start='+D.start+'\n'+Object.entries(D.nodes||{}).map(([id,f])=>{let n;try{n=typeof f==='function'?f():f}catch(e){return '  ['+id+'] ERR '+e.message}return '  ['+id+'] '+(n.text||'')+'\n'+(n.opts||[]).map(o=>'     - '+o.label+(o.go?' ->'+o.go:'')).join('\n')}).join('\n')).join('\n')

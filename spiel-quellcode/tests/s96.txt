@@ -1,0 +1,2 @@
+tp|3000|(()=>{wlFast=true;P.x=-3200;P.z=-2600;P.y=groundAt(P.x,P.z,1e4);P.yaw=0.5;P.pitch=-.05;show('pause',false);state='playing';camera.position.set(P.x,P.y+1.6,P.z);for(let k=0;k<120;k++)wlUpdate();return [inCore(P.x,P.z),P.y,getHeight(P.x,P.z),areaAt?areaAt(P.x,P.z):0]})()
+shotW2|6000|(()=>{show('pause',false);state='playing';return [P.x,P.y,P.z,camera.position.y]})()

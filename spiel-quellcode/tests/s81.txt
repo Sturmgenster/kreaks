@@ -1,0 +1,5 @@
+tp|3000|P.x=0;P.z=1000;P.y=groundAt(P.x,P.z,1e4)+2;P.yaw=Math.PI;P.pitch=-.05;FLAGS.clock=660;show('pause',false);state='playing';1
+build|0|(()=>{camera.position.set(P.x,P.y+1.6,P.z);const t=performance.now();for(let k=0;k<60;k++)wlUpdate();return [WL_CH.size,[...WL_CH.values()].filter(c=>c.built&&!c.empty).length,Math.round(performance.now()-t)]})()
+shotW1|6000|(()=>{show('pause',false);state='playing';return areaAt(P.x,P.z)})()
+tp2|3000|P.x=0;P.z=860;P.y=groundAt(P.x,P.z,1e4)+12;P.yaw=Math.PI;P.pitch=-.25;show('pause',false);state='playing';camera.position.set(P.x,P.y+1.6,P.z);for(let k=0;k<60;k++)wlUpdate();1
+shotW2|6000|(()=>{show('pause',false);state='playing';return 1})()

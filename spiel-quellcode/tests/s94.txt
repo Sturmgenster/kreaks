@@ -1,0 +1,6 @@
+tp|3000|(()=>{wlFast=true;P.x=-3200;P.z=-2600;P.y=groundAt(P.x,P.z,1e4)+2;P.yaw=0.5;P.pitch=-.15;show('pause',false);state='playing';camera.position.set(P.x,P.y+1.6,P.z);const t0=performance.now();for(let k=0;k<120;k++)wlUpdate();return [performance.now()-t0,[...WL_CH.values()].filter(c=>c.built).length,wlBiomeOf(wlSites(P.x,P.z)[0][0],P.x,P.z)]})()
+shotV1|6000|(()=>{show('pause',false);state='playing';return 1})()
+tp2|3000|(()=>{let p=null;for(let t=0;t<3000&&!p;t++){const a=t*2.39,r=2500+t*4,x=Math.cos(a)*r,z=Math.sin(a)*r;if(!inCore(x,z)&&wlCont(x,z)>WL_SEA&&wlCont(x,z)<WL_SEA+.012&&getHeight(x,z)>WATER+.5)p=[x,z];}P.x=p[0];P.z=p[1];P.y=groundAt(P.x,P.z,1e4)+6;let bd=0,by=0;for(let a=0;a<6.28;a+=.2){const h=getHeight(P.x+Math.sin(a)*-150,P.z+Math.cos(a)*-150);if(h<WATER-2&&!by){by=1;bd=a;}}P.yaw=bd;P.pitch=-.2;show('pause',false);state='playing';camera.position.set(P.x,P.y+1.6,P.z);for(let k=0;k<120;k++)wlUpdate();return p})()
+shotV2|6000|(()=>{show('pause',false);state='playing';return 1})()
+tp3|3000|(()=>{P.x=20;P.z=40;P.y=groundAt(P.x,P.z,1e4);P.yaw=0;P.pitch=-.1;show('pause',false);state='playing';camera.position.set(P.x,P.y+1.6,P.z);return 1})()
+shotV3|5000|(()=>{show('pause',false);state='playing';return 1})()

@@ -1,0 +1,1 @@
+a|0|(()=>{addItem('w_oak',5);const c0=countItem('w_oak');saveGame();const s=store.get(SLOT_KEY(curSlot));const has=(s.inv||[]).filter(x=>x&&x.id==='w_oak').length;const ok=loadGame();return [state,c0,has,ok,countItem('w_oak'),s.v]})()

@@ -1,0 +1,1 @@
+a|0|[-600,-300,-150,-125].map(z=>z+': '+[836,838,839.9,840,840.1,842,844].map(x=>[getHeight(x,z),rawHeight(x,z),farRaw(x,z)].map(v=>v.toFixed(2)).join('/')).join(' | ')).join(' ### ')

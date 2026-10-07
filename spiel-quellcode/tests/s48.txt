@@ -1,0 +1,1 @@
+fill|0|(()=>{let m=0,mk='',pmin=9999;let area=0,warea=0;for(const k in SPR){const s=SPR[k];if(s.v==null)continue;const yb=(1-s.v)*ATLAS;if(k.startsWith('pl_')){pmin=Math.min(pmin,yb-s.h);continue;}if(yb>m){m=yb;mk=k;}area+=s.w*s.h;if(k.startsWith('w_'))warea+=s.w*s.h;}return [Math.round(m),mk,Math.round(pmin),area,warea]})()

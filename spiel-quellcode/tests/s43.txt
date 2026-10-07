@@ -1,0 +1,5 @@
+find|0|(()=>{let r='';scene.traverse(m=>{if(m.isMesh&&m.material&&m.material.type==='MeshBasicMaterial'&&m.geometry.boundingBox&&m.geometry.boundingBox.max.x>3000&&m.geometry.boundingBox.min.x>600){window.__SUS=m;r=m.geometry.attributes.position.count+' verts, parent '+(m.parent&&m.parent.type)+' col '+(m.material.color&&m.material.color.getHexString())+' vc '+m.material.vertexColors+' map '+!!m.material.map+' fog '+m.material.fog+' side '+m.material.side+' transp '+m.material.transparent;}});return r})()
+tp|3000|P.x=950;P.z=300;P.y=groundAt(950,300,1e4)+.1;P.yaw=-Math.PI/2;P.pitch=.35;1
+shotD2|6000|1
+hide|500|window.__SUS.visible=false;1
+shotD3|6000|1

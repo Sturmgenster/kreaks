@@ -1,0 +1,9 @@
+money|0|setWallet(3000);addItem('rope',1);[wallet(),companionsUsed()]
+hire|0|(()=>{const r=[];const e=mercEnts[0];openDialog(e);r.push(dlg.full.slice(0,50));goNode('deals');r.push(dlg.opts.map(o=>o.label+(o.on===false?'(x)':'')).join('/'));choose(1);r.push(state,companionsUsed(),JSON.stringify(FLAGS.guild.hired));return r.join(' | ')})()
+hire2|0|(()=>{const r=[];openDialog(mercEnts[4]);goNode('deals');choose(0);openDialog(mercEnts[2]);goNode('deals');choose(0);openDialog(mercEnts[3]);goNode('deals');r.push(dlg.full.slice(0,60),dlg.opts.map(o=>o.on===false?'x':'o').join(''));closeDialog();return r.join(' | ')+' used '+companionsUsed()})()
+quest|0|(()=>{const v=villagers.find(q=>q.name==='Hilde');openDialog(v);goNode('board');const L=dlg.opts.map(o=>o.label).join(' / ');dlg.pick='rats';goNode('brief');choose(0);closeDialog();return L+' || '+JSON.stringify(FLAGS.guild.q)})()
+go|3000|(()=>{const q=FLAGS.guild.q;P.x=q.x+25;P.z=q.z;P.y=groundAt(P.x,P.z,1e4)+.1;P.yaw=Math.PI/2;P.pitch=-.1;state='playing';return 1})()
+tick|4000|(()=>{guildTick();return [qSpawned.length,mercEnts.filter(e=>e.hired).map(e=>e.name+':'+Math.round(Math.hypot(e.x-P.x,e.z-P.z))).join(',')]})()
+shotF1|5000|[qSpawned.filter(e=>!e.dead).length, FLAGS.guild.q.left.map(x=>x.join(':')).join(',')]
+sim|0|(()=>{P.stats.hp=60;for(let i=0;i<900;i++){updateDemons(1/30);}return [qSpawned.filter(e=>!e.dead).length,JSON.stringify(FLAGS.guild.q.left),P.stats.hp|0,mercEnts.filter(e=>e.hired).map(e=>e.name+':'+(e.hp|0)+(e.down>0?'D':'')).join(',')]})()
+sim2|0|(()=>{for(let i=0;i<1800;i++){updateDemons(1/30);}return [qSpawned.filter(e=>!e.dead).length,JSON.stringify(FLAGS.guild.q),P.stats.hp|0]})()

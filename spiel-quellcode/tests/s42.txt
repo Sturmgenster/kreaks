@@ -1,0 +1,3 @@
+tp|3000|P.x=300;P.z=330;P.y=groundAt(300,330,1e4)+.1;P.yaw=-Math.PI/2;P.pitch=.25;FLAGS.clock=630;1
+shotD1|6000|1
+list|0|(()=>{const o=[];scene.traverse(m=>{if(m.isMesh&&m.visible&&m.geometry){m.geometry.computeBoundingBox&&!m.geometry.boundingBox&&m.geometry.computeBoundingBox();const b=m.geometry.boundingBox;if(b&&(b.max.y>60))o.push((m.name||m.material.type)+':'+Math.round(b.min.x)+'..'+Math.round(b.max.x)+','+Math.round(b.min.y)+'..'+Math.round(b.max.y)+','+Math.round(b.min.z)+'..'+Math.round(b.max.z)+' pos'+Math.round(m.position.x)+','+Math.round(m.position.y)+','+Math.round(m.position.z));}});return o.slice(0,40).join(' | ')})()

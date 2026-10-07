@@ -1,0 +1,1 @@
+file_shops|0|Object.entries(SHOPS).map(([k,s])=>k+': '+s.title+' | cur='+(s.cur||'')+' | greet='+s.greet+'\n  BUY '+JSON.stringify(s.buy)+'\n  SELL '+JSON.stringify(s.sell)).join('\n')

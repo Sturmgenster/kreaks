@@ -1,0 +1,20 @@
+tpT1|3500|P.x=90;P.z=400;P.y=groundAt(P.x,P.z,1e4)+7;P.vy=0;P.yaw=-1.5708;P.pitch=-.28;FLAGS.clock=660;show('pause',false);state='playing';1
+shotT1|5000|(()=>{P.y=groundAt(P.x,P.z,1e4)+7;P.vy=0;show('pause',false);state='playing';return areaAt(P.x,P.z)})()
+tpT2|3500|P.x=400;P.z=90;P.y=groundAt(P.x,P.z,1e4)+7;P.vy=0;P.yaw=3.1416;P.pitch=-.28;FLAGS.clock=660;show('pause',false);state='playing';1
+shotT2|5000|(()=>{P.y=groundAt(P.x,P.z,1e4)+7;P.vy=0;show('pause',false);state='playing';return areaAt(P.x,P.z)})()
+tpT3|3500|P.x=960;P.z=60;P.y=groundAt(P.x,P.z,1e4)+7;P.vy=0;P.yaw=-1.5708;P.pitch=-.28;FLAGS.clock=660;show('pause',false);state='playing';1
+shotT3|5000|(()=>{P.y=groundAt(P.x,P.z,1e4)+7;P.vy=0;show('pause',false);state='playing';return areaAt(P.x,P.z)})()
+tpT4|3500|P.x=960;P.z=500;P.y=groundAt(P.x,P.z,1e4)+7;P.vy=0;P.yaw=-1.5708;P.pitch=-.28;FLAGS.clock=660;show('pause',false);state='playing';1
+shotT4|5000|(()=>{P.y=groundAt(P.x,P.z,1e4)+7;P.vy=0;show('pause',false);state='playing';return areaAt(P.x,P.z)})()
+tpT5|3500|P.x=800;P.z=-300;P.y=groundAt(P.x,P.z,1e4)+7;P.vy=0;P.yaw=-1.5708;P.pitch=-.28;FLAGS.clock=660;show('pause',false);state='playing';1
+shotT5|5000|(()=>{P.y=groundAt(P.x,P.z,1e4)+7;P.vy=0;show('pause',false);state='playing';return areaAt(P.x,P.z)})()
+tpT6|3500|P.x=780;P.z=-80;P.y=groundAt(P.x,P.z,1e4)+7;P.vy=0;P.yaw=0;P.pitch=-.28;FLAGS.clock=660;show('pause',false);state='playing';1
+shotT6|5000|(()=>{P.y=groundAt(P.x,P.z,1e4)+7;P.vy=0;show('pause',false);state='playing';return areaAt(P.x,P.z)})()
+tpT7|3500|P.x=0;P.z=-90;P.y=groundAt(P.x,P.z,1e4)+7;P.vy=0;P.yaw=0;P.pitch=-.28;FLAGS.clock=660;show('pause',false);state='playing';1
+shotT7|5000|(()=>{P.y=groundAt(P.x,P.z,1e4)+7;P.vy=0;show('pause',false);state='playing';return areaAt(P.x,P.z)})()
+tpT8|3500|P.x=-90;P.z=300;P.y=groundAt(P.x,P.z,1e4)+7;P.vy=0;P.yaw=1.5708;P.pitch=-.28;FLAGS.clock=660;show('pause',false);state='playing';1
+shotT8|5000|(()=>{P.y=groundAt(P.x,P.z,1e4)+7;P.vy=0;show('pause',false);state='playing';return areaAt(P.x,P.z)})()
+tpT9|3500|P.x=0;P.z=-1280;P.y=groundAt(P.x,P.z,1e4)+7;P.vy=0;P.yaw=0;P.pitch=-.28;FLAGS.clock=660;show('pause',false);state='playing';1
+shotT9|5000|(()=>{P.y=groundAt(P.x,P.z,1e4)+7;P.vy=0;show('pause',false);state='playing';return areaAt(P.x,P.z)})()
+tpT10|3500|P.x=640;P.z=0;P.y=groundAt(P.x,P.z,1e4)+7;P.vy=0;P.yaw=-1.5708;P.pitch=-.28;FLAGS.clock=660;show('pause',false);state='playing';1
+shotT10|5000|(()=>{P.y=groundAt(P.x,P.z,1e4)+7;P.vy=0;show('pause',false);state='playing';return areaAt(P.x,P.z)})()

@@ -1,0 +1,10 @@
+give|0|P.x=0;P.z=560;P.y=groundAt(0,560,1e4);P.yaw=0;addItem('furnace',1);addItem('iron_ore',5);addItem('coal',2);addItem('wood',4);placeFurn('furnace');FURN.length+':'+FURN[FURN.length-1].key
+open|500|(()=>{const f=FURN[FURN.length-1];P.yaw=Math.atan2(-(f.x-P.x),-(f.z-P.z));useFurn(f);return state})()
+shotF1|1500|$('fuOres').innerHTML.length
+put|300|document.querySelector('#fuOres button[data-ore=iron_ore]').click();document.querySelector('#fuFuels button[data-fuel=coal]').click();JSON.stringify(FLAGS.furnSt)
+run|0|(()=>{const f=FURN[FURN.length-1];const S=furnState(f.key);for(let i=0;i<120;i++)furnStep(S,.25);return JSON.stringify(S)})()
+shotF2|1500|renderFurnUI();1
+take|0|document.getElementById('fuOut').click();countItem('iron_ingot')+' ingots, fuel '+JSON.stringify(furnState(FURN[FURN.length-1].key))
+wood|0|(()=>{document.getElementById('fuIn').click();document.querySelector('#fuOres button[data-ore=wood]').click();const S=furnState(FURN[FURN.length-1].key);for(let i=0;i<200;i++)furnStep(S,.25);return JSON.stringify(S)})()
+close|300|closeFurnUI();state
+save|0|saveGame();const s=JSON.parse(localStorage.getItem(Object.keys(localStorage).find(k=>k.includes('kreak'))||'x')||'{}');Object.keys(s).length

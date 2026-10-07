@@ -1,0 +1,2 @@
+tp|3000|(()=>{wlFast=true;let p=null;for(let t=0;t<3000&&!p;t++){const a=t*2.39,r=2500+t*4,x=Math.cos(a)*r,z=Math.sin(a)*r;if(!inCore(x,z)&&coreDist(x,z)>300){const b=wlBiomeOf(wlSites(x,z)[0][0],x,z);if(b==='wald'&&wlSites(x,z)[0][1]>.95)p=[x,z];}}P.x=p[0];P.z=p[1];P.y=groundAt(P.x,P.z,1e4);P.yaw=0.5;P.pitch=-.05;show('pause',false);state='playing';camera.position.set(P.x,P.y+1.6,P.z);for(let k=0;k<120;k++)wlUpdate();return [p,inCore(P.x,P.z),P.y,getHeight(P.x,P.z)]})()
+shotW1|6000|(()=>{show('pause',false);state='playing';return [P.x,P.y,P.z]})()

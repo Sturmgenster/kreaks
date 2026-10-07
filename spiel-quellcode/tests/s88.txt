@@ -1,0 +1,2 @@
+mig|2000|(()=>{saveGame();const k=SLOT_KEY(curSlot),s=store.get(k);s.p=[4005,1.02,2];s.flags.intShift=undefined;delete s.flags.intShift;s.flags.furn=[['bed',4062,1,'abc']];store.set(k,s);startGame(false);return 1})()
+chk|3000|[Math.round(P.x),interiorKind(P.x,P.z),JSON.stringify(FLAGS.furn),FLAGS.intShift]

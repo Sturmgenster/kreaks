@@ -1,0 +1,1 @@
+fileShops|0|Object.entries(SHOPS).map(([k,d])=>k+' | '+d.title+' | BUY '+(d.buy||[]).map(x=>x.join(':')).join(',')+' | SELL '+(d.sell||[]).map(x=>x.join(':')).join(',')).join('\n')+'\nMERCH '+JSON.stringify(MERCHANTS.map(m=>[m.name,m.shop||m.key]))+'\nITEMS '+Object.keys(ITEMS).join(',')

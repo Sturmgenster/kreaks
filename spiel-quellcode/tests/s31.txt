@@ -1,0 +1,2 @@
+tp|8000|(()=>{const g=WG.filter(g=>g.sp==='gnu')[1];const l=wAlive(g);const m=l[0];P.x=g.cx+30;P.z=g.cz+8;P.y=groundAt(P.x,P.z,1e4);P.yaw=Math.atan2(-(g.cx-P.x),-(g.cz-P.z));P.pitch=-.05;return [l.length,Math.round(g.cx),Math.round(g.cz)]})()
+shotHerd|4000|1

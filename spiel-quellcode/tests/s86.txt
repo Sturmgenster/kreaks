@@ -1,0 +1,4 @@
+tpE3|2500|P.x=2730;P.z=500;P.y=groundAt(P.x,P.z,1e4)+10;P.vy=0;P.yaw=-1.5708;P.pitch=-.18;FLAGS.clock=660;show('pause',false);state='playing';camera.position.set(P.x,P.y+1.6,P.z);for(let k=0;k<60;k++)wlUpdate();1
+shotE3|5000|(()=>{P.y=groundAt(P.x,P.z,1e4)+10;P.vy=0;show('pause',false);state='playing';return 1})()
+tpE7|2500|P.x=300;P.z=815;P.y=groundAt(P.x,P.z,1e4)+10;P.vy=0;P.yaw=3.1416;P.pitch=-.18;FLAGS.clock=660;show('pause',false);state='playing';camera.position.set(P.x,P.y+1.6,P.z);for(let k=0;k<60;k++)wlUpdate();1
+shotE7|5000|(()=>{P.y=groundAt(P.x,P.z,1e4)+10;P.vy=0;show('pause',false);state='playing';return 1})()

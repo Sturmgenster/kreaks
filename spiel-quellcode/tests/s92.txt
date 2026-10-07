@@ -1,0 +1,4 @@
+tp|3000|(()=>{wlFast=true;P.x=3000;P.z=2500;P.y=groundAt(P.x,P.z,1e4)+30;P.yaw=0.5;P.pitch=-.35;show('pause',false);state='playing';camera.position.set(P.x,P.y+1.6,P.z);for(let k=0;k<120;k++)wlUpdate();return 1})()
+shotH1|6000|(()=>{show('pause',false);state='playing';return 1})()
+tp2|3000|(()=>{P.x=-3000;P.z=-3500;P.y=groundAt(P.x,P.z,1e4)+3;P.yaw=2.2;P.pitch=-.05;show('pause',false);state='playing';camera.position.set(P.x,P.y+1.6,P.z);for(let k=0;k<120;k++)wlUpdate();return 1})()
+shotH2|6000|(()=>{show('pause',false);state='playing';return 1})()

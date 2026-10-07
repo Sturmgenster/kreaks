@@ -1,0 +1,6 @@
+tp|4000|teleport(0,-60,0);FLAGS.clock=23*60;1
+spawn|0|(()=>{for(let i=0;i<400;i++){updateNightMobs(.1);updateDemons(.1);}return NIGHTMOB.map(e=>e.type+':'+Math.round(Math.hypot(e.x-P.x,e.z-P.z))+(e.dead?'D':'')).join(' ')+' | hp '+P.stats.hp})()
+blood|0|(()=>{FLAGS.moonForce={n:FLAGS.day,ev:'blood',phase:4};for(let i=0;i<300;i++){updateNightMobs(.1);updateDemons(.1);}return NIGHTMOB.map(e=>e.type).join(' ')+' ev:'+tonightEv()})()
+blue|0|(()=>{FLAGS.moonForce={n:FLAGS.day,ev:'blue',phase:0};updateNightMobs(.1);return [NIGHTMOB.length,peaceNight()]})()
+day|0|(()=>{FLAGS.moonForce=null;for(let i=0;i<60;i++){updateNightMobs(.1);updateDemons(.1);}FLAGS.clock=9*60;updateNightMobs(.1);return NIGHTMOB.length})()
+light|0|(()=>{FLAGS.clock=23*60;updateDayNight(.016,0);return [DN.nightLight,DN.moonLight,DN.phase]})()

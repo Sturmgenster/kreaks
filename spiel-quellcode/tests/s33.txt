@@ -1,0 +1,4 @@
+tp|3000|P.x=-5;P.z=748;P.y=groundAt(P.x,P.z,1e4)+4;P.yaw=Math.PI*0.9;P.pitch=-.25;FLAGS.clock=12*60;1
+shotCoda1|5000|1
+tp2|0|P.x=30;P.z=650;P.y=groundAt(P.x,P.z,1e4)+12;P.yaw=Math.PI*0.85+Math.PI;P.pitch=-.35;1
+shotCoda2|5000|1

@@ -1,0 +1,5 @@
+web|3000|(()=>{try{const n=mpNetWeb('ABCDEFGH2345');window.__n=n;return [typeof TrysteroLib.joinRoom,n.selfId]}catch(e){return 'ERR '+e.message}})()
+leave|300|(()=>{window.__n.leave();return 1})()
+menu|300|(()=>{openMenu();return 1})()
+panel|1500|(()=>{$('btnMP').click();return [$('mpPanel').hidden]})()
+shotMPMenu|500|1

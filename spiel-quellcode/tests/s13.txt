@@ -1,0 +1,9 @@
+tp|6000|FLAGS.clock=13*60;teleport(...prWorld(0,60),0);1
+lions|20000|WM.filter(m=>m.sp.startsWith('lion')&&m.g.home===PROCK).map(m=>m.sp[5]+(m.male?'M':'')+':'+m.st+' den'+Math.round(Math.hypot(m.x-PROCK.den.x,m.z-PROCK.den.z))+' h'+prideH(m.x,m.z).toFixed(1)).join(' | ')
+shotL1|500|(()=>{const d=PROCK.den;teleport(d.x+Math.cos(d.ang)*16,d.z+Math.sin(d.ang)*16,0);P.yaw=Math.atan2(-(d.x-P.x),-(d.z-P.z));P.pitch=0;return 1})()
+dusk|0|FLAGS.clock=19*60;1
+lions2|25000|WM.filter(m=>m.sp.startsWith('lion')&&m.g.home===PROCK).map(m=>m.sp[5]+(m.male?'M':'')+':'+m.st+' h'+prideH(m.x,m.z).toFixed(1)+' L'+(prideLedgeTop(m.x,m.z)!=null)).join(' | ')
+shotL2|500|teleport(...prWorld(75,-25),0);P.yaw=Math.atan2(-(PROCK.x-P.x),-(PROCK.z-P.z));P.pitch=0.15;1
+night|0|FLAGS.clock=23*60;1
+herds|8000|(()=>{const r={};for(const m of WM){if(!['zebra','gnu','gazelle','buffalo'].includes(m.sp))continue;r[m.st]=(r[m.st]||0)+1;}return JSON.stringify(r)})()
+perf|0|(()=>{const t=performance.now();for(let i=0;i<30;i++)updateWild(1/60);return ((performance.now()-t)/30).toFixed(2)+'ms'})()

@@ -1,0 +1,4 @@
+give|300|(()=>{addItem('ship',1);let p=null;for(let t=0;t<6000&&!p;t++){const a=t*2.39,r=2500+t*6,x=Math.cos(a)*r,z=Math.sin(a)*r;if(!inCore(x,z)&&getHeight(x,z)<-5&&getHeight(x+40,z)<-5&&getHeight(x-40,z)<-5&&getHeight(x,z+40)<-5&&getHeight(x,z-40)<-5)p=[x,z];}window.__p=p;return p})()
+tp|3000|(()=>{const p=window.__p;wlFast=true;FLAGS.boats=[{t:'ship',x:p[0],z:p[1],yaw:0}];boatSync();const b=BOATS[0];const[x,z]=boatWorld(b,SHIP.WHEEL-.6,0);P.x=x;P.z=z;P.y=WATER+SHIP.MD;P.yaw=.4;FLAGS.clock=600;show('pause',false);state='playing';camera.position.set(P.x,P.y+1.6,P.z);for(let k=0;k<120;k++)wlUpdate();return boatFits(b.T,b.d.x,b.d.z,0)})()
+helm|300|(()=>{const b=BOATS[0];boatIn=b;keys.add(settings.keys.forward);for(let i=0;i<200;i++){time+=.05;updatePlayer(.05);updateDemons(.05);}keys.delete(settings.keys.forward);return [b.v,b.d.x-window.__p[0],b.d.z-window.__p[1],b.d.yaw]})()
+shotH1|2500|(()=>{show('pause',false);state='playing';return 1})()

@@ -1,0 +1,2 @@
+a|2000|(()=>{setWallet(3000);openDialog(mercEnts[2]);goNode('deals');choose(0);guildAccept('wolves');saveGame();startGame(false);return 1})()
+b|4000|(()=>{state='playing';for(let i=0;i<60;i++)updateDemons(1/30);return [JSON.stringify(FLAGS.guild.hired),mercEnts.length,mercEnts.filter(e=>e&&e.hired).map(e=>e.name+' '+Math.round(Math.hypot(e.x-P.x,e.z-P.z))).join(','),!!FLAGS.guild.q,DEM.filter(e=>e.merc).length]})()

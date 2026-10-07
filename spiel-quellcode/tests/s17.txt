@@ -1,0 +1,4 @@
+tp|4000|teleport(CODA.x,CODA.z+5,0);FLAGS.clock=23*60;1
+perf|0|(()=>{const T=(f)=>{const t=performance.now();f();return (performance.now()-t).toFixed(1)};return {vill:T(()=>updateVillagers(.016)),anim:T(()=>updateAnimals(.016)),frogs:T(()=>updateFrogs(.016)),dem:T(()=>updateDemons(.016)),render:T(()=>renderer.render(scene,camera)),day:T(()=>updateDayNight(.016,0))}})()
+day|0|FLAGS.clock=12*60;1
+perf2|2000|(()=>{const T=(f)=>{const t=performance.now();f();return (performance.now()-t).toFixed(1)};return {vill:T(()=>updateVillagers(.016)),render:T(()=>renderer.render(scene,camera)),render2:T(()=>renderer.render(scene,camera))}})()

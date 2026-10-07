@@ -1,0 +1,5 @@
+tp|2000|(()=>{peaceNight=()=>true;P.x=20;P.z=40;P.y=groundAt(P.x,P.z,1e4);P.yaw=0;P.pitch=-.05;FLAGS.clock=600;show('pause',false);state='playing';camera.position.set(P.x,P.y+1.6,P.z);return areaAt(P.x,P.z)})()
+spawn|300|(()=>{const a=blueSpawn('bshroom',P.x-1.5,P.z-5),b=blueSpawn('bslug',P.x+2.5,P.z-7),c=blueSpawn('brider',P.x-4,P.z-9);return [!!a,!!b,!!c]})()
+shotBL|2500|(()=>{show('pause',false);state='playing';return BLUE.length})()
+kill|300|(()=>{const r=BLUE.find(e=>e.type==="brider");hurtEnt(r,999,"player");riftOpen(r.x,r.z);return [r.dead,(FLAGS.rifts||[]).length]})()
+shotRift|3000|(()=>{show('pause',false);state='playing';const r=(FLAGS.rifts||[])[0];if(r){P.x=r.x;P.z=r.z+6;P.y=groundAt(P.x,P.z,1e4);P.yaw=0;}return FLAGS.rifts})()

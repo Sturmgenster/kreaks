@@ -1,0 +1,1 @@
+a|0|[state,!!cine,IN.on,$('intro')&&$('intro').hidden,loadBusy,cine&&cine.lines[0]]

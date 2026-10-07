@@ -1,0 +1,2 @@
+enter|2500|FLAGS.clock=600;useDoor({kind:'hallEnter'});P.z=-1;P.x=4120;P.yaw=0;P.pitch=0;1
+shotH3|6000|[FY,P.y,camera.position.y]

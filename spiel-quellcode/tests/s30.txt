@@ -1,0 +1,4 @@
+tp|8000|teleport(1500,450,0);1
+perf|0|(()=>{const T=(f,n)=>{const t=performance.now();for(let i=0;i<n;i++)f();return ((performance.now()-t)/n).toFixed(2)};return {wild:T(()=>updateWild(1/60),60),anim:T(()=>updateAnimals(1/60),30),harv:T(()=>{hvT=0;updateHarvest(1/60)},10),natta:T(()=>updateNatta(1/60),30),night:T(()=>updateNightMobs(1/60),30)}})()
+tp2|6000|teleport(1250,-380,0);1
+perf2|0|(()=>{const T=(f,n)=>{const t=performance.now();for(let i=0;i<n;i++)f();return ((performance.now()-t)/n).toFixed(2)};return {anim:T(()=>updateAnimals(1/60),30),attack:T(()=>{P.atkReady=0;P.stats.st=100;attack()},20)}})()

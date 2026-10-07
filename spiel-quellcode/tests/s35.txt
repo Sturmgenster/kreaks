@@ -1,0 +1,6 @@
+tp|3000|FLAGS.clock=12*60;P.x=-2;P.z=704;P.y=groundAt(P.x,P.z,1e4)+2.5;P.yaw=Math.atan2(-(0-P.x),-(746-P.z));P.pitch=-.12;1
+shotC1|6000|1
+tp2|0|P.x=20;P.z=764;P.y=groundAt(P.x,P.z,1e4)+3;P.yaw=Math.atan2(-(-20-P.x),-(700-P.z));P.pitch=-.12;1
+shotC2|6000|1
+tp3|0|P.x=-30;P.z=721;P.y=groundAt(P.x,P.z,1e4)+2;P.yaw=Math.atan2(-(-60-P.x),-(721-P.z));P.pitch=-.05;1
+shotC3|6000|1

@@ -1,0 +1,9 @@
+tp|6000|teleport(...TP.natta.p(),0);1
+info|0|[NAT.init,NAT.spots.length,JSON.stringify(NAT.spots.map(s=>[Math.round(s.x),Math.round(s.z),jMud(s.x,s.z).toFixed(2)])),NAT.st]
+roam|0|(()=>{NAT.st='roam';NAT.lift=.3;const s=NAT.spots[0];NAT.x=s.x;NAT.z=s.z;NAT.spot=1;for(let i=0;i<60;i++){natMove(s.x+i*.5,s.z+Math.sin(i*.3)*3,10,.05);}teleport(NAT.x+10,NAT.z+12,0);P.yaw=Math.atan2(-(NAT.x-10-P.x),-(NAT.z-P.z));P.pitch=-.1;NAT.st='hold';return [NAT.x,NAT.z]})()
+shotNat1|2500|1
+fight|0|(()=>{NAT.st='fight';NAT.lift=2.2;NAT.mouth=1;natBar(true);return 1})()
+shotNat2|2500|1
+sim|0|(()=>{teleport(NAT.x+6,NAT.z+3,0);P.stats.hp=P.stats.maxHp=5000;const h0=P.stats.hp;const acts={};for(let i=0;i<600;i++){updateNatta(.05);if(NAT.act)acts[NAT.act.k]=(acts[NAT.act.k]||0)+1;}return [NAT.st,h0-P.stats.hp,JSON.stringify(acts)]})()
+hits|0|(()=>{let n=0;const h=NAT.hp;for(let i=0;i<40;i++){P.atkReady=0;P.stats.st=100;P.yaw=Math.atan2(-(NAT.x-P.x),-(NAT.z-P.z));attack();updateNatta(.05);}return [h,NAT.hp,NAT.st]})()
+kill|0|(()=>{nattaHurt(99999,'head');for(let i=0;i<10;i++)updateNatta(.1);return [NAT.st,FLAGS.nattaDead,drops.map(d=>d.id).join(',')]})()

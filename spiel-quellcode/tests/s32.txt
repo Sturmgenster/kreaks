@@ -1,0 +1,5 @@
+wait|6000|[FLAGS.mq,state]
+h0|0|(()=>{const n=DIALOGS.Hagen.nodes.hello();return n.text.slice(0,40)+' | '+n.opts.map(o=>o.label).join('|')})()
+d0|0|(()=>{const D=DIALOGS.Dofra;const s=D.start();const n=D.nodes[s]();const o=n.opts[2];o.act&&o.act();return s+' -> '+D.nodes[o.go]().text.slice(-90)})()
+h1|0|(()=>{const n=DIALOGS.Hagen.nodes.hello();const o=n.opts[0];o.act();return o.label+' | mq='+FLAGS.mq+' | '+DIALOGS.Hagen.nodes[o.go]().opts.map(o=>o.label).join('|')})()
+h2|0|(()=>{const o=DIALOGS.Hagen.nodes.mq_h2().opts[0];o.act();return [FLAGS.mq,mqObjective().t]})()

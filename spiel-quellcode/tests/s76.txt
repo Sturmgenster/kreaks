@@ -1,0 +1,1 @@
+fileSpr|0|Object.keys(SPR).filter(k=>/^(pine|oak|birch|bush|grass|tall|flower|fern|rock|srock|stump|dpine|dead|redwood|rw|acacia|baobab|palm|jpalm|jtree|cactus|bcactus|dshrub|reed|mushroom|termite|bones|sgrass|lrock|jbush|jleaf|liana|deadr|kpine|maple|sakura|caveent|ice|snow|cmush|lily|shell|drift|coral|kelp)/.test(k)).map(k=>k+':'+SPR[k].w+'x'+SPR[k].h).join(' ')

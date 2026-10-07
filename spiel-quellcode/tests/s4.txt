@@ -1,0 +1,4 @@
+tp|6000|teleport(PROCK.x-PROCK.c*60,PROCK.z-PROCK.s*60,0);P.yaw=Math.atan2(-(PROCK.x-P.x),-(PROCK.z-P.z));P.pitch=0.05;1
+shotRock1|500|[P.x,P.z]
+tp2|4000|teleport(PROCK.x+PROCK.s*55,PROCK.z-PROCK.c*55,0);P.yaw=Math.atan2(-(PROCK.x-P.x),-(PROCK.z-P.z));1
+shotRock2|500|1

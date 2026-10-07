@@ -1,0 +1,6 @@
+homes|0|villagers.filter(v=>!v.home).map(v=>v.name).join(',')+' | '+villagers.length
+tp|4000|teleport(CODA.x,CODA.z+5,0);FLAGS.clock=21*60+40;1
+sim|0|(()=>{for(let i=0;i<900;i++){FLAGS.clock+=.1;updateVillagers(.1);}return [villagers.filter(v=>v.asleep).length,villagers.filter(v=>v.goHome).map(v=>v.name+':'+Math.hypot(v.x-v.home[0],v.z-v.home[1]).toFixed(1)).join(' '),FLAGS.clock]})()
+morn|0|FLAGS.clock=7*60+30;(()=>{for(let i=0;i<30;i++)updateVillagers(.1);return villagers.filter(v=>v.asleep).length})()
+frog|0|(()=>{teleport(FROG.x+FROG.r+6,FROG.z,0);FLAGS.clock=22*60;for(let i=0;i<600;i++)updateFrogs(.1);return frogs.map(v=>v.name+(v.asleep?':Z':v.singAt?':♪':':-')).join(' ')})()
+frog2|0|(()=>{FLAGS.clock=1*60;for(let i=0;i<600;i++)updateFrogs(.1);return frogs.filter(v=>v.asleep).length+'/'+frogs.length})()

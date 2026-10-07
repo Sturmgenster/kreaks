@@ -1,0 +1,5 @@
+tp|6000|teleport(1250,-380,0);P.yaw=0;P.pitch=-.15;1
+roam|0|(()=>{const fx=-Math.sin(P.yaw),fz=-Math.cos(P.yaw),rx=Math.cos(P.yaw),rz=-Math.sin(P.yaw);NAT.st="hold";NAT.lift=.3;NAT.mouth=0;NAT.x=P.x+fx*8+rx*16;NAT.z=P.z+fz*8+rz*16;NAT.trail=[];natPush();for(let i=0;i<40;i++){natMove(P.x+fx*(8+Math.sin(i*.25)*2)+rx*(16-i*.4),P.z+fz*(8+Math.sin(i*.25)*2)+rz*(16-i*.4),10,.05);}return [NAT.x,NAT.z,NAT.trail.length]})()
+shotNat3|3000|1
+rear|0|NAT.lift=2.3;NAT.mouth=1;1
+shotNat4|3000|1

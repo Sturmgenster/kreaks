@@ -1,0 +1,12 @@
+folk|0|MARKET_FOLK.map(F=>{const v=villagers.find(q=>q.name===F.name);return F.name+':'+(v?Math.round(v.ax)+','+Math.round(v.az)+' bed '+Math.round(v.bed)+' home '+(v.home?Math.round(v.home[0])+','+Math.round(v.home[1]):'-'):'missing')}).join(' | ')
+dofra|0|SHOPS.Dofra.sell.map(x=>x[0]).join(',')+' || '+SHOPS.Hagen.sell.map(x=>x[0]).join(',')+' || '+(SHOPS['Meister Wen']?SHOPS['Meister Wen'].sell.map(x=>x[0]).join(','):'-')
+tp|3000|P.x=0;P.z=704;P.y=groundAt(P.x,P.z,1e4)+.1;P.yaw=Math.PI;P.pitch=-.1;FLAGS.clock=600;for(const v of villagers)if(v.ax!=null&&MARKET_FOLK.some(F=>F.name===v.name)){v.x=v.ax;v.z=v.az;v.asleep=false;}1
+shotM1|6000|1
+shopW|500|(()=>{addItem('flower',3);addItem('w_oak',4);const v=villagers.find(q=>q.name==='Bruno');openDialog(v);choose(0);return shop&&shop.def.buy.map(x=>x.join(':')).join(',')+' SELL '+shop.def.sell.map(x=>x.join(':')).join(',')})()
+cl|300|closeShop();closeDialog();state
+junk|500|(()=>{addItem('mushroom',5);addItem('ring',1);const v=villagers.find(q=>q.name==='Gustl');openDialog(v);const t=dlg.full;choose(0);return t+' || '+shop.def.buy.map(x=>x.join(':')).join(',')+' SELL '+shop.def.sell.map(x=>x.join(':')).join(',')})()
+shotM2|2500|1
+cl2|300|closeShop();closeDialog();state
+days|0|(()=>{const o=[];for(let d=1;d<6;d++){FLAGS.day=d;junkStock();stallStock('Wilma');o.push(SHOPS.Gustl.buy.map(x=>x[0]).join(',')+' / '+SHOPS.Wilma.buy.map(x=>x[0]).join(','));}return o.join(' | ')})()
+luck|0|(()=>{equip.neck={id:'luckcharm',n:1};const x0=FLAGS.xp||0;gainXP(100);return [(FLAGS.xp||0)-x0, !!ITEMS.luckcharm.icon]})()
+night|0|(()=>{FLAGS.clock=1300;for(let i=0;i<40;i++)updateVillagers(.5);return MARKET_FOLK.map(F=>{const v=villagers.find(q=>q.name===F.name);return F.name+(v.asleep?':zzz':v.goHome?':home':':wach')}).join(' ')})()

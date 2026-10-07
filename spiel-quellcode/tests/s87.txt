@@ -1,0 +1,9 @@
+cave|0|(()=>{wlFast=true;let found=null;for(let r=2;r<12&&!found;r++)for(let a=-r;a<=r&&!found;a++)for(const b of[-r,r]){const s=wlSite(a,b);const c=wlCave(s);if(c){found=[s,c];break;}}if(!found)return'none';const[s,c]=found;window.__C=found;P.x=c.x+Math.cos(c.ea)*.2;P.z=c.z+Math.sin(c.ea)*.2;P.y=groundAt(P.x,P.z,1e4);camera.position.set(P.x,P.y+1.6,P.z);P.yaw=Math.atan2(-(c.x-P.x),-(c.z-P.z));P.pitch=0;return [s.name,s.b,Math.round(c.x),Math.round(c.z)]})()
+door|0|(()=>{const q=wlCaveNear();if(!q)return 'no near';const c=q[1];P.x=c.x+3;P.z=c.z;P.yaw=Math.atan2(-(c.x-P.x),-(c.z-P.z));P.pitch=-.1;const d=doorLooked();return JSON.stringify(d&&{k:d.kind,i:d.i,w:!!d.wild})+' prompt '+storyPrompt2()})()
+enter|3000|(()=>{const d=doorLooked();if(!d)return'nodoor';useDoor(d);return [P.x|0,P.z|0,interiorKind(P.x,P.z),areaAt(P.x,P.z),caveCur&&caveCur.i]})()
+exit|2500|(()=>{const c=CAVES[caveCur?caveCur.i:wlSlot0];useCaveDoor({kind:'caveExit',i:c.i});return [Math.round(P.x),Math.round(P.z),areaAt(P.x,P.z)]})()
+tav|1500|useDoor({kind:'tavernEnter'});[P.x|0,interiorKind(P.x,P.z),areaAt(P.x,P.z)]
+realm|1500|(()=>{P.x=R_ARRIVE.x;P.z=R_ARRIVE.z;P.y=groundAt(P.x,P.z,1e4);return [interiorKind(P.x,P.z),areaAt(P.x,P.z),P.y.toFixed(1)]})()
+swim|0|(()=>{const q=window.__F;P.x=-4976;P.z=-4769;P.y=groundAt(P.x,P.z,1e4);state='playing';const y=P.y;return [getHeight(P.x,P.z).toFixed(1),y]})()
+border|0|(()=>{P.x=49999;P.z=10;clampWorld(P);const a=[P.x];P.x=52000;clampWorld(P);a.push(P.x);return a})()
+harv|0|(()=>{P.x=0;P.z=1200;P.y=groundAt(P.x,P.z,1e4);camera.position.set(P.x,P.y+1.6,P.z);for(let k=0;k<200;k++)wlUpdate();let n=0,spr={};for(const l of HG.values())for(const b of l)if(b.spr&&b.spr.startsWith('wl_')){n++;spr[b.spr.replace(/\d+$/,'')]=1;}return n+' '+Object.keys(spr).join(',')})()

@@ -1,0 +1,1 @@
+a|0|Object.entries(window.__SC).sort((a,b)=>b[1]-a[1]).map(e=>e.join(':')).join(' ')

@@ -1,0 +1,2 @@
+w|5000|(()=>{mpWaitShow('x','y',3);return 1})()
+c|100|[$('mpWait').hidden,$('mpWC').textContent,state]

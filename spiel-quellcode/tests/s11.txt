@@ -1,0 +1,4 @@
+tp|8000|teleport(1500,450,0);1
+cnt|0|(()=>{const m={};for(const x of WM)m[x.sp]=(m[x.sp]||0)+1;return [WM.length,WG.length,JSON.stringify(m)]})()
+shotW1|500|(()=>{const g=WG.find(g=>g.sp==='gnu');const l=wAlive(g);teleport(l[0].x+25,l[0].z+10,0);P.yaw=Math.atan2(-(l[0].x-P.x),-(l[0].z-P.z));return l.length})()
+shotW2|2500|1

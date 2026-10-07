@@ -1,0 +1,6 @@
+g|0|(()=>{const g=VB.find(b=>b.type==='guild');return g?[Math.round(g.x),Math.round(g.z),g.rot.toFixed(2),guildOut&&Math.round(guildOut.x)+','+Math.round(guildOut.z)]:'none'})()
+m|2000|[mercEnts.length,mercEnts.map(e=>e&&e.name+':'+Math.round(e.x)+','+Math.round(e.z)).join(' '),!!mercMesh]
+tpOut|2500|P.x=guildOut.x+guildOut.nx*9;P.z=guildOut.z+guildOut.nz*9;P.y=groundAt(P.x,P.z,1e4)+.1;P.yaw=Math.atan2(guildOut.nx,guildOut.nz);P.pitch=.05;FLAGS.clock=600;1
+shotG1|6000|1
+enter|2500|useDoor({kind:'guildEnter'});[interiorKind(P.x,P.z),areaAt(P.x,P.z)]
+shotG2|6000|1

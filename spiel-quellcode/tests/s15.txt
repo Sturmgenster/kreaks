@@ -1,0 +1,6 @@
+tp|6000|FLAGS.clock=13*60;teleport(...prWorld(0,60),0);1
+sim|0|(()=>{for(let i=0;i<1500;i++)updateWild(.1);return WM.filter(m=>m.sp.startsWith('lion')&&m.g.home===PROCK).map(m=>(m.male?'M':'f')+':'+m.st+' den'+Math.round(Math.hypot(m.x-PROCK.den.x,m.z-PROCK.den.z))+' h'+prideH(m.x,m.z).toFixed(1)+' uv'+prLocal(m.x,m.z).map(v=>v.toFixed(0))).join(' | ')})()
+shotL1|1500|(()=>{const d=PROCK.den;teleport(d.x+Math.cos(d.ang)*14,d.z+Math.sin(d.ang)*14,0);P.yaw=Math.atan2(-(d.x-P.x),-(d.z-P.z));P.pitch=0;return 1})()
+dusk|0|FLAGS.clock=19*60;WG.filter(g=>g.sp==="lion").forEach(g=>{g.hunger=0;g.st="rest";});(()=>{for(let i=0;i<2000;i++)updateWild(.1);return WM.filter(m=>m.sp.startsWith('lion')&&m.g.home===PROCK).map(m=>(m.male?'M':'f')+':'+m.st+' h'+prideH(m.x,m.z).toFixed(1)+' L'+(prideLedgeTop(m.x,m.z)!=null)+' uv'+prLocal(m.x,m.z).map(v=>v.toFixed(0))).join(' | ')})()
+shotL2|1500|teleport(...prWorld(75,-25),0);P.yaw=Math.atan2(-(PROCK.x-P.x),-(PROCK.z-P.z));P.pitch=0.15;1
+night|0|FLAGS.clock=23*60;(()=>{for(let i=0;i<300;i++)updateWild(.1);const r={};for(const m of WM){if(!['zebra','gnu','gazelle','buffalo'].includes(m.sp))continue;r[m.st]=(r[m.st]||0)+1;}return JSON.stringify(r)})()

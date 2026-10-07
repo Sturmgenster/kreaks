@@ -1,0 +1,5 @@
+tp|3000|P.x=1000;P.z=600;P.y=groundAt(P.x,P.z,1e4)+.1;P.yaw=Math.PI/2;P.pitch=.3;FLAGS.clock=630;1
+find|0|(()=>{let r=[];scene.traverse(m=>{if(m.isMesh&&m.geometry){if(!m.geometry.boundingBox)m.geometry.computeBoundingBox();const b=m.geometry.boundingBox;if(b.max.x>2500&&b.min.x>500&&b.min.x<1000){window.__SUS=m;r.push(m.material.type+' '+m.geometry.attributes.position.count+' vis '+m.visible+' col '+(m.material.color&&m.material.color.getHexString())+' tr '+m.material.transparent+' op '+m.material.opacity+' map '+!!m.material.map+' uniforms '+Object.keys(m.material.uniforms||{}).join(','));}}});return r.join(' | ')})()
+shotW1|6000|1
+hide|500|window.__SUS.visible=false;1
+shotW2|6000|1

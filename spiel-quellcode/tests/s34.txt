@@ -1,0 +1,2 @@
+tp|3000|P.x=0;P.z=800;P.y=groundAt(P.x,P.z,1e4)+60;P.yaw=0;P.pitch=-.75;FLAGS.clock=12*60;P.vy=0;P.ground=true;1
+shotTop|6000|(()=>{P.y=groundAt(P.x,P.z,1e4)+60;P.vy=0;return 1})()

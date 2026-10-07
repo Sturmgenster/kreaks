@@ -1,0 +1,3 @@
+info|0|[WL_READY,!!WL_TEX,WL_TEX&&WL_TEX.image.width+'x'+WL_TEX.image.height,CAVES.length,wlSlot0,getHeight(-1500,300).toFixed(2),getHeight(0,-2500).toFixed(2),getHeight(0,2000).toFixed(2),areaAt(0,2000),AREAS[areaAt(0,2000)]]
+tp|4000|P.x=0;P.z=1000;P.y=groundAt(P.x,P.z,1e4)+2;P.yaw=Math.PI;P.pitch=-.1;FLAGS.clock=660;show('pause',false);state='playing';[areaAt(P.x,P.z),AREAS[areaAt(P.x,P.z)],WL_CH.size]
+shotW1|8000|(()=>{show('pause',false);state='playing';return [WL_CH.size,[...WL_CH.values()].filter(c=>c.built&&!c.empty).length]})()

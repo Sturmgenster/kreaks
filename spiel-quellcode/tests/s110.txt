@@ -1,0 +1,5 @@
+setup|2000|(()=>{FLAGS.kreak=1;FLAGS.kreakNamed=1;ensureKreak();ensureMercs();const G=GF();for(const n of['Fenn','Lyra','Ivo','Theo']){G.hired[n]={until:gameMinutes()+3000,wait:false};const e=mercEnts[MERC_BY[n].i];e.hired=true;e.mode='follow';}return 1})()
+mount|1500|(()=>{FLAGS.mounts={horse0:1};FLAGS.mountSel='horse0';summonMount('horse0');mount.x=P.x+1;mount.z=P.z+1;mount.state='idle';mount.delay=0;mountUp();for(let i=0;i<60;i++){time+=.05;updateDemons(.05);}return [kreakE.steed]})()
+place|300|(()=>{P.yaw=0;P.pitch=-.02;P.view=0;const L=[kreakE,...['Fenn','Lyra','Ivo','Theo'].map(n=>mercEnts[MERC_BY[n].i])];L.forEach((e,i)=>{e.x=P.x-7+i*3.5;e.z=P.z-9;e.special2=e.special;});window.__L=L;return L.map(e=>e.steed)})()
+freeze|100|(()=>{compFollowing=e=>!!e.steed||true;for(const e of window.__L){e.mode='wait';}kreakE.rescue=1;return 1})()
+shotR2|3000|(()=>{show('pause',false);state='playing';for(const e of window.__L){e.x=e.x;}return steedN})()

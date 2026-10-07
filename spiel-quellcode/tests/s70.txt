@@ -1,0 +1,2 @@
+a|0|[850,700,620].map(x=>x+': '+[114,116,118,119,119.9,120,120.1,121,122,124].map(z=>[getHeight(x,z),rawHeight(x,z),farRaw(x,z),desertW(x,z)].map(v=>v.toFixed(2)).join('/')).join(' | ')).join(' ### ')
+b|0|[780,800,820,838].map(x=>x+': '+[-126,-123,-121,-120,-119,-117,-114].map(z=>[getHeight(x,z),rawHeight(x,z),farRaw(x,z)].map(v=>v.toFixed(2)).join('/')).join(' | ')).join(' ### ')

@@ -1,0 +1,3 @@
+imgIcons|300|(()=>{const ids=['wsword','ssword','waxe','spick','spear','rod','torch','shield','dagger','akuma','bow','wood','meat','berries','lollipop','iron_sword','iron_pick','iron_axe'].filter(k=>SPR[k]);const c=document.createElement('canvas');c.width=ids.length*40;c.height=40;const x=c.getContext('2d');x.imageSmoothingEnabled=false;x.fillStyle='#456';x.fillRect(0,0,c.width,40);ids.forEach((k,i)=>{const ic=SPR[k].c;x.drawImage(ic,i*40+2,2,ic.width*2,ic.height*2);});window.__ids=ids;return c.toDataURL();})()
+ids|100|window.__ids.map(k=>k+':'+SPR[k].c.width+'x'+SPR[k].c.height)
+keys|100|Object.keys(ITEMS).filter(k=>ITEMS[k].weapon||ITEMS[k].tool).join(',')

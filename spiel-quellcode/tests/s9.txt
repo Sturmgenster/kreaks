@@ -1,0 +1,7 @@
+tp|5000|teleport(1500,300,0);1
+cnt|0|(()=>{let n=0,m={};for(const l of HG.values())for(const b of l){n++;const k=b._o.spr.replace(/\d+$/,'');m[k]=(m[k]||0)+1;}return [n,JSON.stringify(m)]})()
+face|300|(()=>{let best=null,bd=1e9;for(const l of HG.values())for(const b of l){if(!b._o.spr.startsWith('acacia'))continue;const d=Math.hypot(b.x-P.x,b.z-P.z);if(d<bd){bd=d;best=b;}}window.__T=best;teleport(best.x+2.2,best.z,0);P.yaw=Math.atan2(-(best.x-P.x),-(best.z-P.z));P.pitch=0;return [best.x,best.z,bd,best.hp]})()
+shotA|300|1
+hit|0|(()=>{const r=[];for(let i=0;i<12;i++){P.atkReady=0;P.stats.st=100;attack();r.push(window.__T.hp);}return r})()
+after|1500|[window.__T._gone,window.__T.spr,JSON.stringify(drops.map(d=>d.id+':'+d.n)),Object.keys(FLAGS.harv||{}).length]
+shotB|300|1

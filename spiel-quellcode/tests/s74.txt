@@ -1,0 +1,1 @@
+a|0|[850,856].map(x=>x+': '+[-124,-122,-121,-120,-119,-118].map(z=>[getHeight(x,z),farRaw(x,z),farRaw0(x,z),farRawOld(x,Math.max(z,-120)),jungleW(x,z),jungleH(x,z),rawHeight(x,z)].map(v=>v.toFixed(2)).join('/')).join(' | ')).join(' ### ')

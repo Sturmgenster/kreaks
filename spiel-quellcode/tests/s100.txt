@@ -1,0 +1,1 @@
+h|100|(()=>[P.x,P.z,getHeight(2,4.8),getHeight(0,0),groundAt(2,4.8,10),WL_READY,inCore(2,4.8)])()

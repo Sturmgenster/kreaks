@@ -1,0 +1,2 @@
+menu|1500|(()=>{openMenu();return 1})()
+shotMenu|500|1

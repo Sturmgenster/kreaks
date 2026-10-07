@@ -1,0 +1,4 @@
+east|3000|(()=>{wlFast=true;P.x=4100;P.z=0;P.y=groundAt(P.x,P.z,1e4)+6;P.yaw=-1.57;P.pitch=-.15;show('pause',false);state='playing';camera.position.set(P.x,P.y+1.6,P.z);for(let k=0;k<200;k++)wlUpdate();return [areaAt(P.x,P.z),AREAS[areaAt(P.x,P.z)],getHeight(P.x,P.z).toFixed(1),[...WL_CH.values()].filter(c=>c.ground).length]})()
+shotX|5000|(()=>{show('pause',false);state='playing';return 1})()
+far|3000|(()=>{P.x=-30000;P.z=-42000;P.y=groundAt(P.x,P.z,1e4)+6;camera.position.set(P.x,P.y+1.6,P.z);for(let k=0;k<200;k++)wlUpdate();return [AREAS[areaAt(P.x,P.z)],wlDom(P.x,P.z).b]})()
+shotY|5000|(()=>{show('pause',false);state='playing';return 1})()

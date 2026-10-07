@@ -1,0 +1,1 @@
+dist|0|(()=>{const c={};for(let i=-50;i<=50;i+=2)for(let j=-50;j<=50;j+=2){const s=wlSite(i,j);c[s.b]=(c[s.b]||0)+1;}const n=[-50,-25,0,25,50].map(j=>{const cc={};for(let i=-50;i<=50;i+=5){const s=wlSite(i,j);cc[s.b]=(cc[s.b]||0)+1;}return j+':'+JSON.stringify(cc);});return JSON.stringify(c)+' || '+n.join(' | ')})()

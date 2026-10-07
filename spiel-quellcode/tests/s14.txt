@@ -1,0 +1,2 @@
+tp|6000|FLAGS.clock=13*60;teleport(...prWorld(0,60),0);1
+dbg|0|(()=>{const g=WG.find(g=>g.home===PROCK);const l=wAlive(g);const m=l.find(m=>!m.male);const a=[m.x,m.z];wLions(g,l,.5);const b=[m.x,m.z];const r=prRoute2(m,PROCK.den.x,PROCK.den.z);return JSON.stringify({a,b,st:m.st,gst:g.st,hunger:g.hunger,r,mp:[m.x,m.z],wl:wLand('lioness',r[0],r[1]),land2:wLand('lioness',m.x,m.z)})})()

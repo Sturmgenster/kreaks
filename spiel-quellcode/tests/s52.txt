@@ -1,0 +1,8 @@
+tp|3000|P.x=-80;P.z=riverZ(-80)-20;P.y=groundAt(P.x,P.z,1e4)+.1;P.yaw=Math.PI*.8;P.pitch=-.15;FLAGS.clock=630;[Math.round(P.y*10)/10]
+shotR1|6000|[0,4,8,12,16,20,26].map(d=>Math.round(getHeight(-80,riverZ(-80)+d)*100)/100)
+tp|3000|P.x=BX+4;P.z=BZ-24;P.y=groundAt(P.x,P.z,1e4)+.1;P.yaw=Math.PI*.95;P.pitch=-.12;[BX,BZ]
+shotR2|6000|[-12,-11,-9,0,9,11,12].map(d=>Math.round(groundAt(BX,BZ+d,5)*100)/100)
+tp|3000|P.x=riverX1(250)+22;P.z=250;P.y=groundAt(P.x,P.z,1e4)+.1;P.yaw=Math.PI/2+.4;P.pitch=-.15;1
+shotR3|6000|1
+tp|3000|P.x=1500;P.z=660;(()=>{let best=null,bd=1e9;for(let x=1400;x<1700;x+=4)for(let z=500;z<900;z+=4){const d=Math.abs(sRiverD(x,z)-18);if(d<bd){bd=d;best=[x,z];}}P.x=best[0];P.z=best[1];P.y=groundAt(P.x,P.z,1e4)+.1;P.pitch=-.15;let bx=0,bz=0,b2=1e9;for(let a=0;a<6.28;a+=.2){const d=sRiverD(P.x+Math.sin(a)*20,P.z+Math.cos(a)*20);if(d<b2){b2=d;bx=a;}}P.yaw=bx+Math.PI;return best})()
+shotR4|6000|1

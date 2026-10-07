@@ -1,0 +1,5 @@
+st|0|[loreStage(),villagerLine(villagers[3]),villagerLine(villagers[20]),hagenNews()]
+shops|0|JSON.stringify({dofra:SHOPS.Dofra.sell.length,bana:SHOPS.Bana.base,quorg:SHOPS.Quorg.sell.slice(-3)})
+dlg|0|(()=>{const out=[];for(const k of['Corvin','Dofra','Hagen','Uka-Uka','Mumbo','Bertram','Gisbert']){const D=DIALOGS[k];const s=typeof D.start==='function'?D.start():D.start;const n=D.nodes[s]();out.push(k+':'+s+':'+n.text.slice(0,60)+' ['+n.opts.map(o=>o.label).join('|')+']');}return out.join('\n')})()
+wen|5000|(()=>{teleport(KX0+60,(KZ0+KZ1)/2,0);updateKCitizens();return kWen&&[kWen.name,kWen.x,kWen.z]})()
+stock|0|(()=>{const m=MERCHANTS[0];merchStock(m);return JSON.stringify(SHOPS[m.name].buy)+' '+SHOPS[m.name].greet})()
