@@ -361,6 +361,8 @@ const RACES={
   frog:{name:'Froschmensch',plural:'Froschmenschen',size:.95,hp:70,st:140,mp:0,speed:.65,jump:10,desc:'Langsam zu Fuß, aber ein gewaltiger Springer. Kann niemals Magie wirken.'},
   kobold:{name:'Kobold',plural:'Kobolde',size:.15,hp:30,st:135,mp:135,speed:1,desc:'Winzig klein, kaum größer als eine Hand. Zerbrechlich, aber voller Energie und Magie.'},
   dragon:{name:'Drachenmensch',plural:'Drachenmenschen',size:1.1,hp:130,st:110,mp:100,speed:.95,fly:1,desc:'Geschuppte Nachfahren der Drachen. Groß, kräftig und können fliegen.'}};
+// Erweiterungen für neue Völker (werden in parts/y_races.js gefüllt)
+const RACE_DRAW={},BAREFOOT={},NOEARS={},CUSTOMFACE={};
 const AGES={kid:'Kind',adult:'Erwachsen',old:'Alt'};
 function charStats(c){const r=RACES[c.race],kid=c.age==='kid',old=c.age==='old';
   return{hp:Math.round(r.hp*(kid?.5:1)),st:r.st,mp:r.mp,speed:r.speed*(old?.85:1),size:r.size*(kid?.8:1),jump:r.jump?(kid?r.jump/2:r.jump):1,fly:r.fly?(kid?.5:1):0,dmg:old?1.25:1,regen:old?.5:1,noMagic:r.mp===0};}
@@ -406,13 +408,13 @@ function drawHero(c,frame,back,pose,poseSide){
   // Beine
   if(!longC){const lw=Math.max(2,Math.floor(half)-1),lp=bareLegs?sk:bot;
     rect(cx-lw,cx-1,legTop,H-4-lL,lp);rect(cx+1,cx+lw,legTop,H-4-rL,lp);
-    const fp=(R==='frog'||R==='dragon'||R==='kobold'||bareLegs)?sk:CLOTH.leather,fw=R==='frog'?2:R==='dragon'?1:1;
+    const fp=(R==='frog'||R==='dragon'||R==='kobold'||BAREFOOT[R]||bareLegs)?sk:CLOTH.leather,fw=R==='frog'?2:R==='dragon'?1:1;
     rect(cx-lw-fw,cx-1,H-3-lL,H-1-lL,fp,-.1);rect(cx+1,cx+lw+fw,H-3-rL,H-1-rL,fp,-.1);
     if(R==='dragon'){p.set(cx-lw-1,H-1-lL,hex('#e8e0c8'));p.set(cx+lw+1,H-1-rL,hex('#e8e0c8'));}}
   else{const sway=frame===1?-1:frame===2?1:0,pl=cl==='robe'?top:top;
     for(let y=tTop;y<H-2;y++){const t=y<=waist?0:(y-waist)/(H-2-waist),hw2=half+(y<=waist?0:1+t*3.2),sw=y>H-5?sway:0;
       for(let x=Math.round(cx-hw2)+sw;x<=Math.round(cx+hw2)+sw;x++)p.set(x,y,shade(pl,x,cx-hw2,cx+hw2,y,y===waist?-.25:0));}
-    const fp=(R==='frog'||R==='dragon'||R==='kobold')?sk:CLOTH.leather;rect(cx-3+lL,cx-1+lL,H-2,H-1,fp,-.2);rect(cx+1-rL,cx+3-rL,H-2,H-1,fp,-.2);}
+    const fp=(R==='frog'||R==='dragon'||R==='kobold'||BAREFOOT[R])?sk:CLOTH.leather;rect(cx-3+lL,cx-1+lL,H-2,H-1,fp,-.2);rect(cx+1-rL,cx+3-rL,H-2,H-1,fp,-.2);}
   // Rumpf
   const belly=(R==='dwarf'||R==='orc'||R==='frog')&&!kid?1:0;
   for(let y=tTop;y<=waist;y++){const b=belly&&y>tTop+3&&y<waist-1?1:0;for(let x=tx0-b;x<=tx1+b;x++){const col=shade(torsoPal,x,tx0-b,tx1+b,y);
@@ -449,7 +451,7 @@ function drawHero(c,frame,back,pose,poseSide){
   if(R==='elf'){[[hx0-1,-1],[hx1+1,1]].forEach(([x,s])=>{p.set(x,ey,sk[1]);p.set(x+s,ey-1,sk[2]);p.set(x+s*2,ey-2,sk[2]);p.set(x+s,ey,sk[1]);});}
   else if(R==='kobold'){const k=c.ears||'big',n=k==='big'?5:k==='small'?3:4;for(let i=0;i<n;i++){const dy=k==='droop'?i*.6:-i*.45;for(let t=0;t<=Math.max(0,2-i*.5);t++){p.set(hx0-1-i,ey+dy+t,sk[i<2?2:1]);p.set(hx1+1+i,ey+dy+t,sk[i<2?1:0]);}}}
   else if(R==='orc'){p.set(hx0-1,ey,sk[1]);p.set(hx0-2,ey-1,sk[2]);p.set(hx1+1,ey,sk[0]);p.set(hx1+2,ey-1,sk[1]);}
-  else if(R!=='frog'&&R!=='dragon'){p.set(hx0-1,ey,sk[1]);p.set(hx1+1,ey,sk[0]);p.set(hx0-1,ey+1,sk[1]);p.set(hx1+1,ey+1,sk[0]);}
+  else if(R!=='frog'&&R!=='dragon'&&!NOEARS[R]){p.set(hx0-1,ey,sk[1]);p.set(hx1+1,ey,sk[0]);p.set(hx0-1,ey+1,sk[1]);p.set(hx1+1,ey+1,sk[0]);}
   // Gesicht
   if(back){if(R==='frog')for(const s of[-1,1]){const ex0=s<0?hx0+1:hx1-3;for(let y=ht-2;y<=ht;y++)for(let x=ex0;x<=ex0+2;x++)if(!((y===ht-2)&&(x===ex0||x===ex0+2)))p.set(x,y,sk[y<ht-1?2:1]);}}
   else if(R==='frog'){for(const s of[-1,1]){const ex0=s<0?hx0+1:hx1-3;for(let y=ht-2;y<=ht+1;y++)for(let x=ex0;x<=ex0+2;x++)if(!((y===ht-2)&&(x===ex0||x===ex0+2)))p.set(x,y,sk[y<ht?2:1]);
@@ -459,14 +461,14 @@ function drawHero(c,frame,back,pose,poseSide){
     p.set(cx,ey+2,sk[0]);for(let x=cx-2;x<=cx+2;x++)p.set(x,ey+4,hex('#3a1a10'));p.set(cx+1,ey+5,WH);}
   else if(R==='dragon'){p.set(cx-2,ey,eyeCol);p.set(cx+2,ey,eyeCol);p.set(cx-3,ey,eyeCol);p.set(cx+3,ey,eyeCol);p.set(cx-2,ey-1,sk[0]);p.set(cx+2,ey-1,sk[0]);
     rect(cx-2,cx+2,ey+2,hb-1,sk,.25);p.set(cx-1,ey+2,sk[0]);p.set(cx+1,ey+2,sk[0]);for(let x=cx-2;x<=cx+2;x++)p.set(x,hb-1,sk[0]);p.set(cx-2,hb,WH);p.set(cx+2,hb,WH);}
-  else{p.set(cx-2,ey,R==='orc'?hex('#c8a020'):EYE);p.set(cx+2,ey,R==='orc'?hex('#c8a020'):EYE);if(c.asian){p.set(cx-3,ey,EYE);p.set(cx+3,ey,EYE);p.set(cx-3,ey-1,sk[0]);p.set(cx+3,ey-1,sk[0]);}else if(!kid&&R!=='orc'){p.set(cx-3,ey,WH);p.set(cx+3,ey,WH);}
+  else if(!CUSTOMFACE[R]){p.set(cx-2,ey,R==='orc'?hex('#c8a020'):EYE);p.set(cx+2,ey,R==='orc'?hex('#c8a020'):EYE);if(c.asian){p.set(cx-3,ey,EYE);p.set(cx+3,ey,EYE);p.set(cx-3,ey-1,sk[0]);p.set(cx+3,ey-1,sk[0]);}else if(!kid&&R!=='orc'){p.set(cx-3,ey,WH);p.set(cx+3,ey,WH);}
     p.set(cx,ey+1,sk[1]);p.set(cx,ey+2,sk[0]);const MO=hex(R==='orc'?'#2a1a10':'#7a3a2a'),mw=R==='orc'?2:1;for(let x=cx-mw;x<=cx+mw;x++)p.set(x,ey+3,MO);
     if(R==='orc'&&c.tusks!=='none'){const big=c.tusks==='big';p.set(cx-2,ey+2,WH);p.set(cx+2,ey+2,WH);if(big){p.set(cx-2,ey+1,WH);p.set(cx+2,ey+1,WH);}}
     if((fem||kid)&&R!=='orc'){p.set(cx-3,ey+2,hex('#d9806a'));p.set(cx+3,ey+2,hex('#d9806a'));}
     if(old){p.set(cx-2,ey+1,sk[1]);p.set(cx+2,ey+1,sk[1]);}
     if(c.hair!=='none'||c.beard!=='none'){const bc=hr[0];p.set(cx-3,ey-1,bc);p.set(cx-2,ey-1,bc);p.set(cx+2,ey-1,bc);p.set(cx+3,ey-1,bc);}}
   // Haare
-  const hs=(R==='frog'||R==='dragon'||c.guard||c.helm)?'none':c.hair||'none',hcol=old&&!['white','silver'].includes(c.hairColor)?HAIRS.grey:hr;
+  const hs=(R==='frog'||R==='dragon'||CUSTOMFACE[R]||c.guard||c.helm)?'none':c.hair||'none',hcol=old&&!['white','silver'].includes(c.hairColor)?HAIRS.grey:hr;
   const H3=(x,y,k)=>p.set(x,y,hcol[k]);
   if(['short','long','braid','bun','wild'].includes(hs)){for(let x=hx0;x<=hx1;x++)H3(x,ht-1,x<cx?2:1);
     for(let y=ht;y<=ht+1;y++)for(let x=hx0-1;x<=hx1+1;x++)H3(x,y,shadeIdx(.6-(x-cx)/6*.4,3,x,y));
@@ -499,6 +501,7 @@ function drawHero(c,frame,back,pose,poseSide){
   if(R==='dragon'&&back){for(let k=0;k<12;k++){const t=k/11,x=cx+Math.sin(t*2.2)*2*(frame===1?-1:frame===2?1:.4),y=waist-1+t*(H-3-waist),w=Math.max(1,3-t*2.2);for(let o=-w/2;o<=w/2;o+=1)p.set(x+o,y,sk[o<0?2:1]);}
     wing(-1);wing(1);}
   if(c.neck&&!back){const G=hex('#d6b048'),AM=hex('#e07a1c');for(let x=cx-2;x<=cx+2;x++)p.set(x,tTop+1+(Math.abs(x-cx)<2?1:0),G);p.set(cx,tTop+3,AM);}
+  if(RACE_DRAW[R])RACE_DRAW[R]({p,c,cx,ht,hb,hh,hw,hx0,hx1,ey,tTop,waist,legTop,tx0,tx1,half,aw,W,H,sk,hr,back,frame,kid,old,fem,EYE,WH,eyeCol,rect,shade,lL,rL,cl});
   outline(p);const out=p.done();out.headBox=[hx0,hx1,ht,hb];out.waist=waist;out.legTop=legTop;out.handL=[hands[0][0],hands[0][2]];out.handR=[hands[1][1]-1,hands[1][2]];return out;
 }
 function defaultChar(){return{race:'human',sex:'m',age:'adult',skin:0,hair:'short',hairColor:'brown',beard:'none',cloth:'tunic',clothColor:'green',pants:'brown',eyes:'gold',pattern:'spots',horns:'curved',crest:'yes',ears:'big',tusks:'small',name:''};}
@@ -554,13 +557,13 @@ const FPAL={horse:[pal(['#24140a','#42260f','#64391a','#83502a','#a06a3c']),pal(
   cow:[pal(['#2a150a','#462410','#64361a','#824a26','#9e6234']),pal(['#a8a49c','#c8c4ba','#e0dcd2','#f0ece4','#faf7f0'])],cspot:pal(['#0e0c0c','#1a1717','#2a2524']),
   pink:pal(['#8a5048','#b46e64','#d89488']),horn:pal(['#8a7a5a','#c2b08a','#e8dcc0']),hoof:pal(['#1a1612','#2a241e']),
   saddle:pal(['#2a170c','#452713','#64391d','#83502c']),blanket:pal(['#4c1416','#7a2224','#a43a32','#c85a48'])};
-function fEll(p,cx,cy,rx,ry,Pf,lit=.6){for(let y=Math.floor(cy-ry);y<=Math.ceil(cy+ry);y++)for(let x=Math.floor(cx-rx);x<=Math.ceil(cx+rx);x++){const dx=(x-cx)/rx,dy=(y-cy)/ry;if(dx*dx+dy*dy>1)continue;
+function fEllA(p,cx,cy,rx,ry,Pf,lit=.6){for(let y=Math.floor(cy-ry);y<=Math.ceil(cy+ry);y++)for(let x=Math.floor(cx-rx);x<=Math.ceil(cx+rx);x++){const dx=(x-cx)/rx,dy=(y-cy)/ry;if(dx*dx+dy*dy>1)continue;
   const P=typeof Pf==='function'?Pf(x,y):Pf;p.set(x,y,P[shadeIdx(lit-dy*.35-dx*.06+(hash2(x,y,71)-.5)*.16,P.length,x,y)]);}}
 // Seitenansicht (Blick nach rechts). sc = Pixel pro Meter
 function drawFarm(type,frame,v,sc,saddle){
   const s=frame===1?1:frame===2?-1:0,dims={horse:[2.75,2.3],donkey:[2.05,1.95],cow:[2.45,1.5]}[type];
   const W=Math.ceil(dims[0]*sc),H=Math.ceil(dims[1]*sc),p=new Px(W,H),X=m=>m*sc,Y=m=>H-1-m*sc;
-  const E=(x,y,rx,ry,P,lit)=>fEll(p,X(x),Y(y),Math.max(.7,rx*sc),Math.max(.7,ry*sc),P,lit);
+  const E=(x,y,rx,ry,P,lit)=>fEllA(p,X(x),Y(y),Math.max(.7,rx*sc),Math.max(.7,ry*sc),P,lit);
   const leg=(x,top,w,P,sw,dark)=>{const n=Math.max(2,Math.round(top*sc)),wp=Math.max(2,Math.round(w*sc)),hf=Math.max(1,Math.round(.07*sc));
     for(let k=0;k<=n;k++){const t=k/n,y=Math.round(Y(top))+k,xx=X(x)+sw*t*sc*.16;
       for(let o=0;o<wp;o++){const hoof=k>n-hf;p.set(xx+o,y,hoof?FPAL.hoof[o?1:0]:P[Math.min(P.length-1,(dark?0:1)+(o===0?1:0)+(t<.35?1:0))]);}}};
@@ -599,7 +602,7 @@ function drawFarm(type,frame,v,sc,saddle){
 function drawMountView(type,v,front,frame,s){
   const D=type==='donkey',k=D?.74:1,B=D?FPAL.donkey:FPAL.horse[v],Mn=D?FPAL.donkey:FPAL.hmane[v];
   const wk=1.45,W=Math.ceil(1.15*s),H=Math.ceil(2.3*k*s),p=new Px(W,H),cx=(W-1)/2,X=m=>cx+m*wk*s,Y=m=>H-1-m*s;
-  const E=(x,y,rx,ry,P,lit)=>fEll(p,X(x),Y(y),Math.max(.7,rx*wk*s),Math.max(.7,ry*s),P,lit);
+  const E=(x,y,rx,ry,P,lit)=>fEllA(p,X(x),Y(y),Math.max(.7,rx*wk*s),Math.max(.7,ry*s),P,lit);
   const lift=side=>(frame===1&&side<0)||(frame===2&&side>0)?.07:0;
   const legV=(x,top,w,side)=>{const y0=Math.round(Y(top)),y1=Math.round(Y(lift(side))),x0=Math.round(X(x-w/2)),x1=Math.round(X(x+w/2)),hf=Math.max(1,Math.round(.07*s));
     for(let y=y0;y<=y1;y++)for(let xx=x0;xx<=x1;xx++){const hoof=y>y1-hf;p.set(xx,y,hoof?FPAL.hoof[xx===x0?0:1]:B[Math.min(B.length-1,1+(xx===x0?1:0)+(y<y0+(y1-y0)*.35?1:0))]);}};
@@ -630,7 +633,7 @@ function drawMountView(type,v,front,frame,s){
 // Pferdehals aus der Ego-Sicht
 function drawSteedPOV(type,v){const D=type==='donkey',B=D?FPAL.donkey:FPAL.horse[v],Mn=D?FPAL.hmane[0]:FPAL.hmane[v],p=new Px(48,40);
   for(let y=12;y<40;y++){const t=(y-12)/28,hw=6+t*12;for(let x=Math.round(24-hw);x<=Math.round(24+hw);x++){const nx=(x-24)/hw;p.set(x,y,B[shadeIdx(.62-nx*.35-t*.12+(hash2(x,y,5)-.5)*.1,B.length,x,y)]);}}
-  fEll(p,24,11,6.5,4.5,B,.7);
+  fEllA(p,24,11,6.5,4.5,B,.7);
   for(const sx of[-1,1]){const n=D?11:7;for(let i=0;i<n;i++){const w=Math.max(1,Math.round(2.4-i*2/n)),ex=24+sx*(4+i*.35);for(let o=0;o<w;o++){p.set(ex+sx*o,9-i,B[o===0?1:2]);}p.set(ex-sx,9-i,B[0]);}}
   if(!D){for(let y=8;y<40;y++){const x0=Math.round(24-6-(y-12)*.43);for(let o=0;o<3+((y>>2)&1);o++)p.set(x0+o+(y<12?6:0),y,Mn[(o+y)%3]);}for(let x=21;x<=26;x++)p.set(x,7+(x&1),Mn[1]);}
   else for(let y=9;y<40;y++)p.set(24,y,Mn[1]);
@@ -4627,7 +4630,7 @@ function mineHit(W){if(!caveCur)return false;const fx=-Math.sin(P.yaw),fz=-Math.
     if((dx*fx+dz*fz)/Math.max(dist,.01)<.55)continue;bd=dist;best=d;}
   if(!best)return false;const H=heldItem(),it=H&&H.it,tier=it&&it.tool==='pick'?(it.tier||1):0,info=ORES[best.k]||GEMS[best.k];
   if(!tier){Snd.clink(.5);toast('Dafür brauchst du eine Spitzhacke');return true;}if(tier<info.hard){Snd.clink(.6);toast('Deine Spitzhacke ist zu schwach für '+ITEMS[best.k].name);return true;}
-  if(best.hp==null)best.hp=info.hp;best.hp-=12+tier*8;Snd.clink(1);const cc=GEMS[best.k]?GEMS[best.k].col[2]:ORES[best.k].col;
+  if(best.hp==null)best.hp=info.hp;best.hp-=(12+tier*8)*((P.mods&&P.mods.dig)||1);Snd.clink(1);const cc=GEMS[best.k]?GEMS[best.k].col[2]:ORES[best.k].col;
   for(let k=0;k<8;k++)spawnParticle(best.x,best.wy,best.z,(Math.random()-.5)*3,Math.random()*2.5,(Math.random()-.5)*3,Math.random()<.5?0x6a6662:parseInt(cc.slice(1),16),.6,.22);wearTool();
   if(best.hp<=0){caveCur.save.mined[best.j]=1;hideDeposit(best);const n=GEMS[best.k]?1:1+(Math.random()<.4?1:0);spawnDrop(best.k,n,best.x-best.dx*.6,best.wy,best.z-best.dz*.6);gainXP(info.hard*3+(GEMS[best.k]?20:0));Snd.crack();
     if(GEMS[best.k]){const li=caveCur.lamps.findIndex(l=>Math.abs(l.x-best.x)<.01&&Math.abs(l.z-best.z)<.01);if(li>=0)caveCur.lamps.splice(li,1);toast(ITEMS[best.k].name+' gefunden!');}saveGame();}
@@ -6409,7 +6412,7 @@ function partDialogs(){const D=DIALOGS.Dofra;if(D){D.nodes.mq_d3=nd('Es sind vie
    Schlacht um Coda: Dämonen von allen Seiten, Verbündete im ganzen Dorf
    ========================================================= */
 DT.dragonA.fly=1.5;
-const FIN_GOAL=200,FIN_CAP=120;
+const FIN_GOAL=260,FIN_CAP=110;
 {const he=hurtEnt;hurtEnt=function(e,n,by){if(FIN.on&&e&&e.fin&&e.fac==='ally'&&by==='demon')n*=e.type==='dragonA'?.4:.5;return he(e,n,by);};}
 function villagePoint(){for(let k=0;k<20;k++){const x=(Math.random()-.5)*150,z=625+Math.random()*195;if(inWorld(x,z)&&!nearWater(x,z)&&!collHitXZ(x,z))return[x,z];}return[(Math.random()-.5)*20,700+Math.random()*40];}
 function codaSpot(side){const base=side==='n'?-Math.PI/2:side==='s'?Math.PI/2:side==='w'?Math.PI:side==='e'?0:Math.random()*6.283;
@@ -7322,7 +7325,7 @@ function hurtWild(m,n,by){if(m.dead)return;m.hp-=n;m.hurt=.22;const S=WSP[m.sp],
 // ---------- Pflanzenfresser ----------
 function wThreats(g,list,dt){// Spieler und jagende Räuber in der Nähe → ganze Gruppe flieht
   const S=WSP[g.sp];if(!S.fleeR||g.flee>0)return;const sneak=down('sneak')&&!P.riding,R=S.fleeR*(sneak?.5:1)*(P.riding?1.3:1);
-  for(const m of list){if(state==='playing'&&!cheatOn()&&Math.hypot(P.x-m.x,P.z-m.z)<R&&P.x<60000){g.flee=5+Math.random()*4;g.fx=P.x;g.fz=P.z;if(g.sp==='zebra')wSnd('bray',m.x,m.z);if(g.sp==='monkey')wSnd('chatter',m.x,m.z);return;}}
+  for(const m of list){if(false&&Math.hypot(P.x-m.x,P.z-m.z)<R){g.flee=5+Math.random()*4;g.fx=P.x;g.fz=P.z;if(g.sp==='zebra')wSnd('bray',m.x,m.z);if(g.sp==='monkey')wSnd('chatter',m.x,m.z);return;}}
   for(const p of wPredAct){if(p.dead)continue;
     for(const m of list){const d=wDist(p,m);if(d<(p.st==='chase'?45:14)){g.flee=6+Math.random()*4;g.fx=p.x;g.fz=p.z;if(g.sp==='zebra')wSnd('bray',m.x,m.z);return;}}}}
 function wHerd(g,list,dt){const S=WSP[g.sp];if(g.flee>0)g.flee-=dt;if(g.angry>0)g.angry-=dt;g.drinkT-=dt;
@@ -7353,7 +7356,7 @@ function wHippoAI(m,g,dt){const night=DN.day<.35;const R=SRIVERS[g.river].p;if(!
     if(Math.random()<dt*.01)m.ri+=Math.random()<.5?-1:1;if(Math.random()<dt*.008)wSnd('grunt',m.x,m.z);}
   m.inWater=getHeight(m.x,m.z)<WATER-.3;}
 // ---------- Erdmännchen ----------
-function wMeerkats(g,list,dt){const b=g.burrow;let threat=false;if(state==='playing'&&!cheatOn()&&Math.hypot(P.x-b.x,P.z-b.z)<WSP.meerkat.fleeR*(down('sneak')?.6:1))threat=true;
+function wMeerkats(g,list,dt){const b=g.burrow;let threat=false;if(g.flee>0){threat=true;g.flee=0;}
   for(const p of WM){if(p.dead||!(p.sp==='lioness'||p.sp==='hyena'||p.sp==='lion'))continue;if(Math.hypot(p.x-b.x,p.z-b.z)<20){threat=true;break;}}
   if(threat){if(!(g.hide>0))wSnd('squeak',b.x,b.z);g.hide=8+Math.random()*7;}if(g.hide>0)g.hide-=dt;
   list.forEach((m,i)=>{if(g.hide>0){const d=Math.hypot(b.x-m.x,b.z-m.z);if(d>.6){wMove(m,b.x,b.z,WSP.meerkat.run,dt);m.st='run';m.hidden=false;}else{m.hidden=true;m.st='idle';}return;}
@@ -8714,8 +8717,8 @@ function updateAnimals(dt){if(!animalMesh)return;const tnt=animalMesh.geometry.a
       if(dp<14&&state==='playing'&&!cheatOn()){a.state='watch';}
       else if(L!==a&&L.alive){tx=L.x+a.ox;tz=L.z+a.oz;speed=Math.hypot(tx-a.x,tz-a.z)>3?Math.min(A.flee,A.speed*1.8):0;}
       else{a.t-=dt;if(a.t<=0){a.t=4+Math.random()*8;if(Math.random()<.65)newTarget(a,a.roam);}speed=Math.hypot(a.tx-a.x,a.tz-a.z)>1?A.speed:0;}}
-    else if(a.type==='deer'&&a.state!=='flee'&&!(a.scared>0)&&(a.state==='alert'||(dp<A.fleeR&&state==='playing'&&!cheatOn()))){if(a.state!=='alert'){a.state='alert';a.alertT=.75+Math.random()*.5;}a.alertT-=dt;a.flip=((P.x-a.x)*rx+(P.z-a.z)*rz)<0;if(a.alertT<=0)a.state='flee';}
-    else if(a.type!=='boar'&&((dp<A.fleeR&&state==='playing')||(a.scared>0))){a.scared=Math.max(0,(a.scared||0)-dt);a.state='flee';speed=A.flee;const d=Math.max(dp,.01);tx=a.x+(a.x-P.x)/d*8;tz=a.z+(a.z-P.z)/d*8;a.t=2+Math.random()*2;}
+    else if(a.type==='deer'&&a.state!=='flee'&&!(a.scared>0)&&(a.state==='alert')){if(a.state!=='alert'){a.state='alert';a.alertT=.75+Math.random()*.5;}a.alertT-=dt;a.flip=((P.x-a.x)*rx+(P.z-a.z)*rz)<0;if(a.alertT<=0)a.state='flee';}
+    else if(a.type!=='boar'&&(a.scared>0)){a.scared=Math.max(0,(a.scared||0)-dt);a.state='flee';speed=A.flee;const d=Math.max(dp,.01);tx=a.x+(a.x-P.x)/d*8;tz=a.z+(a.z-P.z)/d*8;a.t=2+Math.random()*2;}
     else{if(a.state==='flee'){a.state='idle';a.hx=a.x;a.hz=a.z;}a.t-=dt;
       if(a.state==='idle'){if(a.t<=0){if(newTarget(a,a.roam))a.state='walk';a.t=3+Math.random()*6;}}
       else{speed=A.speed;if(Math.hypot(a.tx-a.x,a.tz-a.z)<.6||a.t<-15){a.state='idle';a.t=2+Math.random()*7;}}}

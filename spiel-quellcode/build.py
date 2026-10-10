@@ -11,5 +11,5 @@ assert k.endswith('})();')
 tj=k[:-5]+"\nwindow.__G=s=>eval(s);\n})();\n"
 open('test.html','w').write(h+'<script>\n'+tj+t)
 open('check.js','w').write(j)
-r=subprocess.run(['node','--check','check.js'],capture_output=True,text=True)
+r=subprocess.run(['node','--no-lazy','--check','check.js'],capture_output=True,text=True)
 print('SYNTAX_OK' if r.returncode==0 else r.stderr[:2000])

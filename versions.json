@@ -1,7 +1,20 @@
 {
-  "latest": "0.0.75",
+  "latest": "0.0.100",
   "latestBeta": null,
   "versions": [
+    {
+      "id": "0.0.100",
+      "label": "Beta-2.0",
+      "name": "KREAKS Beta-2.0",
+      "channel": "release",
+      "date": "2026-10-10",
+      "notes": "Beta 2.0: Intro als 3D-Film, die Chronik von Kriesa vor der Sturmburg (erst nach Shikaya offen), lebendiges Coda mit Händlern, Bauern, Karren und neuen Völkern, Opa Knorz mit vertonter Anleitung und eigener Stimmen-Regler.",
+      "url": "https://raw.githubusercontent.com/Sturmgenster/kreaks/main/spiel/KREAKS-0.0.100.kreaks",
+      "size": 36498793,
+      "sha256": "5a13154627cd346d7c8582af02ea325694eb312da2b8c07d4aa4ee8934ee5763",
+      "encrypted": true,
+      "wrappedKey": "wcDMA0K3SMKDFFIYAQv/QlkBHrHokSljD+iMe8H1vRG4yM8siIfg2zln3m3D0UuOi1OcFPI0deV+4q47EN7C+1QX0Z4YNOXxr4Gszl/qPDOCWC1JuO6Efnu0mBM/sxPggaZcuKsolfQekEIZLtAFTjyoCOXfi4yG2L4skgjFGpWSuPgm3ECxFsYKLUDJ/jxosBkVsyiP4KrMk/huYGoR8H6gCzvhX17Fw0bEZVk5aemqToeoEpDI9QdZYwldO7n9gvYMRW2FzQlLYm/H/2IvCgTarFk1TvdsOoeHTgJeBE3L2rxy5fOyQxblIKReB/zRlNmHYc/edeeTTXS3l0x9eIPRLbj0JHMf9Nk8Df0SBlABe7RGmLgEtZ/A7fpV66siTP5mAzBn7c9cpvBAcUutfT4v+bNSD7BE4Lnd6+26+iNuyb9tWn0FOatJXAoKOWRCoqUW3eWEvGV27VlZTvMPDHqEimgeGwPPJO6PGOQvfr3/lRSrE1Uax8BZ7C+VHaezFRW4TuNmjmPKArTrpGiR0nEBNoLc+smVgxfN3fXlTI3PrgfFVCdeXAdhkPHhqOIHfh2U8oh/MrjI00nxQboqlWI+am+1Vc4RmCKbwFFGb1O5lV2a/8SARo88BR4S9YkLZ18gq/QLzVxM4IfqWGAD7b6tzM+yasd42rmT1Pt7Qw2DAQ=="
+    },
     {
       "id": "0.0.75",
       "label": "Beta-1.0",
@@ -23,8 +36,8 @@
   "news": [
     {
       "kicker": "Neuigkeiten",
-      "title": "KREAKS Beta-1.0 ist da",
-      "text": "Ab jetzt brauchst du einen Key. Deine Welt bekommt einen eigenen Namen – dein Spielername ist dein Kontoname."
+      "title": "KREAKS Beta-2.0 ist da",
+      "text": "Neues Intro, die Chronik von Kriesa, ein lebendiges Coda und Opa Knorz, der dir alles erklärt – mehr oder weniger."
     }
   ]
 }

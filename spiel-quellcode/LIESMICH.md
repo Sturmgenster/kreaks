@@ -1,4 +1,4 @@
-# KREAKS – Quellcode des Spiels (Stand Beta-1.0 (0.0.75))
+# KREAKS – Quellcode des Spiels (Stand Beta-2.0 (0.0.100))
 
 - `game.js` + `parts/*.js` – Spielcode (Teile werden in Namensreihenfolge angehängt)
 - `head.html`, `tail.html` – HTML-Gerüst, Oberfläche und Styles

@@ -1,5 +1,6 @@
 # Baut pkg/KREAKS (Spielpaket) aus kreaks.html: three.js lokal statt aus dem Internet
-import shutil,os
+import shutil,os,sys
+DEV='dev' in sys.argv  # Entwickler-Paket (läuft ohne Launcher-Konto)
 s=open('kreaks.html').read()
 cdn='<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"'
 assert cdn in s
@@ -14,9 +15,10 @@ for fam,f,w in[('Great Vibes','great-vibes-latin-400-normal',400),('Silkscreen',
   shutil.copy('gamefonts/'+f+'.woff2','pkg/KREAKS/assets/fonts/'+f+'.woff2')
   css+="@font-face{font-family:'%s';src:url(%s.woff2) format('woff2');font-weight:%d;font-display:swap}\n"%(fam,f,w)
 open('pkg/KREAKS/assets/fonts/fonts.css','w').write(css)
+if DEV:
+  s=s.replace('<script src="assets/three.min.js"','<script>window.KREAKS_DEV=true</script><script src="assets/three.min.js"',1)
 open('pkg/KREAKS/index.html','w').write(s)
 shutil.copy('nm/node_modules/three/build/three.min.js','pkg/KREAKS/assets/three.min.js')
 # Launcher: mitgelieferte Version aktualisieren
-if os.path.isdir('launcher/assets/bundled-game'):shutil.rmtree('launcher/assets/bundled-game')
-shutil.copytree('pkg/KREAKS','launcher/assets/bundled-game')
+
 print('pkg ok')

@@ -1,9 +1,9 @@
 /* =========================================================
-   KREAKS Beta-1.0 (0.0.75) · Konto aus dem Launcher
+   KREAKS Beta-2.0 (0.0.100) · Konto aus dem Launcher
    - Das Spiel läuft nur mit freigeschaltetem KREAKS-Konto (Start über den Launcher)
    - Der Spielername ist der Kontoname, Spielstände gehören zum Konto
    ========================================================= */
-const KREAKS_VERSION={label:'Beta-1.0',build:'0.0.75'};
+const KREAKS_VERSION={label:'Beta-2.0',build:'0.0.100'};
 const KACC=(typeof window!=='undefined'&&window.KREAKS_ACCOUNT)||null;
 
 // Startbildschirm: Version anzeigen
@@ -13,7 +13,7 @@ const KACC=(typeof window!=='undefined'&&window.KREAKS_ACCOUNT)||null;
 // Ohne Konto: Spiel sperren, wenn es außerhalb des Launchers gestartet wurde.
 // (Entwickler-Vorschau im Browser und die Testversion bleiben offen.)
 {const viaLauncher=location.protocol==='kreaks:';
- const isTest=typeof window.__G==='function';
+ const isTest=/test\.html$/.test(location.pathname)||window.KREAKS_DEV===true;   // Testversion bzw. Entwickler-Paket für die KREA-Engine
  const blocked=!isTest&&((viaLauncher&&!(KACC&&KACC.licensed))||(location.protocol==='file:'));
  if(blocked){const d=document.createElement('div');d.id='accBlock';
    d.innerHTML=`<div class="ab-in"><h1>KREAKS</h1><p>${viaLauncher?'Dein Konto ist noch nicht freigeschaltet.':'KREAKS startest du über den KREAKS Launcher.'}</p><small>${viaLauncher?'Löse im Launcher einen Key ein und starte das Spiel neu.':'Melde dich dort mit deinem Konto an und klicke auf „Spielen“.'}</small></div>`;
@@ -39,7 +39,13 @@ if(KACC&&KACC.uuid){
        localStorage.setItem('kreaks_migrated',accId);}
    }catch(e){}
    const g0=store.get.bind(store),s0=store.set.bind(store);
-   store.get=k=>g0(NS+k);store.set=(k,v)=>s0(NS+k,v);}
+   // Einstellungen gelten für den ganzen PC (nicht pro Konto). Früher landeten sie im Konto-Bereich,
+   // wurden beim Start aber aus dem allgemeinen Bereich gelesen – deshalb waren sie nach dem Neustart weg.
+   {const ns=g0(NS+SET_KEY);if(ns&&typeof ns==='object'){s0(SET_KEY,ns);try{localStorage.removeItem(NS+SET_KEY);}catch(e){}
+      Object.assign(settings,ns);settings.keys=Object.assign({},DEFAULTS.keys,ns.keys||{});}}
+   store.get=k=>k===SET_KEY?g0(k):g0(NS+k);store.set=(k,v)=>k===SET_KEY?s0(k,v):s0(NS+k,v);
+   // Spielstand löschen: auch im Konto-Bereich
+   {const rm=Storage.prototype.removeItem;Storage.prototype.removeItem=function(k){rm.call(this,k);try{if(this===localStorage&&typeof k==='string'&&k.startsWith('kreaks_')&&!k.includes(':'))rm.call(this,NS+k);}catch(e){}};}}
 
   // Spielername = Kontoname (auch bei alten Spielständen)
   {const a=startGame;startGame=function(isNew,char){if(char)char.name=KACC.name||char.name;const r=a.apply(this,arguments);

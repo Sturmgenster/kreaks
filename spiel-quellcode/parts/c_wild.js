@@ -163,6 +163,6 @@ function animalSleep(a){const h=wHour();switch(a.type){case'hare':return h>11&&h
 {const ua0=updateAnimals;updateAnimals=function(dt){ua0(dt);if(!animalMesh)return;const sz=animalMesh.geometry.attributes.size;let ch=false;
   animals.forEach((a,i)=>{if(!a.alive||a.tame||a.pen){a._hide=false;return;}const s=animalSleep(a)==='hide'&&!(a.state==='flee'||a.berserk||a.state==='hunt');
     if(s&&!a._hide){a._hide=true;}else if(!s&&a._hide){a._hide=false;}
-    if(a._hide){const dp=Math.hypot(P.x-a.x,P.z-a.z);if(dp<4.5&&state==='playing'){a._hide=false;a.scared=3;return;}sz.array[i*2]=0;sz.array[i*2+1]=0;ch=true;}});
+    if(a._hide){const dp=Math.hypot(P.x-a.x,P.z-a.z);if(dp<4.5&&state==='playing'){a._hide=false;return;}sz.array[i*2]=0;sz.array[i*2+1]=0;ch=true;}});
   if(ch)sz.needsUpdate=true;};}
 {const ft0=frontTargets;frontTargets=function(range,cone){return ft0(range,cone).filter(a=>!a._hide);};}

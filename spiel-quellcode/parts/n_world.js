@@ -109,9 +109,11 @@ clampWorld=function(o){if(o.x>60000)return;const R=WORLD_R-2;if(Math.abs(o.x)>R|
   if(o.x>FX0+100&&o.x<FX1&&inCore(o.x,o.z))clampFar(o);};
 // ---------- Schwimmen: tiefes Wasser trägt dich an der Oberfläche ----------
 const SWIM_Y=WATER-1.25;
-{const g0=groundAt;groundAt=function(x,z,feet){const g=g0(x,z,feet);if(x<60000&&g<SWIM_Y&&g>-1e3)return SWIM_Y;return g;};}
+// Nur dort schwimmen, wo wirklich Wasser ist (sonst schwebt man über Senken im Wald)
+function swimWater(x,z){if(x>=60000)return false;if(!inCore(x,z))return true;if(nearWater(x,z))return true;try{if(typeof kWater==='function'&&kWater(x,z)>.3)return true;}catch(e){}return false;}
+{const g0=groundAt;groundAt=function(x,z,feet){const g=g0(x,z,feet);if(x<60000&&g<SWIM_Y&&g>-1e3&&swimWater(x,z))return SWIM_Y;return g;};}
 let swimMsg=false;
-{const up0=updatePlayer;updatePlayer=function(dt){const px=P.x,pz=P.z;up0(dt);if(P.x<60000&&!P.riding&&getHeight(P.x,P.z)<SWIM_Y-.05&&P.y<=SWIM_Y+.3){P.x=px+(P.x-px)*.55;P.z=pz+(P.z-pz)*.55;
+{const up0=updatePlayer;updatePlayer=function(dt){const px=P.x,pz=P.z;up0(dt);if(P.x<60000&&!P.riding&&getHeight(P.x,P.z)<SWIM_Y-.05&&P.y<=SWIM_Y+.3&&swimWater(P.x,P.z)){P.x=px+(P.x-px)*.55;P.z=pz+(P.z-pz)*.55;
     if(!swimMsg){swimMsg=true;toast('Du schwimmst. Im Wasser kommst du nur langsam voran.');}if(Math.random()<dt*3)spawnParticle(P.x+(Math.random()-.5),WATER+.05,P.z+(Math.random()-.5),0,.4,0,0xe8f4ff,.5,.15);}};}
 
 /* =========================================================
@@ -222,15 +224,9 @@ function*wlBuildChunk(ch){const{x0,z0}=ch,N=WLN,S=WLC/N,V=N+1,H=new Float32Array
     if(Math.min(H[a],H[b],H[c],H[d])<WATER)widx.push(i,j);}
   if(!anyWild){ch.empty=true;return;}yield;
   const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(pos,3));g.setAttribute('uv',new THREE.BufferAttribute(uv,2));g.setIndex(idx);g.computeVertexNormals();
-  // Textur
-  const T=512,ES=WLC/T,cv=document.createElement('canvas');cv.width=cv.height=T;const ctx=cv.getContext('2d'),img=ctx.createImageData(T,T),D=img.data;
-  for(let py=0;py<T;py++){if(py%10===9)yield;const wz=z0+(py+.5)*ES,gy=Math.floor(wz/ES),fj=(py+.5)/T*N;for(let px=0;px<T;px++){const wx=x0+(px+.5)*ES,gx=Math.floor(wx/ES),fi=(px+.5)/T*N;
-      const i=clamp(Math.round(fi+(hash2(gx,gy,4510)-.5)*1.1),0,N),j=clamp(Math.round(fj+(hash2(gx,gy,4511)-.5)*1.1),0,N),k=j*V+i;
-      let b=B1[k];if(!b){const o=(py*T+px)*4;D[o]=D[o+1]=D[o+2]=90;D[o+3]=255;continue;}if(W2[k]>0&&vnoise(wx*.11,wz*.11,4512)*.75+hash2(gx>>1,gy>>1,4513)*.25<W2[k])b=B2[k];if(CD[k]<80&&vnoise(wx*.13,wz*.13,4514)*.6+hash2(gx,gy,4515)*.4>CD[k]/80)b=CL[k];
-      const ii=Math.min(N-1,Math.floor(fi)),jj=Math.min(N-1,Math.floor(fj)),u=fi-ii,v=fj-jj,a=H[jj*V+ii],bb=H[jj*V+ii+1],c=H[(jj+1)*V+ii],d=H[(jj+1)*V+ii+1];
-      const h=a*(1-u)*(1-v)+bb*u*(1-v)+c*(1-u)*v+d*u*v,sl=Math.hypot((bb-a+d-c)*.5,(c-a+d-bb)*.5)/S;
-      const col=wlColor(b,h,sl,wx,wz,gx,gy),o=(py*T+px)*4;D[o]=col[0];D[o+1]=col[1];D[o+2]=col[2];D[o+3]=255;}}
-  ctx.putImageData(img,0,0);const tex=new THREE.CanvasTexture(cv);tex.magFilter=THREE.NearestFilter;tex.minFilter=THREE.NearestMipmapNearestFilter;
+  // Textur: zuerst grob (schnell sichtbar), die feine Fassung kommt später
+  Object.assign(ch,{H,B1,B2,W2,CD,CL,N,S,V});
+  const tex=yield*wlPaintTex(ch,WL_TEX_LO);
   ch.ground=new THREE.Mesh(g,new THREE.MeshPhongMaterial({map:tex,flatShading:true,shininess:0,specular:0x000000}));scene.add(ch.ground);
   // Wasser
   if(widx.length){const wp=[],wi=[];let n=0;for(let k=0;k<widx.length;k+=2){const x=x0+widx[k]*S,z=z0+widx[k+1]*S;wp.push(x,WATER,z,x+S,WATER,z,x,WATER,z+S,x+S,WATER,z+S);wi.push(n,n+2,n+1,n+1,n+2,n+3);n+=4;}
@@ -248,19 +244,37 @@ function*wlBuildChunk(ch){const{x0,z0}=ch,N=WLN,S=WLC/N,V=N+1,H=new Float32Array
     deco.push({x:c.x,y:c.y-.35,z:c.z,w:6.9,h:6.9*60/84,spr:'wl_caveent'+v,tint:1});}
   for(const p of props){const k=gk(p.x,p.z);let l=tgrid.get(k);if(!l)tgrid.set(k,l=[]);l.push(p);}ch.props=props;ch.deco=deco;
   if(deco.length){ch.bb=makeBillboards(deco,wlMat);ch.bb.frustumCulled=false;scene.add(ch.bb);}}
+function*wlPaintTex(ch,T){const{x0,z0,H,B1,B2,W2,CD,CL,N,S,V}=ch;const ES=WLC/T,cv=document.createElement('canvas');cv.width=cv.height=T;const ctx=cv.getContext('2d'),img=ctx.createImageData(T,T),D=img.data;
+  for(let py=0;py<T;py++){if(py%Math.max(2,Math.round(10*T/512))===Math.max(2,Math.round(10*T/512))-1)yield;const wz=z0+(py+.5)*ES,gy=Math.floor(wz/ES),fj=(py+.5)/T*N;for(let px=0;px<T;px++){const wx=x0+(px+.5)*ES,gx=Math.floor(wx/ES),fi=(px+.5)/T*N;
+      const i=clamp(Math.round(fi+(hash2(gx,gy,4510)-.5)*1.1),0,N),j=clamp(Math.round(fj+(hash2(gx,gy,4511)-.5)*1.1),0,N),k=j*V+i;
+      let b=B1[k];if(!b){const o=(py*T+px)*4;D[o]=D[o+1]=D[o+2]=90;D[o+3]=255;continue;}if(W2[k]>0&&vnoise(wx*.11,wz*.11,4512)*.75+hash2(gx>>1,gy>>1,4513)*.25<W2[k])b=B2[k];if(CD[k]<80&&vnoise(wx*.13,wz*.13,4514)*.6+hash2(gx,gy,4515)*.4>CD[k]/80)b=CL[k];
+      const ii=Math.min(N-1,Math.floor(fi)),jj=Math.min(N-1,Math.floor(fj)),u=fi-ii,v=fj-jj,a=H[jj*V+ii],bb=H[jj*V+ii+1],c=H[(jj+1)*V+ii],d=H[(jj+1)*V+ii+1];
+      const h=a*(1-u)*(1-v)+bb*u*(1-v)+c*(1-u)*v+d*u*v,sl=Math.hypot((bb-a+d-c)*.5,(c-a+d-bb)*.5)/S;
+      const col=wlColor(b,h,sl,wx,wz,gx,gy),o=(py*T+px)*4;D[o]=col[0];D[o+1]=col[1];D[o+2]=col[2];D[o+3]=255;}}
+  ctx.putImageData(img,0,0);const tex=new THREE.CanvasTexture(cv);tex.magFilter=THREE.NearestFilter;tex.minFilter=THREE.NearestMipmapNearestFilter;
+  return tex;}
+const WL_TEX_LO=96,WL_TEX_HI=512;
+// Feine Textur nachreichen (nur wenn alle Kacheln in der Nähe schon stehen)
+function*wlRefine(ch){const tex=yield*wlPaintTex(ch,WL_TEX_HI);if(ch.ground){const old=ch.ground.material.map;ch.ground.material.map=tex;ch.ground.material.needsUpdate=true;if(old)old.dispose();}else tex.dispose();ch.hi=true;}
 function wlFreeChunk(ch){if(ch.ground){scene.remove(ch.ground);ch.ground.geometry.dispose();ch.ground.material.map.dispose();ch.ground.material.dispose();}
   if(ch.water){scene.remove(ch.water);ch.water.geometry.dispose();}if(ch.bb){scene.remove(ch.bb);ch.bb.geometry.dispose();}
   for(const p of ch.props||[]){const l=tgrid.get(gk(p.x,p.z));if(l){const i=l.indexOf(p);if(i>=0)l.splice(i,1);}}
   for(const b of ch.deco||[])if(b._hv){const c=hvCell(b.x,b.z),l=HG.get(c);if(l){const i=l.indexOf(b);if(i>=0)l.splice(i,1);if(!l.length)HG.delete(c);}if(HK.get(b._hk)===b)HK.delete(b._hk);HGONE.delete(b);}
-  ch.ground=ch.water=ch.bb=null;ch.props=ch.deco=null;}
+  ch.ground=ch.water=ch.bb=null;ch.props=ch.deco=null;ch.H=ch.B1=ch.B2=ch.W2=ch.CD=ch.CL=null;}
 function wlChunkSites(ch){const out=new Set();for(const[dx,dz]of[[0,0],[WLC,0],[0,WLC],[WLC,WLC],[WLC/2,WLC/2]]){const ci=Math.floor((ch.x0+dx)/WL_CELL),cj=Math.floor((ch.z0+dz)/WL_CELL);for(let a=-1;a<=1;a++)for(let b=-1;b<=1;b++)out.add(wlSite(ci+a,cj+b));}return out;}
 function wlUpdate(){if(!WL_READY||!wlMat)return;const cx=camera.position.x,cz=camera.position.z;if(cx>60000){return;}
   const rd=(settings.renderDist||140)+70,ci=Math.floor(cx/WLC),cj=Math.floor(cz/WLC),R=Math.ceil(rd/WLC)+1;let best=null,bd=1e9;
   for(let a=-R;a<=R;a++)for(let b=-R;b<=R;b++){const i=ci+a,j=cj+b,x0=i*WLC,z0=j*WLC;if(Math.abs(x0)>WORLD_R+WLC||Math.abs(z0)>WORLD_R+WLC)continue;
     const d=Math.max(0,Math.hypot(x0+WLC/2-cx,z0+WLC/2-cz)-WLC*.71);if(d>rd)continue;const key=i*100003+j;let ch=WL_CH.get(key);if(!ch){if(wlChunkInCore(x0,z0))continue;ch={i,j,x0,z0,built:false};WL_CH.set(key,ch);}
     if(!ch.built&&d<bd){bd=d;best=ch;}}
+  // Eine Verfeinerung wird abgebrochen, sobald eine neue Kachel gebaut werden muss
+  if(wlJob&&wlJob.refine&&best){wlJob.ch.refining=false;wlJob=null;}
   if(!wlJob&&best){best.built=true;wlJob={ch:best,g:wlBuildChunk(best)};}
-  if(wlJob){const t0=performance.now();try{while(performance.now()-t0<(wlFast?1e9:7)){if(wlJob.g.next().done){wlJob=null;break;}}}catch(e){console.error('Wildnis-Kachel',e);wlJob=null;}}
+  if(!wlJob&&!best){let rf=null,rd2=1e9;for(const ch of WL_CH.values()){if(!ch.ground||ch.hi||!ch.H)continue;const d=Math.hypot(ch.x0+WLC/2-cx,ch.z0+WLC/2-cz);if(d<rd2&&d<rd*.75){rd2=d;rf=ch;}}
+    if(rf){rf.refining=true;wlJob={ch:rf,g:wlRefine(rf),refine:true};}}
+  // Steht der Spieler auf (oder direkt neben) einer noch leeren Kachel, mehr Rechenzeit geben
+  const urgent=wlJob&&!wlJob.refine&&Math.hypot(wlJob.ch.x0+WLC/2-cx,wlJob.ch.z0+WLC/2-cz)<WLC*1.3;
+  if(wlJob){const t0=performance.now(),bud=wlFast?1e9:urgent?22:wlJob.refine?5:9;try{while(performance.now()-t0<bud){if(wlJob.g.next().done){wlJob=null;break;}}}catch(e){console.error('Wildnis-Kachel',e);wlJob=null;}}
   for(const[k,ch]of WL_CH){const d=Math.max(0,Math.hypot(ch.x0+WLC/2-cx,ch.z0+WLC/2-cz)-WLC*.71);if(d>rd+90&&!(wlJob&&wlJob.ch===ch)){if(ch.built)wlFreeChunk(ch);WL_CH.delete(k);}}}
 {const ud0=updateDesert;updateDesert=function(){ud0();try{wlUpdate();}catch(e){if(!wlUpdate.err){wlUpdate.err=1;console.error('Wildnis',e);}}};}
 {const id0=initDemons;initDemons=function(a){id0(a);try{wlMat=bbMaterial(WL_TEX,0,0);wlMat.uniforms.time=decorMat.uniforms.time;EXTRA_BB.push(wlMat);}catch(e){console.error(e);}};}
