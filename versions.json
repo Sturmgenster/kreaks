@@ -1,7 +1,20 @@
 {
-  "latest": "0.0.103",
+  "latest": "0.0.104",
   "latestBeta": null,
   "versions": [
+    {
+      "id": "0.0.104",
+      "label": "Beta-3.1",
+      "name": "KREAKS Beta-3.1",
+      "channel": "release",
+      "date": "2026-10-11",
+      "notes": "Beta 3.1: Neuer Befehl /summon <Name> [Anzahl] im Cheat-Modus. Ruft Zombies, Skelette, Liche, den Elderlich, Trolle, Kobolde, Horden, Dämonen und mehr herbei. /summon ohne Namen zeigt alle Wesen.",
+      "url": "https://raw.githubusercontent.com/Sturmgenster/kreaks/main/spiel/KREAKS-0.0.104.kreaks",
+      "size": 36523064,
+      "sha256": "9d35ba14b8d728166ecef1f3a4da50aea5fc774ee6a61847f556ba99ab3a2916",
+      "encrypted": true,
+      "wrappedKey": "wcDMA0K3SMKDFFIYAQwAgOdewXKM/EBizR7izh5x6dxQGq/VpbpWtHSvpTr66zO2alwZgdT5yrwK5zkMLIe+JhxeD8kFkI2l18/xC2gWDyStRl+FCZNY2IAZ1H3BSoh704IQ+bjlsUORCSpCoJB3qf9dkwEChFVYlf0JnOSzyrXYAdOXiHvjnxMQOg31vmU43eSdO+eIk1cQRHsGTzzdjb9YGQ6D1rttXFFUYFuDaf/61uXCCkdHJTlaQO2dHibgvALxUPi1ug3NthKs7TBklYveUUIrmxCqJizGyOn72uga4WYG3SRcMjMFCaH55wfS8SXayQqRv28JCzRJHULh/XgP5RWmBebRyn91jBKmhxSwnz04aoaXiexKEqFbiQj2N6oGApipD5KRP3v8FKlWytoAtM4k2T4r/n4D0NpjUQGq6xMeWIhp0/4be+HAgiq/vPqmWKDMF2U5eq5AiZ/skU557TVsjPcunCNu2aNsSNETnAdQ4o9Yw5uku3iTQtCgh5gkuyIQxxcZ2IR8rKdg0nEBi42t5ldtdkB7PsW+wvnVycCXnGQJUJ8qNFEdWlNtIeP5p696SoXU0r/Oy7P38GSDK6vPYsRc6NJQGvgzmelAJv/+VwmFtg3xbTvFRCDt9sTdjeXoRYrxBhsIGQdLwBxWYpSxtQLYzC9yI1HQNVEFWg=="
+    },
     {
       "id": "0.0.103",
       "label": "Beta-3.0",
@@ -49,8 +62,8 @@
   "news": [
     {
       "kicker": "Neuigkeiten",
-      "title": "KREAKS Beta-3.0 ist da",
-      "text": "Nachts erwachen Zombies und Liche, auf Ebene und Berg lauern Troll- und Koboldhorden. Dazu Ringe und Amulette mit echten Werten, Rüstungen mit eigenem Aussehen und neue Inventarbilder."
+      "title": "KREAKS Beta-3.1 ist da",
+      "text": "Neu im Cheat-Modus: /summon <Name> ruft jedes Wesen herbei, zum Beispiel /summon zombie 3 oder /summon elderlich."
     }
   ]
 }

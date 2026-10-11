@@ -224,7 +224,7 @@ function mzPickMinion(archers,total){let r=Math.random(),t=null;for(const[k,p]of
 function mzSummon(L,n,sq){const own=L.minions||(L.minions=[]);const archers=sq?sq.members.filter(m=>!m.dead&&m.d.archer).length:0;
   Snd.demonRoar&&Snd.demonRoar(.25,.7);mzBurst(L.x,L.y+2,L.z,30,[0x7aff3a,0xb8ff5a,0x2a4a10],5,1,.35);
   for(let i=0;i<n;i++){const a=mzAngle(L)+(i-(n-1)/2)*.7+Math.PI*(i%2?.25:-.25),r=2.5+Math.random()*2,x=L.x+Math.cos(a)*r,z=L.z+Math.sin(a)*r;
-    const t=mzPickMinion(archers,n);const e=spawnEnt(t,x,z,{v:(Math.random()*3)|0,rise:0,aggroT:999,summoned:1,master:L,home:{x,z}});e.d=Object.assign({},e.d,{dmg:Math.max(4,Math.round(e.d.dmg*.75))});e.special=mzMember;e.sq=sq||null;own.push(e);MZ.und.push(e);if(sq)sq.members.push(e);}
+    const t=mzPickMinion(archers,n);const e=spawnEnt(t,x,z,{v:(Math.random()*3)|0,rise:0,aggroT:999,summoned:1,master:L,cmd:L.cmd,home:{x,z}});e.d=Object.assign({},e.d,{dmg:Math.max(4,Math.round(e.d.dmg*.75))});e.special=mzMember;e.sq=sq||null;own.push(e);MZ.und.push(e);if(sq)sq.members.push(e);}
   if(sq)mzAssign(sq);}
 // Zauber der Liche
 const MZ_SP={
@@ -268,7 +268,7 @@ function mzLichAI(e,dt){
   if(d>want+5){entMove(e,P.x,P.z,e.d.spd,dt);return true;}
   e.frame=0;e.flip=((P.x-e.x)*Math.cos(P.yaw)-(P.z-e.z)*Math.sin(P.yaw))<0;return true;}
 function mzCallLiches(E,n){const ks=['f','i','s','b'];for(let i=0;i<n;i++){const a=mzAngle(E)+(i?1:-1)*1.1,x=E.x+Math.cos(a)*4,z=E.z+Math.sin(a)*4;
-  const L=spawnEnt('lich'+ks[(Math.random()*4)|0],x,z,{rise:0,aggroT:999,summoned:1,master:E,home:{x,z}});L.special=mzLichAI;L.sq=E.sq;E.sq.members.push(L);MZ.und.push(L);mzBurst(x,L.y+1,z,40,[0x6ac8ff,0x9a6aff,0x1c1a3e],6,1,.4);}
+  const L=spawnEnt('lich'+ks[(Math.random()*4)|0],x,z,{rise:0,aggroT:999,summoned:1,master:E,cmd:E.cmd,home:{x,z}});L.special=mzLichAI;L.sq=E.sq;E.sq.members.push(L);MZ.und.push(L);mzBurst(x,L.y+1,z,40,[0x6ac8ff,0x9a6aff,0x1c1a3e],6,1,.4);}
   mzAssign(E.sq);}
 function mzSpawnLich(x,z,elder){const t=elder?'elderlich':'lich'+['f','i','s','b'][(Math.random()*4)|0];const e=spawnEnt(t,x,z,{rise:0,home:{x,z},noLeash:!!elder});e.special=mzLichAI;e.sq=mzSquad(e,elder?'elder':'lich');e.sq.pat=Math.random()<.5?'ring':'zange';
   MZ.und.push(e);mzBurst(x,e.y+1,z,50,elder?[0x6ac8ff,0x9a6aff,0x0a0a18]:[0x7aff3a,0x5a4a34,0x2a1a0e],7,1.2,.45);return e;}
@@ -302,7 +302,7 @@ function mzUndeadTick(dt){const dark=isDark(),ev=tonightEv(),peace=dark&&ev==='b
   // Untote: verschwinden weit weg, verbrennen im Tageslicht
   for(let i=MZ.und.length-1;i>=0;i--){const e=MZ.und[i];if(!DEM.includes(e)){MZ.und.splice(i,1);continue;}if(e.dead)continue;const pd=Math.hypot(e.x-P.x,e.z-P.z);
     if(pd>150||P.x>60000&&e.x<60000){removeEnt(e);MZ.und.splice(i,1);continue;}
-    if(!dark||peace){if(pd>30){removeEnt(e);MZ.und.splice(i,1);continue;}if(Math.random()<dt*10)spawnParticle(e.x+(Math.random()-.5),e.y+Math.random()*e.h,e.z+(Math.random()-.5),0,1.5,0,Math.random()<.5?0xff7a1a:0x3a3034,.8,.3);
+    if((!dark||peace)&&!e.cmd){if(pd>30){removeEnt(e);MZ.und.splice(i,1);continue;}if(Math.random()<dt*10)spawnParticle(e.x+(Math.random()-.5),e.y+Math.random()*e.h,e.z+(Math.random()-.5),0,1.5,0,Math.random()<.5?0xff7a1a:0x3a3034,.8,.3);
       e.hp-=e.max*.04*dt;if(e.hp<=0)killEnt(e,null);}}
   for(let i=MZ.hordes.length-1;i>=0;i--){const H=MZ.hordes[i];H.members=H.members.filter(m=>DEM.includes(m));const alive=H.members.filter(m=>!m.dead);
     if(!alive.length||alive.every(m=>Math.hypot(m.x-P.x,m.z-P.z)>170)||P.x>60000){for(const m of alive)removeEnt(m);MZ.hordes.splice(i,1);continue;}
