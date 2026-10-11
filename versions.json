@@ -1,7 +1,20 @@
 {
-  "latest": "0.0.100",
+  "latest": "0.0.103",
   "latestBeta": null,
   "versions": [
+    {
+      "id": "0.0.103",
+      "label": "Beta-3.0",
+      "name": "KREAKS Beta-3.0",
+      "channel": "release",
+      "date": "2026-10-11",
+      "notes": "Beta 3.0: Neue Gegner (Zombies, Liche mit vier Kampfstilen, der Elderlich mit eigener Armee, Troll- und Koboldhorden, die auch Kutschen überfallen), Ringe und Amulette mit Werten bei ausgewählten Händlern, jede Rüstung mit eigenem Aussehen, neue Inventarbilder wie in der Hand und korrekte Texturen für Gegenstände am Boden.",
+      "url": "https://raw.githubusercontent.com/Sturmgenster/kreaks/main/spiel/KREAKS-0.0.103.kreaks",
+      "size": 36521699,
+      "sha256": "cfc1df603f381c6883b8cfd132d2da1eb5b502dd6c13de272f856e3bc1b835c8",
+      "encrypted": true,
+      "wrappedKey": "wcDMA0K3SMKDFFIYAQwAyfEek2R7mIS/TfYaji+/A7n5AWvSpyWWnP0bK0I42jdPXSCT2xdx8jInaeSkqOYXHwKJ2LAqQv/fXVW6zyehflPHHGruq87+jMJLcdXfDrMGLISGHLdOtGiwkgEAz03Q/iBRuqJZoFptfrLxRZgg/VHBA8b3V17IsHrRxdRXKR2+R6T7SqBHo8+FNzjt7HH+CKtlok/2TrYy+INMLKQ84u7DilEVRTryIyeE00+RzYFhzUpQrApbcUWW6z9UKY6EvNNrDoyq/Ufts78f0k/biepYSwJbFGYIKT1I0x1BugBZlkuU3UcjQYK1nNOv8NYmuAZr3RV6CxmG+Sm627+WNn8y0DORl6sZ1zHcHtmB2l2NITKBSejltyQb4+hfmHUXtBT7Jb0V0PsHavK4k6f+uhX7Me/7bPTwfTCCbSU9yKUUr38RE9D86pYctfe7TIpYdWCsHe9olFH0yPJbwnD+2UMvxA6BzjDOMPq1OFvtRaxvwaXZhJ5Ms99oT0JQ5ILa0nEBuuIP9t+qIcbhssxsjKZZfBnXoK4IsSI7oOvvRYYefL7+IHztehZy1GeSHHP3uPwukb2x2ffQ+ZprbngPwWHz/HJLPVuvLhP2GzHH0zk9Z2udLXrQuOwunimXIcvBvkCovS8DdogAhOIZ3IJujND2ng=="
+    },
     {
       "id": "0.0.100",
       "label": "Beta-2.0",
@@ -36,8 +49,8 @@
   "news": [
     {
       "kicker": "Neuigkeiten",
-      "title": "KREAKS Beta-2.0 ist da",
-      "text": "Neues Intro, die Chronik von Kriesa, ein lebendiges Coda und Opa Knorz, der dir alles erklärt – mehr oder weniger."
+      "title": "KREAKS Beta-3.0 ist da",
+      "text": "Nachts erwachen Zombies und Liche, auf Ebene und Berg lauern Troll- und Koboldhorden. Dazu Ringe und Amulette mit echten Werten, Rüstungen mit eigenem Aussehen und neue Inventarbilder."
     }
   ]
 }
