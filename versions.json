@@ -1,7 +1,20 @@
 {
-  "latest": "0.0.104",
+  "latest": "0.0.107",
   "latestBeta": null,
   "versions": [
+    {
+      "id": "0.0.107",
+      "label": "Beta-3.2",
+      "name": "KREAKS Beta-3.2",
+      "channel": "release",
+      "date": "2026-10-11",
+      "notes": "Beta 3.2: Nachts kommen jetzt auch bewaffnete Skelette (Schwert, Axt, Schild, Bogen, teils gepanzert) in kleinen Gruppen, dazu Zombies. Skelette, Zombies und Liche sind größer als der Spieler. Man fällt weiter, wenn Inventar oder Chat offen sind. Im Mehrspieler ist der Chat für alle sichtbar, mit Sprechblasen.",
+      "url": "https://raw.githubusercontent.com/Sturmgenster/kreaks/main/spiel/KREAKS-0.0.107.kreaks",
+      "size": 36524210,
+      "sha256": "482ec283a0f1c62289089e2a01a55607fe21b0602fad8e6fd3909e0811f601bf",
+      "encrypted": true,
+      "wrappedKey": "wcDMA0K3SMKDFFIYAQv7BKbjnMJmsj9aMzTFLmiT+pBnLv1J+H42XFDdKwUvyQ7lvaOB/OJxK846BmotSliLHLa3XyRywpdaw2la5lQLLMxZiHOT4cWT4F4zwOWTRyqloAKGSHqCdI3fbQoxNtuvoXi+fhZ6sxVAIxpsVjywbQ/Yq4Iw2nyk0pbidwAjjuNEfTVFU5QdzTAycTGwkUyT7fTuyXsohqnLfkUaCtzFapwxTMUc98MwBgntl58INyU0LJP0W6t6Zv+4fOj7j8nDXMsPlqNLAR1tfR1OSfsubkd/myNm7PFwjbfm69pWZBfaeVEqDdTz2UzXARW2ur7p8+Pr6VmDOMZ6zK13XFpU+2Q8BZaYabqhWh4GwANNpQp2vEXPAujSkbBY11k2KnXshKTGnJJ3vHf9qjQWJ94SPDdYFNFfWenUptfgFJdOkeAE2yWTmPig+HumkD8JewB7//OkZ/9TRP8rTHq7D5JRLLIhBWKdqyoShRqqHK5aQKa4TldHmWhpbn95nnYMatin0nEBUpiZwR98ILs1q5ced3DJIVo72lOLwvYoBnK9KWFvQ6TwHvZAEnm4rfX4bXNMAdLYTumukQJTcsz+gtsf/DI0HhNtusN8XnM+Pvipm3HQDBb6zFUIcCbiCzaS46/5OaGLIlQDCS2Mj1f2EDmgvtDeDA=="
+    },
     {
       "id": "0.0.104",
       "label": "Beta-3.1",
@@ -62,8 +75,8 @@
   "news": [
     {
       "kicker": "Neuigkeiten",
-      "title": "KREAKS Beta-3.1 ist da",
-      "text": "Neu im Cheat-Modus: /summon <Name> ruft jedes Wesen herbei, zum Beispiel /summon zombie 3 oder /summon elderlich."
+      "title": "KREAKS Beta-3.2 ist da",
+      "text": "Nachts ziehen bewaffnete Skelette und Zombies umher, größer und bedrohlicher als zuvor. Dazu: Chat für alle Spieler mit Sprechblasen und kein Schweben mehr bei offenem Inventar."
     }
   ]
 }

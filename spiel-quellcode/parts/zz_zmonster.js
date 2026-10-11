@@ -287,7 +287,7 @@ const MZ={und:[],hordes:[],crumble:[],zT:8,lT:30,hT:60,nightKey:null,lichNight:0
 function mzLevel(){return FLAGS.level||0;}
 function mzSpot(dMin,dMax){for(let t=0;t<16;t++){const a=Math.random()*6.283,d=dMin+Math.random()*(dMax-dMin),x=P.x+Math.cos(a)*d,z=P.z+Math.sin(a)*d;
   if(!inWorld(x,z)||nightSafe(x,z))continue;const g=groundAt(x,z,1e4);if(!(g>WATER+.3))continue;if(typeof nearWater==='function'&&x>-HALF&&x<HALF&&nearWater(x,z))continue;return[x,z];}return null;}
-function mzBlocked(){return state!=='playing'||P.x>60000||(typeof inRealm==='function'&&inRealm(P.x))||(typeof FIN!=='undefined'&&FIN.on)||mqIs('coda')||nightSafe(P.x,P.z)||cheatOn()||FILM.on;}
+function mzBlocked(){return state!=='playing'||P.x>60000||(typeof inRealm==='function'&&inRealm(P.x))||(typeof FIN!=='undefined'&&FIN.on)||mqIs('coda')||nightSafe(P.x,P.z)||FILM.on;}
 function mzSpawnHorde(x,z){const lv=mzLevel(),nt=Math.max(1,Math.min(3,1+((Math.random()*(lv>=10?3:lv>=7?2:1))|0))),nk=3+((Math.random()*(lv>=7?6:4))|0),id=Math.random();
   const H={id,members:[],sq:null,done:0};H.sq=mzSquad(null,'horde');H.sq.pat=Math.random()<.5?'ring':'zange';
   for(let i=0;i<nt;i++){const e=spawnEnt('troll',x+(Math.random()-.5)*5,z+(Math.random()-.5)*5,{hordeId:id,home:{x,z}});e.special=mzTrollAI;e.sq=H.sq;H.members.push(e);H.sq.members.push(e);}
@@ -313,9 +313,15 @@ function mzUndeadTick(dt){const dark=isDark(),ev=tonightEv(),peace=dark&&ev==='b
   if(mzBlocked())return;
   const key=(FLAGS.day||0)-((FLAGS.clock||600)<720?1:0);if(MZ.nightKey!==key){MZ.nightKey=key;MZ.lichNight=0;MZ.elderNight=0;}
   // Zombies
-  if(dark&&!peace){MZ.zT-=dt;if(MZ.zT<=0){MZ.zT=(blood?5:9)+Math.random()*7;const zs=MZ.und.filter(e=>!e.dead&&e.type==='zombie'&&!e.summoned).length;
-      if(zs<(blood?7:4)){const q=mzSpot(42,62);if(q){const n=Math.random()<.35?2:1;for(let k=0;k<n;k++){const e=spawnEnt('zombie',q[0]+(Math.random()-.5)*3,q[1]+(Math.random()-.5)*3,{v:(Math.random()*3)|0,rise:0,home:{x:q[0],z:q[1]}});e.special=mzMember;MZ.und.push(e);}
-        if(!FLAGS.zombieTip){FLAGS.zombieTip=1;toast('Zombies! Langsam, aber sie lassen nicht locker.');}}}}
+  if(dark&&!peace){MZ.zT-=dt;if(MZ.zT<=0){MZ.zT=(blood?5:8)+Math.random()*6;const zs=MZ.und.filter(e=>!e.dead&&!e.summoned&&!e.cmd&&(e.type==='zombie'||/^usk/.test(e.type))).length;
+      if(zs<(blood?9:6)){const q=mzSpot(42,62);if(q){
+        if(Math.random()<.55){const n=Math.random()<.35?2:1;for(let k=0;k<n;k++){const e=spawnEnt('zombie',q[0]+(Math.random()-.5)*3,q[1]+(Math.random()-.5)*3,{v:(Math.random()*3)|0,rise:0,home:{x:q[0],z:q[1]}});e.special=mzMember;MZ.und.push(e);}
+          if(!FLAGS.zombieTip){FLAGS.zombieTip=1;toast('Zombies! Langsam, aber sie lassen nicht locker.');}}
+        else{// bewaffnete Skelette: kleine Gruppe, die sich abspricht
+          const n=1+((Math.random()*(blood?4:3))|0),sq=mzSquad(null,'horde');for(let k=0;k<n;k++){let t=['usks','uska','uskh','uskb'][(Math.random()*4)|0];if(Math.random()<.25)t+='a';
+            const e=spawnEnt(t,q[0]+(Math.random()-.5)*4,q[1]+(Math.random()-.5)*4,{rise:0,home:{x:q[0],z:q[1]}});e.special=mzMember;e.sq=n>1?sq:null;if(n>1)sq.members.push(e);MZ.und.push(e);}
+          if(n>1){mzAssign(sq);MZ.hordes.push({id:-2,members:sq.members.slice(),sq,done:1});}
+          if(!FLAGS.skelTip){FLAGS.skelTip=1;toast('Bewaffnete Skelette streifen durch die Nacht!');}}}}}
     // Lich (ab Stufe 3), Elderlich (ab Stufe 8, sehr selten)
     MZ.lT-=dt;if(MZ.lT<=0){MZ.lT=35+Math.random()*25;const lv=mzLevel(),hasL=MZ.und.some(e=>!e.dead&&(e.d.lich||e.type==='elderlich'));
       if(!hasL&&lv>=3){const pe=lv>=8&&!MZ.elderNight?(blood?.07:.025):0,pl=MZ.lichNight<2?(blood?.3:.14):0,r=Math.random();
