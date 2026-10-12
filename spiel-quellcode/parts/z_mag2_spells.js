@@ -194,8 +194,8 @@ defSpell('wachstum',{el:'nature',name:'Wachstum',desc:'Gefällte Bäume, abgeern
   cast(c){const p=cpos(c),R=12;magSnd('leaf',p.x,p.z,1.4);magSnd('heal',p.x,p.z,.5);let n=0;const pop=(x,z)=>{const y=groundAt(x,z,p.y+5);mburst(x,y+.6,z,16,{cols:MPAL.bloom.concat(MPAL.nature),spd:2,up:2,life:1,s:.13,add:true});};
     ringFx(p.x,groundAt(p.x,p.z,p.y+1),p.z,1,30,{cols:MPAL.nature,spd:8,life:.9,s:.16,add:true});
     if(!isClient()){
-      const F=FLAGS.felled||{};for(const[k,t]of TREEOBJ){if(F[k]==null||Math.hypot(t.x-p.x,t.z-p.z)>R)continue;delete F[k];if(t.broken)unfell(t);const d=TREEDECO.get(k);if(d&&d._stump)unstumpDeco(d);pop(t.x,t.z);n++;}
-      if(typeof HGONE!=='undefined'&&FLAGS.harv)for(const b of [...HGONE]){if(Math.hypot(b.x-p.x,b.z-p.z)>R)continue;delete FLAGS.harv[b._hk];try{hvBack(b);}catch(e){}pop(b.x,b.z);n++;}
+      const F=FLAGS.felled||{};for(const[k,t]of TREEOBJ){if(F[k]==null||F[k]>=1e14||Math.hypot(t.x-p.x,t.z-p.z)>R)continue;delete F[k];if(t.broken)unfell(t);const d=TREEDECO.get(k);if(d&&d._stump)unstumpDeco(d);pop(t.x,t.z);n++;}
+      if(typeof HGONE!=='undefined'&&FLAGS.harv)for(const b of [...HGONE]){if(Math.hypot(b.x-p.x,b.z-p.z)>R||FLAGS.harv[b._hk]>=1e14)continue;delete FLAGS.harv[b._hk];try{hvBack(b);}catch(e){}pop(b.x,b.z);n++;}
       let pk=0;for(const q of pickups)if(!q.active&&q.regrowAt&&Math.hypot(q.x-p.x,q.z-p.z)<R){q.regrowAt=0;pk++;pop(q.x,q.z);n++;}if(pk){regrowT=0;regrowPickups(1);}
       if(c.own)toast(n?`${n} Pflanze${n>1?'n':''} sind nachgewachsen`:'Hier gibt es nichts nachwachsen zu lassen.');}
     for(let i=0;i<60;i++){const a=Math.random()*6.283,r=Math.random()*R,x=p.x+Math.cos(a)*r,z=p.z+Math.sin(a)*r;spark({x,y:groundAt(x,z,p.y+4)+.1,z,vy:1+Math.random(),life:1.2,s:.1,c:mpick(MPAL.nature.concat(MPAL.bloom)),add:true,a:.8});}}});

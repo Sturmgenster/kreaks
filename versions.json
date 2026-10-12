@@ -1,7 +1,20 @@
 {
-  "latest": "0.0.107",
+  "latest": "0.0.108",
   "latestBeta": null,
   "versions": [
+    {
+      "id": "0.0.108",
+      "label": "Beta-3.3",
+      "name": "KREAKS Beta-3.3",
+      "channel": "release",
+      "date": "2026-10-12",
+      "notes": "Pferdehändler Ruprecht steht wieder vor den Ställen. Schläge treffen jetzt das Vorderste (kein Gras mehr hinter Bäumen). Baumstümpfe kann man mit einer Axt für immer entfernen.",
+      "url": "https://raw.githubusercontent.com/Sturmgenster/kreaks/main/spiel/KREAKS-0.0.108.kreaks",
+      "size": 36526447,
+      "sha256": "d165075045190f0a3ef83ff55993f469a63aa04ab4b0c827e0c9a82e46addce9",
+      "encrypted": true,
+      "wrappedKey": "wcDMA0K3SMKDFFIYAQv/ckZv07NRx7hy1uYhC0SJfc2/kgSXR+0PKPwi9Bf5NBR6BaMVNSzRQsxXYxuCYvgZ2KABF7HRksmwpGOvmQqrRuU13/sNuuFxbnrxb5UuWohJT3a7/2s+bcPJbZ9IXlnuDw5iwRF0v1Gtn+HGTTtnTYAoW54xLAyg0oRiLdAWrSMlJ+stYjzyiISLsgfTMlocn2JiyIeEht8KLtY63kYyGDALpHcwNzVkvGlHai6Hl+1pkI9vb1SOqCETvpwYF5+OvN/KnIjNUYByp1DZqXTguQ1UYdq9h8XIOrvKkmCfSRVLoQwDjF8luLPqajAV0CjqUIEmhUK2+D0GS4diaAR6E4ds+e1s/fEwFv5AgExPpXLCPqTEq6jSUkcaGTknes53P6GjxotJo83OgoNS1Ao2enTKfaRPZWC8ima5lU4jaHG5IxXMy6oZWb1mIyf0DBMUaHVx9EUQSZ2RREFDf4rroO34UQLSXlbNgDdk9C2hdE5wv0f3PmyEohYfgRJvgd7c0nEBsFxSqauVQ7jAoRRVWYmgRQ+BocJajbPz5Z9TjL36QDgcK6W5MCmNJCGbU0Lt4ecn8T88FP+sPWu4fm/7jy0YtoT6L8cbFVbx2cCbDemUwnras8i+DZZvVo/M+83ZldxO8/aKBcxFGDpLsULeNz0Mxw=="
+    },
     {
       "id": "0.0.107",
       "label": "Beta-3.2",
@@ -75,8 +88,8 @@
   "news": [
     {
       "kicker": "Neuigkeiten",
-      "title": "KREAKS Beta-3.2 ist da",
-      "text": "Nachts ziehen bewaffnete Skelette und Zombies umher, größer und bedrohlicher als zuvor. Dazu: Chat für alle Spieler mit Sprechblasen und kein Schweben mehr bei offenem Inventar."
+      "title": "KREAKS Beta-3.3 ist da",
+      "text": "Ruprecht ist zurück bei seinen Pferden, Schläge gehen nicht mehr durch Bäume hindurch und Baumstümpfe lassen sich mit der Axt für immer entfernen."
     }
   ]
 }
