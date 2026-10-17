@@ -1,9 +1,9 @@
 /* =========================================================
-   KREAKS Beta-3.3 (0.0.108) · Konto aus dem Launcher
+   KREAKS Beta-3.4 (0.0.120) · Konto aus dem Launcher
    - Das Spiel läuft nur mit freigeschaltetem KREAKS-Konto (Start über den Launcher)
    - Der Spielername ist der Kontoname, Spielstände gehören zum Konto
    ========================================================= */
-const KREAKS_VERSION={label:'Beta-3.3',build:'0.0.108'};
+const KREAKS_VERSION={label:'Beta-3.4',build:'0.0.120'};
 const KACC=(typeof window!=='undefined'&&window.KREAKS_ACCOUNT)||null;
 
 // Startbildschirm: Version anzeigen

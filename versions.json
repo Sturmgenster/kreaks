@@ -1,7 +1,20 @@
 {
-  "latest": "0.0.108",
+  "latest": "0.0.120",
   "latestBeta": null,
   "versions": [
+    {
+      "id": "0.0.120",
+      "label": "Beta-3.4",
+      "name": "KREAKS Beta-3.4",
+      "channel": "release",
+      "date": "2026-10-17",
+      "notes": "Die Dungeon-Stadt mit dem Großen Turm (Ebene 1), Arena als Kolosseum, Gildenränge, reisende Gildenabenteurer und Räuber, Mietshäuser und Bewohner mit Tagesablauf. Dazu Vampir, Nadelwald und Friedhöfe, neue Meere und Tiefsee mit Tauchen im Kupfer-Taucheranzug, seltenes Wetter, Hausbau, Bogen, Talente, Dungeons, Dörfer und Haustiere.",
+      "url": "https://raw.githubusercontent.com/Sturmgenster/kreaks/main/spiel/KREAKS-0.0.120.kreaks",
+      "size": 36664047,
+      "sha256": "be41928d7fb7ea49dd2c5dd12d2daf2e702f8742ca08487cb984608e3f7a28f3",
+      "encrypted": true,
+      "wrappedKey": "wcDMA0K3SMKDFFIYAQwAxdi5Dv3x/paE4g2AtuYbJwZ0Mth2RfSF5Txd1IpeG5JyZO1YrOYUWMvilkfq1FxvacI13D88iU0wISOKUex4MkcGqBc1nuxBUiiew0aSzsyDisKiPSJhlwXFLX4u7GMfwAW0DBSjoSJT7az0ebpu7DiwX1wmloV5q2Wz0IO02HpTm2KXV7erpTTw+FxfJuorviNmJmk9LGOCEUO3IR8TQMkSCjcrJGKnle1O0vi4JBLl1geqfdnnhavwr5NsaVbpLbs64Y/QQ0eSNcPUwRiRQ7NXA51B6OUSiejFkNOOt281lUOGbsWKnFde/YrNwwdzhi5rSTpXX+Ve2bDeT/2zKkX0lDqn5bx2IMkyv9zs+l/anSzWILYLarJgk4lx1ikyN9+PfK51vQZPdenJxbVFPy7O7dB8SqivSjX0Oat+iZKODyDLZo0MGj521ETXukj0opdMEj5UMoFPUO7kOpusNfXPJUd4vYr82cRzs0wWY28iMm7k/nV4Eq5Dkcsv1OTm0nEBKwebYdGZfHVKulAdUgcMla/EifCx3lm6GmTs8Ujglc+Jzt8wKu4gbZ3a5zn6cbte00POuoUlD2JE3bCesVMNu1gkU51i3nu3pCYRnwlRb4qS0fYY6UDdD4pp4ipexQF+6YjEUUrZ3n2FJgTUXYwbaw=="
+    },
     {
       "id": "0.0.108",
       "label": "Beta-3.3",

@@ -426,7 +426,10 @@ function drawHero(c,frame,back,pose,poseSide){
   if(cl==='rags'){for(let x=tx0;x<=tx1;x++)if(hash2(x,5,7)<.6)p.set(x,waist+1+((hash2(x,6,7)*2)|0),top[1]);p.set(tx0+2,tTop+3,CLOTH.brown[2]);p.set(tx0+3,tTop+3,CLOTH.brown[2]);p.set(tx1-2,tTop+6,CLOTH.ochre[2]);}
   if(['tunic','leather','chain','rags','vest','guard'].includes(cl)){for(let x=tx0;x<=tx1;x++)p.set(x,waist,CLOTH.leather[1]);if(!back)p.set(cx,waist,hex('#d6b048'));}
   if(cl==='loin'){rect(cx-2,cx+2,waist,waist+4,CLOTH.brown);for(let x=tx0;x<=tx1;x++)p.set(x,waist,CLOTH.leather[0]);}
-  if(cl==='guard'&&!back){const RED=hex('#b3262a'),WH=hex('#efe9dc'),BL=hex('#7cc8f0'),t0=tx0+1,t1=tx1-1,wdt=t1-t0+1;
+  if(cl==='guard'&&!back&&c.uni){const U=c.uni,A=hex(U.a),B=hex(U.b),E=hex(U.e),t0=tx0+1,t1=tx1-1,yb=Math.min(H-4,waist+5);
+    for(let y=tTop+1;y<=yb;y++)for(let x=t0;x<=t1;x++)p.set(x,y,(x===t0||x===t1||y===yb)?B:A);
+    const my=Math.round((tTop+1+waist)/2);for(let y=my-2;y<=my+1;y++){p.set(cx,y,E);p.set(cx-1,y,E);}p.set(cx-2,my-2,E);p.set(cx+1,my-2,E);}
+  else if(cl==='guard'&&!back){const RED=hex('#b3262a'),WH=hex('#efe9dc'),BL=hex('#7cc8f0'),t0=tx0+1,t1=tx1-1,wdt=t1-t0+1;
     for(let y=tTop+1;y<=Math.min(H-4,waist+5);y++)for(let x=t0;x<=t1;x++){const k=Math.floor((x-t0)/wdt*3);p.set(x,y,k===1?WH:RED);}
     const my=Math.round((tTop+1+waist)/2);for(let y=my-1;y<=my;y++)for(let x=cx-1;x<=cx;x++)p.set(x,y,BL);p.set(cx+1,my-1,BL);p.set(cx+1,my,BL);}
   // Arme
@@ -668,7 +671,7 @@ const ANIMALS={hare:{h:.42,speed:1.6,flee:6.0,fleeR:9,name:'Hase'},fox:{h:.5,spe
 /* =========================================================
    Atlas
    ========================================================= */
-const ATLAS=2048,SPR={};
+const ATLAS=4096,ATLAS_H=2048,SPR={};
 function buildAtlas(){
   const list=[];
   for(let i=0;i<3;i++)list.push(['pine'+i,drawPine(100+i*31,i)]);
@@ -694,10 +697,10 @@ function buildAtlas(){
   animalSprites(list);
   list.push(['stick',drawStick()]);list.push(['mushroom',drawMushroom()]);list.push(['stone',drawStone()]);list.push(['cone',drawCone()]);
   list.sort((a,b)=>b[1].height-a[1].height);
-  const cv=document.createElement('canvas');cv.width=cv.height=ATLAS;const ctx=cv.getContext('2d');
+  const cv=document.createElement('canvas');cv.width=ATLAS;cv.height=ATLAS_H;const ctx=cv.getContext('2d');
   let x=2,y=2,rowH=0;
   for(const[name,c]of list){if(x+c.width+2>ATLAS){x=2;y+=rowH+3;rowH=0;}
-    ctx.drawImage(c,x,y);SPR[name]={c,w:c.width,h:c.height,u:x/ATLAS,v:1-(y+c.height)/ATLAS,du:c.width/ATLAS,dv:c.height/ATLAS};
+    ctx.drawImage(c,x,y);SPR[name]={c,w:c.width,h:c.height,u:x/ATLAS,v:1-(y+c.height)/ATLAS_H,du:c.width/ATLAS,dv:c.height/ATLAS_H};if(y+c.height>ATLAS_H)console.warn('Atlas voll:',name);
     x+=c.width+3;rowH=Math.max(rowH,c.height);}
   const tex=new THREE.CanvasTexture(cv);tex.magFilter=THREE.NearestFilter;tex.minFilter=THREE.NearestFilter;tex.generateMipmaps=false;
   return tex;
@@ -4395,7 +4398,7 @@ const MATS={iron:{n:'Eisen',adj:'Eisen',pal:['#2e3034','#5a5e64','#8a9098','#c0c
   adamant:{n:'Adamantium',adj:'Adamantium',pal:['#3a0826','#6e1648','#a82c6a','#e86aa8'],tier:5,dmg:48,cd:.55,dur:1000,def:[.13,.3,.08],ing:'adamant_ingot'},
   diamond:{n:'Diamant',adj:'Diamant',pal:['#4a8aa8','#8ad0ea','#d0f4ff','#ffffff'],tier:6,dmg:58,cd:.5,dur:1600,def:[.16,.36,.1],ing:'diamond'},
   black:{n:'Schwarzer Diamant',adj:'Schwarzdiamant',pal:['#06060a','#1a1a26','#3c3c52','#9a8ac8'],tier:7,dmg:72,cd:.5,dur:2800,def:[.2,.45,.12],ing:'blackdia'}};
-const ORES={coal:{n:'Kohle',pl:'Kohle',col:'#141414',hard:2,hp:40,v:2},iron_ore:{n:'Eisenerz',pl:'Eisenerze',col:'#b87a4a',hard:2,hp:50,v:6},bauxite:{n:'Bauxit',pl:'Bauxit',col:'#c8603a',hard:2,hp:45,v:4},
+const ORES={coal:{n:'Kohle',pl:'Kohle',col:'#141414',hard:2,hp:40,v:2},iron_ore:{n:'Eisenerz',pl:'Eisenerze',col:'#b87a4a',hard:2,hp:50,v:6},bauxite:{n:'Bauxit',pl:'Bauxit',col:'#c8603a',hard:2,hp:45,v:4},copper_ore:{n:'Kupfererz',pl:'Kupfererze',col:'#d0884a',hard:2,hp:50,v:5},
   gold_ore:{n:'Golderz',pl:'Golderze',col:'#ffd040',hard:3,hp:60,v:25},silver_ore:{n:'Silbererz',pl:'Silbererze',col:'#e0e8f0',hard:3,hp:60,v:20},
   mythril_ore:{n:'Mythrilerz',pl:'Mythrilerze',col:'#5ac8f0',hard:4,hp:90,v:60},adamant_ore:{n:'Adamantiumerz',pl:'Adamantiumerze',col:'#e0408a',hard:5,hp:120,v:90}};
 const GEMS={sapphire:{n:'Saphir',pl:'Saphire',col:['#0a1a6a','#1a3ab0','#4a7aff','#b0d0ff'],hard:3,hp:70,v:120,fx:'Mana +2/s'},emerald:{n:'Smaragd',pl:'Smaragde',col:['#063a1a','#127a3a','#2ec86a','#b0ffd0'],hard:3,hp:70,v:120,fx:'Leben +1,5/s'},
@@ -4533,7 +4536,7 @@ function caveCollide(o,R){const[i,ix,iz]=caveCell(o.x,o.z),c=CAVES[i];if(!c||!c.
     if(d<R){if(d>1e-4){o.x=nx+ddx/d*R;o.z=nz+ddz/d*R;}else{const pen=[o.x-bx0,bx1-o.x,o.z-bz0,bz1-o.z],m=Math.min(...pen),k=pen.indexOf(m);if(k===0)o.x=bx0-R;else if(k===1)o.x=bx1+R;else if(k===2)o.z=bz0-R;else o.z=bz1+R;}o.hit=true;}}}
 function caveLOS(ax,az,bx,bz){const d=Math.hypot(bx-ax,bz-az),n=Math.ceil(d/.6);for(let k=1;k<n;k++){const t=k/n;if(caveSolid(ax+(bx-ax)*t,az+(bz-az)*t))return false;}return true;}
 /* ---- Erzvorkommen ---- */
-const DEP_KIND={coal:{p:.035,vein:[2,5],d0:0},iron_ore:{p:.028,vein:[2,4],d0:.05},bauxite:{p:.03,vein:[2,5],d0:0},gold_ore:{p:.0065,vein:[1,3],d0:.3},silver_ore:{p:.0065,vein:[1,3],d0:.3},
+const DEP_KIND={coal:{p:.035,vein:[2,5],d0:0},iron_ore:{p:.028,vein:[2,4],d0:.05},bauxite:{p:.03,vein:[2,5],d0:0},copper_ore:{p:.026,vein:[2,4],d0:.03},gold_ore:{p:.0065,vein:[1,3],d0:.3},silver_ore:{p:.0065,vein:[1,3],d0:.3},
   mythril_ore:{p:.0022,vein:[1,2],d0:.6},adamant_ore:{p:.0014,vein:[1,2],d0:.7},sapphire:{p:.0007,vein:[1,1],d0:.35,pocket:1},emerald:{p:.0007,vein:[1,1],d0:.35,pocket:1},ruby:{p:.0007,vein:[1,1],d0:.35,pocket:1},
   opal:{p:.0006,vein:[1,1],d0:.4,pocket:1},diamond:{p:.00035,vein:[1,1],d0:.55,pocket:1},blackdia:{p:.00007,vein:[1,1],d0:.8,pocket:1}};
 function genDeposits(i,D){const r=mulberry32(91000+i*37),N=CN,faces=[];D.deps=[];
@@ -4754,7 +4757,7 @@ function buildMoleVillage(i,D,C,deco){const[vx,vz]=cellW(i,D.vil.x,D.vil.z),wood
 const MVIL_NPC=[['Grabbel','Bürgermeister',3,null,'Willkommen in Tiefgrund, Langbein! Nur wenige finden den Weg hierher. Benimm dich, dann darfst du bleiben. Und kaufen. Vor allem kaufen.'],
   ['Schorf','Schmied',2,{title:'Schorfs Grubenschmiede',greet:'Werkzeug, das nicht bricht. Fast nie.',buy:[['iron_pick',150],['iron_sword',190],['alu_pick',130],['silver_sword',260],['iron_helm',170],['iron_armor',300],['torch',6],['furnace',80]],sell:[['iron_ingot',12],['alu_ingot',10],['silver_ingot',28]]}],
   ['Wühla','Wirtin',1,{title:'Zur Glühenden Laterne',greet:'Pilzsuppe, Brot und ein Schluck Grubenbräu.',buy:[['bread',10],['mead',16],['hpot',70],['hpot2',190]],sell:[['meat',4],['mushroom',5]]}],
-  ['Buddel','Erzhändler',0,{title:'Buddels Erzkiste',greet:'Frisch aus dem Stollen. Preise frisch vom Händler.',buy:[['coal',6],['iron_ore',16],['bauxite',12],['gold_ore',70],['silver_ore',58],['iron_ingot',34],['alu_ingot',30]],sell:[['coal',1],['iron_ore',3],['bauxite',2],['gold_ore',12],['silver_ore',10]]}],
+  ['Buddel','Erzhändler',0,{title:'Buddels Erzkiste',greet:'Frisch aus dem Stollen. Preise frisch vom Händler.',buy:[['coal',6],['copper_ore',13],['iron_ore',16],['bauxite',12],['gold_ore',70],['silver_ore',58],['iron_ingot',34],['alu_ingot',30]],sell:[['coal',1],['iron_ore',3],['bauxite',2],['gold_ore',12],['silver_ore',10]]}],
   ['Krall','Erzhändler',0,{title:'Kralls Tiefenerze',greet:'Mythril und Adamantium. Wer zahlt, bekommt.',buy:[['mythril_ore',240],['adamant_ore',390],['mythril_ingot',320],['silver_ingot',80],['gold_ingot',95]],sell:[['mythril_ore',30],['adamant_ore',45],['gold_ingot',20]]}],
   ['Glimmer','Edelsteinhändlerin',3,{title:'Glimmers Funkelstube',greet:'Saphir, Smaragd, Rubin, Opal, Diamant. Schwarze Diamanten? Die verkauft hier keiner. Niemand.',buy:[['sapphire',460],['emerald',460],['ruby',500],['opal',540],['diamond',1900]],sell:[['sapphire',50],['emerald',50],['ruby',55],['opal',60],['diamond',180],['blackdia',700]]}],
   ['Kiesel','Dorfbewohner',1,null,null],['Schlacke','Dorfbewohner',2,null,null],['Lore','Dorfbewohnerin',3,null,null],['Stollo','Dorfbewohner',0,null,null]];
