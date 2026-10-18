@@ -1,7 +1,20 @@
 {
-  "latest": "0.0.126",
+  "latest": "0.0.127",
   "latestBeta": null,
   "versions": [
+    {
+      "id": "0.0.127",
+      "label": "Beta-4.1",
+      "name": "KREAKS Beta-4.1",
+      "channel": "release",
+      "date": "2026-10-18",
+      "notes": "Monster greifen erst an, wenn man ihnen auf etwa 15 m nahe kommt, und geben die Verfolgung ab 25 m auf. Getroffene Monster reagieren bis 30 m, Gruppen ziehen gemeinsam los.",
+      "url": "https://raw.githubusercontent.com/Sturmgenster/kreaks/main/spiel/KREAKS-0.0.127.kreaks",
+      "size": 36736320,
+      "sha256": "354612c91be7846e3e1299ab4efda73f3608a9a37419d17df0a31566026d13d0",
+      "encrypted": true,
+      "wrappedKey": "wcDMA0K3SMKDFFIYAQwAjBnb9BMiKU8bc+Ad7XbVnoG+JI9sYEzyGRhoNVvbF6WYlcL4m3xtr4hFj4M048dbn968PPBwk6uPJM4WFCWXXr2UyEtigj2hcaLP7tlHRyB1og5+jT4RWpX0Zt5UPKToXYpYG1bm3/Jh8/omqacq0DyV792BYnvhpP9HNUs0zDKmShty3oszQOr5DDzog/aBPyxXXvTjrDp0F7dS5qh5h12shXIycUE+m7TpysRc1uwVS3ffQbhkO+fTYXWmbkZWRwEbh3tSjL/1WBB7pyzlZpFXIakbqLH31i7k340OJYW2/B4oON7WfffuBtXystVhYIRZ237WSX7GVP5CLZm2ky/b/314jnVNqwsGMNGLI49f60H35M1aXoN8l9Li8RzKCQJgj8eDIEkYLO2mf05oHwkgtz6uO93gcAB8L4IHjIkU0WANj2DZ6YaLcuaMX1re+U+rjwa+42/W6jyw+YXPanLgCVZ+6m+vuRcruCyKxVf+TiZE1VDcTBKlpOsgfH390nEBqeGmorb7RM3+Hw4nfgfc2SlMBHytJFLpTDPQPrSxGP2Qjnogrpt5gB/woigu2fgTCMDwk/IOYL+j2oHl1wjoIcP6zMplttRJ0aLwMAG+AnnKoyCCZQCv6yo0dYAemPg15y9VDJQ2erFSj2cgDWRT7w=="
+    },
     {
       "id": "0.0.126",
       "label": "Beta-4.0",
