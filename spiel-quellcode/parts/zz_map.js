@@ -69,7 +69,8 @@ function mapDraw(ctx,W,H,cx,cz,mpp,big){ctx.imageSmoothingEnabled=false;ctx.fill
     const a=Math.atan2(Y-H/2,X-W/2),r=Math.min((W/2-m)/Math.abs(Math.cos(a)||1e-6),(H/2-m)/Math.abs(Math.sin(a)||1e-6));X=W/2+Math.cos(a)*r;Y=H/2+Math.sin(a)*r;
     ctx.save();ctx.translate(X,Y);ctx.rotate(a);ctx.fillStyle=col;ctx.strokeStyle='#120a04';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(6,0);ctx.lineTo(-5,-5);ctx.lineTo(-5,5);ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();};
   // Markierungen und Quest-Ziel
-  for(const m of(FLAGS.mapMarks||[]))pinOut(m.x,m.z,m.c,m.n);
+  // Automatische Markierungen (Dungeon-Stadt, Gruft aus dem Brief) erst zeigen, wenn man dort schon war. Eigene Markierungen immer.
+  for(const m of(FLAGS.mapMarks||[])){if((m.tw||m.vq)&&!S[mKey(Math.floor(m.x/MCELL),Math.floor(m.z/MCELL))])continue;pinOut(m.x,m.z,m.c,m.n);}
   try{const o=mqObjective();if(o&&o.at&&o.at[0]<60000)pinOut(o.at[0],o.at[1],'#ffd84a',big?'Ziel':null);}catch(e){}
   // Mitstreiter und Mitspieler
   const dot=(x,z,col,r)=>{const X=sx(x),Y=sz(z);if(X<0||Y<0||X>W||Y>H)return;ctx.fillStyle='#0a0604';ctx.fillRect(X-r-1,Y-r-1,r*2+2,r*2+2);ctx.fillStyle=col;ctx.fillRect(X-r,Y-r,r*2,r*2);};

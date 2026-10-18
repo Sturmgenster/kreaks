@@ -24,7 +24,7 @@ function trdBuild(){TRD.busy=true;TRD.seed=WSEED;try{
     return(h(ix,iz)*(1-u)+h(ix+1,iz)*u)*(1-v)+(h(ix,iz+1)*(1-u)+h(ix+1,iz+1)*u)*v;};return f(0,140,8101)*.7+f(0,48,8102)*.3;};
   const gate=[TWC.x+TWC.WR+22,TWC.z];
   for(let r=0;r<NR;r++)for(let c=0;c<NC;c++){const i=r*NC+c,x=X0+(c+.5)*S,z=Z0+(r+.5)*S,h=getHeight(x,z);hgt[i]=h;let k=1+Math.pow(nz(x,z),2)*6;
-    if(h<WATER+.7)k=-1;else{if(h<WATER+2)k*=5;if(h>30)k*=3;if(inCore(x,z))k*=2.5;const d=twD(x,z);if(d<TWC.WR+14)k=-1;}
+    if(h<WATER+.7)k=h<WATER-2?400:80;else{if(h<WATER+2)k*=5;if(h>30)k*=3;if(inCore(x,z))k*=2.5;const d=twD(x,z);if(d<TWC.WR+14)k=-1;}
     cost[i]=k;}
   const idx=(x,z)=>{const c=clamp(Math.floor((x-X0)/S),0,NC-1),r=clamp(Math.floor((z-Z0)/S),0,NR-1);return r*NC+c;};
   const st=idx(SX,zf(SX)),gl=idx(gate[0],gate[1]);cost[st]=Math.max(cost[st],1);cost[gl]=1;
@@ -52,7 +52,9 @@ function roadD(x,z){if(x>-40||x<-2800||!trdOk())return 1e9;const l=TRD.grid.get(
   for(const i of l){const a=W[i],b=W[i+1];const dx=b[0]-a[0],dz=b[1]-a[1],L2=dx*dx+dz*dz||1;let t=((x-a[0])*dx+(z-a[1])*dz)/L2;t=t<0?0:t>1?1:t;const d=Math.hypot(x-a[0]-dx*t,z-a[1]-dz*t);if(d<best)best=d;}return best;}
 function roadAt(s){trdOk();s=clamp(s,0,TRD.total);let lo=0,hi=TRD.len.length-1;if(hi<1)return[SPAWN.x,SPAWN.z,0];while(hi-lo>1){const m=(lo+hi)>>1;if(TRD.len[m]<=s)lo=m;else hi=m;}const a=TRD.all[lo],b=TRD.all[hi],L=TRD.len[hi]-TRD.len[lo]||1,t=(s-TRD.len[lo])/L;return[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,Math.atan2(b[1]-a[1],b[0]-a[0])];}
 // ---------- Gelände: Stadtplateau ----------
-{const a=wlRawH;wlRawH=function(x,z){let h=a(x,z);const d=twD(x,z);if(d<420){const w=wsm(clamp((420-d)/120,0,1));h=h*(1-w)+TWC.H*w;}return h;};}
+{const a=wlRawH;wlRawH=function(x,z){let h=a(x,z);const d=twD(x,z);if(d<420){const w=wsm(clamp((420-d)/120,0,1));h=h*(1-w)+TWC.H*w;return h;}
+  // Wo der Weg durch Wasser müsste, entsteht ein schmaler Landstreifen (keine Brücke)
+  if(h<WATER+1.4&&!TRD.busy&&TRD.seed===WSEED){const r=roadD(x,z);if(r<16){const w=wsm(clamp((16-r)/11,0,1));h=Math.max(h,h*(1-w)+(WATER+1.4)*w);}}return h;};}
 // keine fremden Bauwerke in der Stadt oder auf der Straße
 const twBlock=(x,z)=>twD(x,z)<470||roadD(x,z)<28;
 for(const fn of['wlGy','dgOf','vlgOf','cryptOf','ruinOf','wreckOf','cityOf'])try{const a=eval(fn);const w=function(s){const g=a(s);if(g&&twBlock(g.x,g.z)){const k={wlGy:'gy',dgOf:'dg',vlgOf:'vg',cryptOf:'cp',ruinOf:'ru',wreckOf:'wr',cityOf:'ct'}[fn];s[k]=null;return null;}return g;};eval(fn+'=w');}catch(e){console.error('Turm: Sperre',fn,e);}
@@ -60,9 +62,9 @@ for(const fn of['wlGy','dgOf','vlgOf','cryptOf','ruinOf','wreckOf','cityOf'])try
 // ---------- Biome: Stadt, Straße ----------
 Object.assign(WLB,{stadt:{n:'Die Dungeon-Stadt',mus:'orte/coda',gloom:0,cave:0,reg:'plain'},stadtrand:{n:'Die Dungeon-Stadt',mus:'orte/coda',gloom:0,cave:0,reg:'plain'},strasse:{n:'Straße',mus:'orte/ebene',gloom:0,cave:0,reg:'plain'}});
 Object.assign(WLV,{stadt:[],stadtrand:[['grass',.2,.4,.55,0,.08],['flower',.04,.35,.45,0,.05]],strasse:[]});
-Object.assign(WLP,{stadt:[pal(['#5a5650','#6a665e','#7a766c','#8a857a']),pal(['#4e4a44','#5e5a52'])],stadtrand:WLP.ebene,strasse:[pal(['#6a5a40','#7a6a4c','#8a7a58','#9a8a64']),pal(['#5a5a58','#6e6e6a'])]});
+Object.assign(WLP,{stadt:[pal(['#5a5650','#6a665e','#7a766c','#8a857a']),pal(['#4e4a44','#5e5a52'])],stadtrand:WLP.ebene,strasse:[pal(['#3d2b1c','#4c3722','#5d452a','#6f5434','#846640']),pal(['#5d452a','#6f5434'])]});
 try{Object.assign(FA_BIO,{stadt:[],stadtrand:[],strasse:[]});Object.assign(FA_TGT,{stadt:0,stadtrand:0,strasse:0});Object.assign(MAPC,{wl_stadt:[120,116,108],wl_strasse:[150,120,80]});}catch(e){}
-{const a=wlBiomeOf;wlBiomeOf=function(s,x,z){const d=twD(x,z);if(d<TWC.WR+4)return'stadt';if(d<330)return'stadtrand';const b=a(s,x,z);if(b==='meer'||b==='tiefsee')return b;if(roadD(x,z)<4.5)return'strasse';return b;};}
+{const a=wlBiomeOf;wlBiomeOf=function(s,x,z){const d=twD(x,z);if(d<TWC.WR+4)return'stadt';if(d<330)return'stadtrand';const b=a(s,x,z);if(b==='meer'||b==='tiefsee')return b;if(roadD(x,z)<2.2)return'strasse';return b;};}
 {const a=areaAt;areaAt=function(x,z){const k=a(x,z);if(k==='wl_stadtrand')return'wl_stadt';if(k==='wl_strasse'){const b=wlDom(x,z).b;if(!AREAS['wl_'+b]&&WLB[b]){AREAS['wl_'+b]=WLB[b].n;AREA_MUSIC['wl_'+b]=WLB[b].mus;}return'wl_'+b;}
   if(k==='wl_stadt'&&Math.hypot(x-AR.x,z-AR.z)<AR.R0)return'tw_arena';return k;};}
 AREAS.tw_arena='Die große Arena';AREA_MUSIC.tw_arena='orte/coda';try{MAPC.tw_arena=[190,160,110];WX_NONE.add('tw_arena');}catch(e){}
@@ -71,14 +73,15 @@ AREAS.tw_arena='Die große Arena';AREA_MUSIC.tw_arena='orte/coda';try{MAPC.tw_ar
 // Straße als Belag (Wildnis) mit Brücke übers Wasser
 // =========================================================
 let RDM=null;function rdMats(){if(RDM)return RDM;const T=c=>{const t=new THREE.CanvasTexture(c);t.magFilter=t.minFilter=THREE.NearestFilter;t.generateMipmaps=false;t.wrapS=t.wrapT=THREE.RepeatWrapping;return t;};
-  const p=new Px(32,32),S=pal(['#5a4a34','#6e5c40','#82704e','#96845e']),St=pal(['#6a6a68','#828280','#9a9a96']);for(let y=0;y<32;y++)for(let x=0;x<32;x++){p.set(x,y,S[shadeIdx(.55+(hash2(x>>1,y>>1,301)-.5)*.5,4,x,y)]);if(hash2(x>>2,y>>2,302)<.25&&hash2(x,y,303)<.8)p.set(x,y,St[shadeIdx(.6+(hash2(x,y,304)-.5)*.4,3,x,y)]);}
-  const pk=new Px(16,16),W=pal(['#3e2a16','#5a3e22','#74522e','#8a663a']);for(let y=0;y<16;y++)for(let x=0;x<16;x++)pk.set(x,y,W[y%4===0?0:shadeIdx(.6+(hash2(x>>3,y>>2,305)-.5)*.4+(hash2(x,y,306)-.5)*.15,4,x,y)]);
-  RDM={road:new THREE.MeshLambertMaterial({map:T(p.done()),side:THREE.DoubleSide,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2}),plank:new THREE.MeshLambertMaterial({map:T(pk.done()),side:THREE.DoubleSide}),post:bMats().wood};return RDM;}
+  // Ein ganz normaler Erdweg wie überall im Spiel: Erdfarben, Kiesel, ausgefranste Ränder
+  const p=new Px(16,32),S=pal(['#3d2b1c','#4c3722','#5d452a','#6f5434','#846640']),PB=pal(['#6a665e','#8a857a']);
+  for(let y=0;y<32;y++)for(let x=0;x<16;x++){const e=Math.min(x,15-x),cut=e<3&&hash2(x,y>>1,311)>e*.34+.05;if(cut)continue;p.set(x,y,S[shadeIdx(.45+(hash2(x>>1,y>>1,312)-.5)*.6+(e>4?.1:-.12),5,x,y)]);if(hash2(x,y,313)<.03)p.set(x,y,PB[(x+y)&1]);}
+  RDM={road:new THREE.MeshLambertMaterial({map:T(p.done()),side:THREE.DoubleSide,alphaTest:.5,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2})};return RDM;}
 const RDC={built:new Map(),t:0},RD_SEG=60;
 function rdBuild(ci){const W=TRD.wild,i0=ci*RD_SEG,i1=Math.min(W.length-1,i0+RD_SEG);if(i1-i0<1)return null;const M=rdMats(),grp=new THREE.Group();
   const pos=[],uv=[],idx=[];let v=0,u=ci*RD_SEG*.5,prev=false;
   for(let i=i0;i<=i1;i++){const a=W[Math.max(0,i-1)],b=W[Math.min(W.length-1,i+1)],dx=b[0]-a[0],dz=b[1]-a[1],l=Math.hypot(dx,dz)||1,nx=-dz/l,nz=dx/l,[x,z]=W[i];u+=.5;
-    const ok=twD(x,z)>TWC.WR-2;const y1=getHeight(x+nx*2.6,z+nz*2.6)+.09,y2=getHeight(x-nx*2.6,z-nz*2.6)+.09;pos.push(x+nx*2.6,y1,z+nz*2.6,x-nx*2.6,y2,z-nz*2.6);uv.push(0,u,1,u);
+    const ok=twD(x,z)>TWC.WR-2,hw=1.6;const y1=getHeight(x+nx*hw,z+nz*hw)+.05,y2=getHeight(x-nx*hw,z-nz*hw)+.05;pos.push(x+nx*hw,y1,z+nz*hw,x-nx*hw,y2,z-nz*hw);uv.push(0,u*.32,1,u*.32);
     if(i>i0&&ok&&prev)idx.push(v-2,v-1,v,v-1,v+1,v);prev=ok;v+=2;}
   const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));g.setIndex(idx);g.computeVertexNormals();
   grp.add(new THREE.Mesh(g,M.road));scene.add(grp);return grp;}
@@ -90,7 +93,7 @@ function rdTick(dt){RDC.t-=dt;if(RDC.t>0)return;RDC.t=1;if(P.x>60000||!trdOk())r
 // =========================================================
 const twM4=new THREE.Matrix4(),twQ=new THREE.Quaternion(),twE=new THREE.Euler(),twV=new THREE.Vector3(),twS1=new THREE.Vector3(1,1,1);
 function mgNew(){return new Map();}
-function mgPush(MG,mat,geo,x,y,z,ry,rx,rz){twE.set(rx||0,ry||0,rz||0);twQ.setFromEuler(twE);twV.set(x,y,z);twM4.compose(twV,twQ,twS1);let g=geo.index?geo.toNonIndexed():geo.clone();g.applyMatrix4(twM4);let l=MG.get(mat);if(!l)MG.set(mat,l=[]);l.push(g);if(geo!==g)geo.dispose();}
+function mgPush(MG,mat,geo,x,y,z,ry,rx,rz){twE.set(rx||0,ry||0,rz||0,'YXZ');twQ.setFromEuler(twE);twV.set(x,y,z);twM4.compose(twV,twQ,twS1);let g=geo.index?geo.toNonIndexed():geo.clone();g.applyMatrix4(twM4);let l=MG.get(mat);if(!l)MG.set(mat,l=[]);l.push(g);if(geo!==g)geo.dispose();}
 function mgBuild(MG,grp){for(const[mat,L]of MG){let n=0;for(const g of L)n+=g.attributes.position.count;const pos=new Float32Array(n*3),nor=new Float32Array(n*3),uv=new Float32Array(n*2);let o=0;
   for(const g of L){pos.set(g.attributes.position.array,o*3);nor.set(g.attributes.normal.array,o*3);if(g.attributes.uv)uv.set(g.attributes.uv.array,o*2);o+=g.attributes.position.count;g.dispose();}
   const G=new THREE.BufferGeometry();G.setAttribute('position',new THREE.BufferAttribute(pos,3));G.setAttribute('normal',new THREE.BufferAttribute(nor,3));G.setAttribute('uv',new THREE.BufferAttribute(uv,2));const m=new THREE.Mesh(G,mat);m.frustumCulled=false;grp.add(m);}}
@@ -233,9 +236,10 @@ CAR.list.forEach((c,i)=>{c.n=CAR_NAMES[i];SHOPS[c.n]={title:c.n+', reisend',gree
   sell:[['fur',8],['meat',4],['bones',2],['pearl',40],['shell',3]].filter(q=>ITEMS[q[0]])};
   DIALOGS[c.n]={start:()=>'hello',nodes:{hello:()=>({text:['Ah, ein Reisender! Die Straße ist lang, aber sicher. Meistens.','Zur Dungeon-Stadt? Immer der Straße nach, über den Damm. Du kannst sie nicht verfehlen. Der Turm ist schwer zu übersehen.','Ich verkaufe, was die Leute im Turm brauchen. Und was sie vergessen haben.'][i],
     opts:[{label:'Zeig mir deine Waren.',act:()=>{openShop(c.n);return null;}},{label:'Gute Reise.',go:null}]})}};});
-function carTick(dt){if(!trdOk())return;for(const c of CAR.list){if(c.s==null||c.seed!==TRD.seed){c.s=TRD.total*c.f;c.seed=TRD.seed;if(c.e){removeEnt(c.e);c.e=null;}}const talking=c.e&&dlg&&dlg.v===c.e;if(c.w>0){c.w-=dt;}else if(!talking){c.s+=c.dir*1.4*dt;if(c.s<=40||c.s>=TRD.total-5){c.dir*=-1;c.w=40;c.s=clamp(c.s,40,TRD.total-5);}}
+function carTick(dt){if(!trdOk())return;for(const c of CAR.list){if(c.s==null||c.seed!==TRD.seed){c.s=TRD.total*c.f;c.seed=TRD.seed;if(c.e){removeEnt(c.e);c.e=null;}}{// Position hängt nur von der Weltzeit ab: auf allen Geräten gleich (Mehrspieler)
+    const T=(FLAGS.day||0)*1440+(FLAGS.clock||0),L0=40,L1=TRD.total-5,tr=(L1-L0)/1.4,cyc=2*tr+80,ph=((T+c.f*cyc)%cyc+cyc)%cyc;c.s=ph<tr?L1-ph*1.4:ph<tr+40?L0:ph<2*tr+40?L0+(ph-tr-40)*1.4:L1;}
   const[x,z]=roadAt(c.s),d=Math.hypot(x-P.x,z-P.z);
-  if(d<170&&!c.e&&P.x<60000&&!DGX.on){const e=spawnEnt('tc'+[4,6,5][CAR.list.indexOf(c)],x,z,{home:{x,z},name:c.n,role:'Reisender Händler',talk:0,trader:1,wander:false,always:true});e.portrait=twPortrait(sprOf(e,0));e.special=(e2,dt2)=>{const[tx,tz]=roadAt(c.s);if(Math.hypot(tx-e2.x,tz-e2.z)>.2)entMove(e2,tx,tz,3,dt2);else e2.frame=0;return true;};c.e=e;
+  if(d<170&&!c.e&&P.x<60000&&!DGX.on){const e=spawnEnt('tc'+[4,6,5][CAR.list.indexOf(c)],x,z,{home:{x,z},name:c.n,role:'Reisender Händler',talk:0,trader:1,wander:false,always:true});e.portrait=twPortrait(sprOf(e,0));e.special=(e2,dt2)=>{if(dlg&&dlg.v===e2){e2.frame=0;return true;}const[tx,tz]=roadAt(c.s);if(Math.hypot(tx-e2.x,tz-e2.z)>30){e2.x=tx;e2.z=tz;}if(Math.hypot(tx-e2.x,tz-e2.z)>.2)entMove(e2,tx,tz,3,dt2);else e2.frame=0;return true;};c.e=e;
     try{if(typeof c2Cart==='function'&&VM&&VM.planks){e.cartMode='pull';c.cart=c2Cart(e);CL2.carts.push(c.cart);}}catch(_){}}
   else if(c.e&&(d>230||P.x>60000)){removeEnt(c.e);if(c.cart){scene.remove(c.cart.g);const i=CL2.carts.indexOf(c.cart);if(i>=0)CL2.carts.splice(i,1);c.cart=null;}c.e=null;}}}
 function carLooked(){for(const c of CAR.list){const e=c.e;if(e&&!e.dead&&Math.hypot(e.x-P.x,e.z-P.z)<3.6&&lookingAt(e.x,e.y+1.3,e.z,4.5,.82))return e;}return null;}
@@ -247,7 +251,7 @@ function carLooked(){for(const c of CAR.list){const e=c.e;if(e&&!e.dead&&Math.hy
 let twT=0,twIn=false;
 function twTick(dt){twT-=dt;rdTick(dt);carTick(dt);arTick(dt);if(twT>0)return;twT=.5;if(P.x>60000&&TWS.built&&!DGX.on){twFree();return;}
   const d=twD(P.x,P.z);const BR=Math.max(760,camera.far+120);if(d<BR&&!TWS.built&&WL_READY){twBuild();twSpawnFolk();}else if(d>BR+240&&TWS.built)twFree();
-  const inC=d<TWC.WR;if(inC&&!twIn&&state==='playing'){showArea('Die Dungeon-Stadt');}twIn=inC;
+  const inC=d<TWC.WR&&!(DGX.on&&P.y<DG_Y+40);if(inC&&!twIn&&state==='playing'){showArea('Die Dungeon-Stadt');}twIn=inC;
   for(const e of TWS.ents){if(e.dead||e.trader||e.gm||e.am)continue;if(Math.hypot(e.x-P.x,e.z-P.z)<6&&time-(e.chatT||-99)>30&&Math.random()<.25){e.chatT=time;say(e,(e.guard?TC_GUARD:TC_LINES)[(Math.random()*(e.guard?TC_GUARD:TC_LINES).length)|0],3.2);}}}
 {const a=updateAnimals;updateAnimals=function(dt){a(dt);try{twTick(dt);}catch(e){if(!twTick.err){twTick.err=1;console.error('Turmstadt',e);}}};}
 {const a=startGame;startGame=function(isNew,char){if(TWS.built)twFree();if(TWS.far){scene.remove(TWS.far);TWS.far=null;}for(const c of CAR.list){if(c.e)removeEnt(c.e);c.e=null;}for(const[c,g]of RDC.built){scene.remove(g);for(const s of g.userData.sol||[])solDel(s);}RDC.built.clear();ARNA.on=false;return a(isNew,char);};}

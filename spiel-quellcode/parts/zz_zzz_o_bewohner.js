@@ -27,22 +27,28 @@ const BW_FN={m:['Hannes','Gerold','Matthis','Ruprecht','Konrad','Lorenz','Bertol
 // Wegenetz über die Straßen
 // =========================================================
 const BWG={nodes:[],adj:[],cache:new Map(),built:false};
-function bwGraph(){const N=[],A=[],X=TWC.x,Z=TWC.z,add=(x,z)=>{N.push([X+x,Z+z]);A.push([]);return N.length-1;},link=(a,b)=>{if(a===b||A[a].includes(b))return;const d=Math.hypot(N[a][0]-N[b][0],N[a][1]-N[b][1]);A[a].push([b,d]);A[b].push([a,d]);};
-  const groups=[];
+function bwGraph(){const N=[],A=[],X=TWC.x,Z=TWC.z,key=new Map(),node=(x,z)=>{const k=Math.round(x*2)+','+Math.round(z*2);let i=key.get(k);if(i==null){i=N.length;N.push([X+x,Z+z]);A.push([]);key.set(k,i);}return i;},
+    link=(a,b)=>{if(a===b||A[a].some(q=>q[0]===b))return;const d=Math.hypot(N[a][0]-N[b][0],N[a][1]-N[b][1]);A[a].push([b,d]);A[b].push([a,d]);};
+  // Straßen und Gassen: Punkte an allen Kreuzungen und alle ~10 m
+  for(const S of CITY_ST){const a=S.p[0],b=S.p[1],len=Math.hypot(b[0]-a[0],b[1]-a[1]),ux=(b[0]-a[0])/len,uz=(b[1]-a[1])/len,ts=new Set([0,len]);
+    for(let t=10;t<len;t+=10)ts.add(t);for(const c of(typeof CT_L!=='undefined'?CT_L:[])){const t=Math.abs(ux)>.5?(c-a[0])/ux:(c-a[1])/uz;if(t>0&&t<len)ts.add(t);}
+    const T=[...ts].sort((p,q)=>p-q),ids=T.map(t=>node(a[0]+ux*t,a[1]+uz*t));for(let k=0;k<ids.length-1;k++)link(ids[k],ids[k+1]);}
   // Turmring
-  {const g=[],n=40;for(let k=0;k<n;k++){const a=k/n*6.283;g.push(add(Math.cos(a)*76,Math.sin(a)*76));}for(let k=0;k<n;k++)link(g[k],g[(k+1)%n]);groups.push(g);}
-  for(const S of CITY_ST){const g=[];for(let i=0;i<S.p.length-1;i++){const a=S.p[i],b=S.p[i+1],len=Math.hypot(b[0]-a[0],b[1]-a[1]),n=Math.max(1,Math.round(len/9));for(let k=(i?1:0);k<=n;k++){const t=k/n;g.push(add(a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t));}}
-    for(let k=0;k<g.length-1;k++)link(g[k],g[k+1]);groups.push(g);}
-  for(const Q of CITY_PL){const g=[];for(let x=Q.x0+4;x<=Q.x1-4;x+=11)for(let z=Q.z0+4;z<=Q.z1-4;z+=11)g.push(add(x,z));for(const a of g)for(const b of g)if(a<b&&Math.hypot(N[a][0]-N[b][0],N[a][1]-N[b][1])<16)link(a,b);groups.push(g);}
-  for(const C of CITY_RD){const g=[];for(let k=0;k<6;k++){const a=k/6*6.283;g.push(add(C.x+Math.cos(a)*(C.r-3),C.z+Math.sin(a)*(C.r-3)));}for(let k=0;k<6;k++)link(g[k],g[(k+1)%6]);groups.push(g);}
-  // Verbindungen zwischen Straßen, Plätzen und Ring
-  for(let i=0;i<groups.length;i++)for(let j=i+1;j<groups.length;j++){const pl=i>=1+CITY_ST.length||j>=1+CITY_ST.length,lim=pl?14:8.5;
-    for(const a of groups[i]){let best=-1,bd=lim;for(const b of groups[j]){const d=Math.hypot(N[a][0]-N[b][0],N[a][1]-N[b][1]);if(d<bd){bd=d;best=b;}}if(best>=0)link(a,best);}}
+  {const g=[],n=48;for(let k=0;k<n;k++){const a=k/n*6.283;g.push(node(Math.cos(a)*76,Math.sin(a)*76));}for(let k=0;k<n;k++)link(g[k],g[(k+1)%n]);
+    for(let i=0;i<N.length;i++){const lx=N[i][0]-X,lz=N[i][1]-Z,d=Math.hypot(lx,lz);if(d>77&&d<84){let b=-1,bd=9;for(const j of g){const q=Math.hypot(N[j][0]-N[i][0],N[j][1]-N[i][1]);if(q<bd){bd=q;b=j;}}if(b>=0)link(i,b);}}}
+  // Plätze und Parks: Raster, mit den Straßen am Rand verbunden
+  const grid=new Map(),gk2=(x,z)=>Math.floor(x/12)+','+Math.floor(z/12);for(let i=0;i<N.length;i++){const k=gk2(N[i][0],N[i][1]);if(!grid.has(k))grid.set(k,[]);grid.get(k).push(i);}
+  const near=(x,z,r)=>{const o=[];for(let a=-1;a<=1;a++)for(let b=-1;b<=1;b++){const L=grid.get((Math.floor(x/12)+a)+','+(Math.floor(z/12)+b));if(L)for(const i of L)if(Math.hypot(N[i][0]-x,N[i][1]-z)<r)o.push(i);}return o;};
+  const area=(pts,lim)=>{const ids=pts.map(([x,z])=>node(x,z));for(const a of ids)for(const b of ids)if(a<b&&Math.hypot(N[a][0]-N[b][0],N[a][1]-N[b][1])<lim)link(a,b);for(const a of ids)for(const b of near(N[a][0],N[a][1],lim))if(!ids.includes(b))link(a,b);};
+  for(const Q of CITY_PL){const pts=[];for(let x=Q.x0+3;x<=Q.x1-3;x+=9)for(let z=Q.z0+3;z<=Q.z1-3;z+=9)pts.push([x,z]);area(pts,13);}
+  for(const C of CITY_RD){const pts=[];for(let k=0;k<6;k++){const a=k/6*6.283;pts.push([C.x+Math.cos(a)*(C.r-2.5),C.z+Math.sin(a)*(C.r-2.5)]);}area(pts,11);}
   BWG.nodes=N;BWG.adj=A;BWG.cache.clear();BWG.built=true;}
 function bwNear(x,z){let b=0,bd=1e9;const N=BWG.nodes;for(let i=0;i<N.length;i++){const d=(N[i][0]-x)**2+(N[i][1]-z)**2;if(d<bd){bd=d;b=i;}}return b;}
-function bwRoute(a,b){if(a===b)return[a];const k=a*4096+b;if(BWG.cache.has(k))return BWG.cache.get(k);const N=BWG.nodes,A=BWG.adj,n=N.length,dist=new Float64Array(n).fill(1e18),prev=new Int32Array(n).fill(-1),done=new Uint8Array(n);dist[a]=0;
-  for(let it=0;it<n;it++){let u=-1,ud=1e18;for(let i=0;i<n;i++)if(!done[i]&&dist[i]<ud){ud=dist[i];u=i;}if(u<0||u===b)break;done[u]=1;for(const[v,w]of A[u])if(dist[u]+w<dist[v]){dist[v]=dist[u]+w;prev[v]=u;}}
-  const p=[];if(prev[b]<0&&a!==b){p.push(a,b);}else{for(let v=b;v>=0;v=prev[v]){p.push(v);if(v===a)break;}p.reverse();}if(BWG.cache.size>3000)BWG.cache.clear();BWG.cache.set(k,p);return p;}
+function bwRoute(a,b){if(a===b)return[a];const k=a*65536+b;if(BWG.cache.has(k))return BWG.cache.get(k);const N=BWG.nodes,A=BWG.adj,n=N.length,g=new Float64Array(n).fill(1e18),prev=new Int32Array(n).fill(-1),done=new Uint8Array(n),H=[];
+  const hh=i=>Math.hypot(N[i][0]-N[b][0],N[i][1]-N[b][1]);const push=(f,i)=>{H.push([f,i]);let c=H.length-1;while(c){const p=(c-1)>>1;if(H[p][0]<=H[c][0])break;[H[p],H[c]]=[H[c],H[p]];c=p;}};
+  const pop=()=>{const t=H[0],l=H.pop();if(H.length){H[0]=l;let c=0;for(;;){const x=2*c+1,y=x+1;let m=c;if(x<H.length&&H[x][0]<H[m][0])m=x;if(y<H.length&&H[y][0]<H[m][0])m=y;if(m===c)break;[H[m],H[c]]=[H[c],H[m]];c=m;}}return t;};
+  g[a]=0;push(hh(a),a);while(H.length){const[,u]=pop();if(done[u])continue;done[u]=1;if(u===b)break;for(const[v,w]of A[u]){const ng=g[u]+w;if(ng<g[v]){g[v]=ng;prev[v]=u;push(ng+hh(v),v);}}}
+  const p=[];if(prev[b]<0){p.push(a,b);}else{for(let v=b;v>=0;v=prev[v]){p.push(v);if(v===a)break;}p.reverse();}if(BWG.cache.size>4000)BWG.cache.clear();BWG.cache.set(k,p);return p;}
 // =========================================================
 // Orte: Arbeit, Besorgungen, Freizeit, Spielplätze
 // =========================================================
@@ -58,8 +64,8 @@ function bwPlaces(){const X=TWC.x,Z=TWC.z,W=(x,z)=>[X+x,Z+z],P2=BWP;P2.work=[];P
   for(const Q of CITY_PL)for(let k=0;k<3;k++)P2.free.push({x:X+Q.x0+4+Math.random()*(Q.x1-Q.x0-8),z:Z+Q.z0+3+Math.random()*(Q.z1-Q.z0-6),label:Q.n});
   for(let k=0;k<6;k++){const a=k/6*6.283;P2.free.push({x:X+Math.cos(a)*76,z:Z+Math.sin(a)*76,label:'Turmring'});}
   P2.free.push({x:X+100,z:Z+3,label:'Heldenallee'},{x:X+160,z:Z-3,label:'Heldenallee'});
-  P2.play.push({x:X+150,z:Z+25,r:9},{x:X-135,z:Z,r:7},{x:X-10,z:Z-122,r:7},{x:X-25,z:Z+90,r:7});
-  for(const lx of[122,138,162,178])for(const lz of[19,31])P2.bench.push({x:X+lx,z:Z+lz});}
+  for(const q of CITY.parks)P2.play.push({x:q.x,z:q.z,r:Math.max(4,q.r)});P2.play.push({x:X-137,z:Z,r:6},{x:X-25,z:Z+90,r:7});
+  for(const b of CITY.benches)P2.bench.push({x:b.x,z:b.z});if(!P2.bench.length)P2.bench.push(...P2.free.slice(0,3));}
 // =========================================================
 // Bewohner
 // =========================================================
@@ -97,6 +103,7 @@ function bwTick(dt){if(!TWS.built||!BW.list.length)return;const t=bwClock();
     const ph=bwPhase(e,t);if(ph!==b.phase){b.phase=ph;b.errands=0;b.playAt=null;if(b.inside&&(ph==='home'||ph==='school')){const g=bwGoal(e,ph);b.at=[g.x,g.z];e.x=g.x;e.z=g.z;b.goal=g;}
       else{if(b.inside){b.inside=false;e.hidden=false;const at=b.at||b.door;e.x=at[0];e.z=at[1];}bwPlan(e,bwGoal(e,ph));}}
     if(b.inside){e.hidden=true;continue;}
+    if(b.hold>0){b.hold-=dt;e.frame=0;continue;}
     const pd=Math.hypot(e.x-P.x,e.z-P.z),near=pd<sim;
     // Spätestens 21 Uhr verschwunden
     if(late&&(b.phase==='home')&&(t>=1272||pd>12)){b.inside=true;e.hidden=true;b.at=b.door;e.x=b.door[0];e.z=b.door[1];continue;}

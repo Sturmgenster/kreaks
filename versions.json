@@ -1,7 +1,20 @@
 {
-  "latest": "0.0.120",
+  "latest": "0.0.126",
   "latestBeta": null,
   "versions": [
+    {
+      "id": "0.0.126",
+      "label": "Beta-4.0",
+      "name": "KREAKS Beta-4.0",
+      "channel": "release",
+      "date": "2026-10-18",
+      "notes": "Turm: Ebene 1 Die Kalte Tiefe (Felsenlabyrinth, Minotaurus), Ebene 2 Das Spinnennest (Moos-Hohlraum, Wasserfälle, Tarantula mit abschlagbaren Beinen), Ebene 3 Die Pilzlande (Welt im Turm, Tag/Nacht-Schnecke, Pilzdorf, Pilzzombies, Big Lunar). Neue Sturmklänge, Regler Umgebung. Wegpunkte erst nach Entdecken.",
+      "url": "https://raw.githubusercontent.com/Sturmgenster/kreaks/main/spiel/KREAKS-0.0.126.kreaks",
+      "size": 36735699,
+      "sha256": "c628de67a46f4c378e7c526af41a418f4a804b8a984b387aa3a680fb041e8523",
+      "encrypted": true,
+      "wrappedKey": "wcDMA0K3SMKDFFIYAQv+N8J9vtpfXrtq0SHuHtDh2G+6egHGFjU2rNLj6/6UnLaWi5GV6sPJnXj3Ne1Dh/C8KGxD9XCA7i0wNaTukrhCSbu0ZOYE9WAxG+sisDZeJu3pShQNOuVkUHmahOjUp8jVG4ePAfUCSmUNjEv0u9JWAX7BTRlc238TyuTpr7bsbMCGwAw21vh3Exfli1FrdqG3R8a1JKzkNT0eT90ViRLFpOU43irVBRJZNyeg2Eh2JgCKSJ1F73goksUw9dVEFAJNbmTekOxpWJW2RhfWYuaNeB1AUmij4c4Qv4C98a1Z+/lvTII4srJ13dRIsnzIHNnDSPDxV/63b9+1L6mFscXcxfvrgaM5sclP29nidZazNe4F8jgZM05FR4UPaRYanScoererQSf9Km6HOuBm5a/3I3v0+7XVTOGHLCo5i2pRbDUVtUkoNS2Q13YdLGovYIg4Vj6+bCFQ2wvBOPVhikP4SejMBc5t3qGvDltL4bDvnHj3tzitnJ4q5k5MNKaMSJKy0nEBiiaQujmtTKqunWhKs9cCazS5uIeRmqRrL4xiKLLCT9TQ+yxnyBDRGZ0z8c7s7jSk/wPr8/dydeszDzPWNYsBCmW1f+UwQRO6yqzRVYqOO2xm0CEpRr91jhFUqHbX3MBjmetASlt5JRQHlJmRUDBRQw=="
+    },
     {
       "id": "0.0.120",
       "label": "Beta-3.4",

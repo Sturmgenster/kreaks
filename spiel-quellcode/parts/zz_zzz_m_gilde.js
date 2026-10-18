@@ -106,7 +106,8 @@ function advFoes(e){const p=e.party;if(e.foes)return e.foes.filter(o=>o==='playe
   if(p&&(p.rob||p.angry||p.nonlethal)&&p.state!=='leave'&&p.state!=='flee')return state==='dead'?[]:['player'];
   const L=[];for(const o of DEM)if(o.fac==='demon'&&!o.adv&&!o.dead&&!o.dormant&&Math.hypot(o.x-e.x,o.z-e.z)<16)L.push(o);return L;}
 function advNearest(e,L){let b=null,bd=1e9;for(const o of L){const[x,z]=advTPos(o),d=Math.hypot(x-e.x,z-e.z);if(d<bd){bd=d;b=o;}}return b;}
-function advStrike(e,t){if(t==='player')advHitPlayer(e,e.dmg);else if(!t.dead)hurtEnt(t,e.dmg,e.fac==='demon'?'demon':'ally');}
+function advStrike(e,t){if(t==='player')advHitPlayer(e,e.dmg);else if(!t.dead)advHitEnt(e,t,e.dmg);}
+function advHitEnt(e,t,dmg){hurtEnt(t,dmg,e.fac==='demon'?'demon':'ally');}
 function advShoot(e,t,kind){const[tx,tz]=advTPos(t),ty=t==='player'?P.y+1.2:t.y+t.h*.55,sy=e.y+e.h*.62,dx=tx-e.x,dz=tz-e.z,dy=ty-sy,d=Math.hypot(dx,dy,dz)||1,sp=kind==='bolt'?16:26,err=e.cls==='ranged'?.04:.02;
   const vx=dx/d*sp+(Math.random()-.5)*sp*err,vy=dy/d*sp+(Math.random()-.5)*sp*err+(kind==='bolt'?0:3*d/sp),vz=dz/d*sp+(Math.random()-.5)*sp*err;
   if(!ADV.geo){ADV.geo=new THREE.BoxGeometry(.05,.05,.75);ADV.mat=new THREE.MeshLambertMaterial({color:0x6a4a2a});ADV.bolt=new THREE.MeshBasicMaterial({color:0x9a7aff});ADV.bgeo=new THREE.SphereGeometry(.18,8,6);}
@@ -116,7 +117,7 @@ function advShotsTick(dt){for(let i=ADV.shots.length-1;i>=0;i--){const s=ADV.sho
     if(s.tgt==='player'||(src.fac==='demon'&&!src.foes)){if(Math.hypot(P.x-s.x,P.z-s.z)<.7&&s.y>P.y-.2&&s.y<P.y+2)hit='player';}
     if(!hit)for(const o of src.foes||[])if(o!=='player'&&!o.dead&&Math.hypot(o.x-s.x,o.z-s.z)<.7&&s.y>o.y-.2&&s.y<o.y+o.h+.2){hit=o;break;}
     if(!hit&&s.tgt!=='player'&&s.tgt&&!s.tgt.dead&&!src.foes&&Math.hypot(s.tgt.x-s.x,s.tgt.z-s.z)<.8&&s.y>s.tgt.y-.2&&s.y<s.tgt.y+s.tgt.h+.2)hit=s.tgt;
-    const g=groundAt(s.x,s.z,s.y+1);if(hit||s.t>3||s.y<g){if(hit){if(hit==='player')advHitPlayer(src,s.dmg);else hurtEnt(hit,s.dmg,src.fac==='demon'?'demon':'ally');}
+    const g=groundAt(s.x,s.z,s.y+1);if(hit||s.t>3||s.y<g){if(hit){if(hit==='player')advHitPlayer(src,s.dmg);else advHitEnt(src,hit,s.dmg);}
       for(let k=0;k<(s.kind==='bolt'?14:4);k++)spawnParticle(s.x,s.y,s.z,(Math.random()-.5)*3,Math.random()*2,(Math.random()-.5)*3,s.kind==='bolt'?0xb89aff:0x8a6a3a,.5,.2);scene.remove(s.m);ADV.shots.splice(i,1);}}}
 function advMoveTo(e,x,z,sp,dt){if(entMove(e,x,z,sp,dt)<.001&&e.frame!=='a'&&e.frame!=='c')e.frame=0;}
 function advAI(e,dt){const p=e.party;e.atk-=dt;e.rcd-=dt;if(e.dodge>0){e.dodge-=dt;e.x+=e.dvx*dt;e.z+=e.dvz*dt;return true;}
@@ -165,8 +166,9 @@ ADV.city=[];
 // =========================================================
 // Takt
 // =========================================================
+function advPlDist(x,z){let d=Math.hypot(x-P.x,z-P.z);if(typeof isHostMP==='function'&&isHostMP())for(const R of REMOTE.values())if(time-R.seen<6)d=Math.min(d,Math.hypot(x-R.tx,z-R.tz));return d;}
 function advTick(dt){advShotsTick(dt);ADV.t-=dt;
-  for(let i=ADV.parties.length-1;i>=0;i--){const p=ADV.parties[i],al=advAlive(p);if(!al.length){advEnd(p,i);continue;}const d=Math.min(...al.map(e=>Math.hypot(e.x-P.x,e.z-P.z)));
+  for(let i=ADV.parties.length-1;i>=0;i--){const p=ADV.parties[i],al=advAlive(p);if(!al.length){advEnd(p,i);continue;}const d=Math.min(...al.map(e=>advPlDist(e.x,e.z)));
     if(d>140||P.x>60000||DGX.on||(p.state==='leave'&&d>60)){advEnd(p,i);continue;}if(p.state==='fight'&&(p.rob||p.angry))p.fought=true;}
   if(ADV.t>0)return;ADV.t=35+Math.random()*25;if(state!=='playing'||P.x>60000||DGX.on||(typeof SW!=='undefined'&&SW.on)||inCore(P.x,P.z)||twD(P.x,P.z)<TWC.WR+120||ARNA.on||EXH.on)return;if(Math.random()<.5)advSpawnParty();}
 {const a=updateAnimals;updateAnimals=function(dt){a(dt);try{advTick(dt);arxTick(dt);exhTick(dt);}catch(e){if(!advTick.err){advTick.err=1;console.error('Gilde',e);}}};}

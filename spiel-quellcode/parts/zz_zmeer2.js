@@ -39,24 +39,22 @@ function swSplash(n){for(let k=0;k<n;k++)spawnParticle(P.x+(Math.random()-.5)*1.
   const can=swCan();
   if(!can||(!was&&P.y>SWIM_Y+.3)){if(was){SW.on=false;SW.under=false;}swAir(dt);return;}
   if(!was){SW.on=true;SW.vy=Math.min(0,vy0*.35);if(vy0<-4){swSplash(24);try{Snd.splat();}catch(e){}}
-    if(!SW.tipped&&!FLAGS.swimTip){SW.tipped=true;FLAGS.swimTip=1;toast(`Du schwimmst. [${keyName(settings.keys.sneak)}] abtauchen, [${keyName(settings.keys.jump)}] nach oben. Unter Wasser: [${keyName(settings.keys.sprint)}]+[${keyName(settings.keys.forward)}] schwimmen, sonst läufst du über den Grund.`);}}
+    if(!SW.tipped&&!FLAGS.swimTip){SW.tipped=true;FLAGS.swimTip=1;toast(`Im Wasser gehst du einfach weiter. [${keyName(settings.keys.sprint)}]+[${keyName(settings.keys.forward)}] = schwimmen, [${keyName(settings.keys.jump)}] = nach oben strampeln, [${keyName(settings.keys.sneak)}] = schneller sinken.`);}}
   let fx=0,fz=0;if(state==='playing'){if(down('forward'))fz-=1;if(down('back'))fz+=1;if(down('left'))fx-=1;if(down('right'))fx+=1;}const len=Math.hypot(fx,fz);if(len){fx/=len;fz/=len;}
-  // Unter Wasser: [Strg]+[W] = schwimmen (Schwimmzüge, in Blickrichtung). Sonst sinkt man langsam und läuft schwerfällig über den Grund.
-  // [Shift] = schneller absinken, [Leertaste] = nach oben strampeln.
-  const under=y0<SWIM_Y-.12,ply=state==='playing',up=ply&&down('jump'),dn=ply&&down('sneak'),flip=equip.boots&&equip.boots.id==='flippers',suit=swSuit(),low=swLowK();
-  const swimK=ply&&down('sprint')&&down('forward')&&P.stats.st>.5,vk=flip?1.3:1,sin=Math.sin(P.yaw),cos=Math.cos(P.yaw),L=lookDir(),pc=L.y,g0=getHeight(x0,z0);
+  // Im Wasser geht man normal (man sinkt und läuft über den Grund). Erst [Strg]+[W] schwimmt man, mit Schwimmzügen und Händen.
+  // [Leertaste] = nach oben strampeln, [Shift] = schneller sinken. Jede Rasse schwimmt anders.
+  const RC=swRace(),under=y0<SWIM_Y-.12,ply=state==='playing',up=ply&&down('jump'),dn=ply&&down('sneak'),flip=equip.boots&&equip.boots.id==='flippers',suit=swSuit(),low=swLowK();
+  const swimK=ply&&down('sprint')&&down('forward')&&P.stats.st>.5,vk=(flip?1.3:1)*RC.s,sin=Math.sin(P.yaw),cos=Math.cos(P.yaw),L=lookDir(),pc=L.y,g0=getHeight(x0,z0),headUp=y0+P.eye>WATER+.1;
   let spd,wx=0,wz=0,wy=0;
-  if(swimK)P.stats.st=Math.max(0,P.stats.st-(under?4.5:6)*dt);else if(len<.1)P.stats.st=Math.min(P.stats.maxSt||100,P.stats.st+6*dt);else P.stats.st=Math.min(P.stats.maxSt||100,P.stats.st+2.5*dt);
-  if(!under){spd=2.2*(swimK?1.5:1)*speedMult()*(1-.4*low)*(flip?1.45:1)*(suit?.6:1);
-    wx=fx*cos*spd;wz=-fx*sin*spd;
-    if(fz<0){if(swimK&&pc<-.42){wx+=L.x*spd*-fz;wz+=L.z*spd*-fz;wy+=L.y*spd*-fz;}else{wx+=-sin*spd*-fz;wz+=-cos*spd*-fz;}}else if(fz>0){wx+=sin*spd*fz*.6;wz+=cos*spd*fz*.6;}
-    if(up)wy+=2.4*vk;if(dn)wy-=(suit?3.6:2.4)*vk;if(suit&&!up)wy=Math.min(wy,-1.4);}
-  else if(swimK){spd=2.9*speedMult()*(1-.4*low)*(flip?1.45:1)*(suit?.7:1);
+  if(swimK)P.stats.st=Math.max(0,P.stats.st-(under?4.5:6)*dt/Math.max(.6,RC.s));else if(len<.1)P.stats.st=Math.min(P.stats.maxSt||100,P.stats.st+6*dt);else P.stats.st=Math.min(P.stats.maxSt||100,P.stats.st+2.5*dt);
+  if(swimK&&!under&&!(pc<-.42)){spd=3.2*RC.s*speedMult()*(1-.4*low)*(flip?1.45:1)*(suit?.6:1);
+    wx=fx*cos*spd-sin*spd;wz=-fx*sin*spd-cos*spd;if(up)wy+=2*vk;if(dn)wy-=2.4;}
+  else if(swimK){spd=2.9*RC.s*speedMult()*(1-.4*low)*(flip?1.45:1)*(suit?.7:1);
     wx=fx*cos*spd+L.x*spd;wz=-fx*sin*spd+L.z*spd;wy=L.y*spd;if(up)wy+=1.8*vk;if(dn)wy-=2.4;}
-  else{const floor=y0<=g0+.08;spd=(floor?1.05:.7)*speedMult()*(1-.3*low)*(suit?.85:1);
+  else{const floor=y0<=g0+.08;spd=(floor?(headUp?2.3:1.05*Math.min(1.25,RC.k)):.7)*speedMult()*(1-.3*low)*(suit?.85:1);
     wx=fx*cos*spd;wz=-fx*sin*spd;if(fz<0){wx+=-sin*spd*-fz;wz+=-cos*spd*-fz;}else if(fz>0){wx+=sin*spd*fz*.7;wz+=cos*spd*fz*.7;}
-    wy=dn?-3.4:-(suit?1.6:.9);if(up)wy=(suit?.9:2)*vk;}
-  SW.swim=!under||swimK;
+    wy=dn?-3.4:-(suit?1.6:.9)*RC.k;if(up)wy=(suit?.9:2)*vk/Math.max(.7,RC.k);}
+  SW.swim=swimK;
   const k=1-Math.exp(-5*dt);P.vx+=(wx-P.vx)*k;P.vz+=(wz-P.vz)*k;SW.vy+=(wy-SW.vy)*k;
   P.x=x0+P.vx*dt;P.z=z0+P.vz*dt;P.y=y0+SW.vy*dt;try{collideTrees();}catch(e){}
   const g=getHeight(P.x,P.z);if(P.y<g){P.y=g;SW.vy=Math.max(0,SW.vy);}
@@ -69,9 +67,12 @@ function swSplash(n){for(let k=0;k<n;k++)spawnParticle(P.x+(Math.random()-.5)*1.
   swAir(dt);};}
 function swDrown(n){if(cheatOn()||state==='dead')return;const S=P.stats;S.hp=Math.max(0,S.hp-n);P.lastDmg=time;renderStats();try{Snd.hurt?Snd.hurt():0;}catch(e){}if(S.hp<=0)playerDie();}
 const swSuit=()=>!!(equip.armor&&equip.armor.id==='divehelm');
+// Schwimmwerte der Rassen: s = Schwimmtempo, b = Atem (Faktor), k = Gewicht (wie schnell man sinkt)
+const SW_RACE={human:{s:1,b:1,k:1},elf:{s:1.1,b:1,k:.9},dwarf:{s:.75,b:.85,k:1.6},orc:{s:.9,b:1.2,k:1.3},frog:{s:1.7,b:3.5,k:.6},kobold:{s:.85,b:.7,k:.7},dragon:{s:.8,b:1.4,k:1.4},carrot:{s:.7,b:.9,k:.5},ape:{s:.85,b:1,k:1},cat:{s:.7,b:.8,k:1},mole:{s:.8,b:1.3,k:1.2}};
+const swRace=()=>SW_RACE[(P.char&&P.char.race)||'human']||SW_RACE.human;
 const swHitK=()=>SW.head?.55:1;
 function swAir(dt){const head=P.x<60000&&P.y+P.eye<WATER-.05&&SW.on;SW.head=head;
-  if(head){SW.air=Math.max(0,SW.air-dt*(down('sprint')?3.6:2.5));
+  if(head){SW.air=Math.max(0,SW.air-dt*(down('sprint')?3.6:2.5)/swRace().b);
     if(SW.air<=0){SW.drownT-=dt;if(SW.drownT<=0){SW.drownT=.8;SW.drownN=(SW.drownN||0)+1;swDrown(4+SW.drownN*4);}}}
   else{SW.air=Math.min(100,SW.air+dt*35);SW.drownT=1;SW.drownN=0;}
   swAirUI(dt);}

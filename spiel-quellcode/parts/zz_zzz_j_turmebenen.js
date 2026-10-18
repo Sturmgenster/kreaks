@@ -43,35 +43,18 @@ function twlShell(K,o){const{M,X,Z,Y}=K,R=TWC.R-2,H=o.h||16,seg=64;
   const seal=K.mesh(new THREE.PlaneGeometry(7,7),M.seal,0,3.5,-R+9);const sS=solAdd({x:X,z:Z-R+9,hw:3.6,hd:.4,y0:Y-1,y1:Y+8,rot:0,solid:1,dg:1});DGX.sol.push(sS);
   K.box(1,8,1,M.pillar,-4,0,-R+9,0,true);K.box(1,8,1,M.pillar,4,0,-R+9,0,true);K.box(9,1,1.2,M.pillar,0,8,-R+9,0,false);
   DGX.tw={seal,sS,up,open:false,boss:null,lvl:o.lvl,t:0};}
-// ---------- Ebene 1: Die Halle der Prüfung ----------
-DT.twguard1=Object.assign({},DT.g_bonelord||DT.g_skelwar||DT.uskb,{name:'Der Turmwächter',boss:1,hp:2600,dmg:(DT.g_bonelord&&DT.g_bonelord.dmg||30)*1.15,xp:700,leash:90,noLeash:false});
-TOWER_LEVELS.push({n:'Die Halle der Prüfung',d:'Drei Wachtrupps und der Turmwächter. Die erste Prüfung der Gilde.',build(K){const{M}=K;
-  twlShell(K,{lvl:1,h:16});
-  // Säulenring und Feuerschalen
-  for(let k=0;k<12;k++){const a=k/12*6.283+.26;K.pillar(Math.cos(a)*38,Math.sin(a)*38,1.6,16);}
-  for(let k=0;k<6;k++){const a=k/6*6.283+.52;K.brazier(Math.cos(a)*30,Math.sin(a)*30,k%2===0);}
-  // Banner der Gilde
-  for(let k=0;k<8;k++){const a=k/8*6.283+.2;K.mesh(new THREE.BoxGeometry(.15,6,2.4),M.red,Math.cos(a)*(TWC.R-3.2),8,Math.sin(a)*(TWC.R-3.2),-a);}
-  // Mitte: Prüfstein
-  K.box(6,1,6,M.stone,0,0,0,0,'walk');K.mesh(new THREE.BoxGeometry(1.2,3,1.2),M.pillar,0,2.5,0);K.mesh(new THREE.BoxGeometry(.5,.5,.5),M.rune,0,4.3,0);
-  // Drei Wachtrupps
-  K.group(-24,22,[['usks',3],['usksa',1]],5,15);
-  K.group(26,8,[['kobold',4],['troll',1]],5,15);
-  K.group(-8,-18,[['uska',2],['uskaa',2],['uskb',1]],5,15);
-  // Truhen
-  K.chest(-30,-30,'a',false);K.chest(30,-28,'b',false);
-  // Der Turmwächter vor dem Siegel
-  const b=K.mob('twguard1',0,-36,{wakeR:17});if(b){b.twBoss=1;DGX.tw.boss=b;}
-  K.chest(6,-40,'boss',true);}});
+// Ebene 1 (Die Kalte Tiefe) steht in zz_zzz_jb_hoehle.js
+TOWER_LEVELS.push(null);
 // =========================================================
 // Betreten, Verlassen
 // =========================================================
 function twlEnter(lvl){const L=TOWER_LEVELS[lvl-1];if(!L){toast('Diese Ebene ist noch versiegelt.');return;}if(P.riding){toast('Steig erst ab');return;}if(dlg)closeDialog();
-  if(DGX.on){dgFree();DGX.on=false;}const W=TWC.R*2+8;
-  DGX.d={tower:1,lvl,ox:TWC.x-W/2,oz:TWC.z-W/2,W,st:{},far:62,hemi:.42,g:null};DGX.on=true;DGX.grp=new THREE.Group();scene.add(DGX.grp);DGX.sol=[];DGX.ents=[];DGX.traps=[];DGX.chests=[];DGX.gate=null;DGX.lever=null;
+  if(DGX.on){dgFree();DGX.on=false;}const W=L.W||TWC.R*2+8;
+  DGX.d={tower:1,lvl,ox:TWC.x-W/2,oz:TWC.z-W/2,W,st:{},far:L.far||62,hemi:L.hemi||.42,fogC:L.fogC||null,near:L.near||2,bbl:L.bbl||null,g:null};DGX.on=true;DGX.grp=new THREE.Group();scene.add(DGX.grp);DGX.sol=[];DGX.ents=[];DGX.traps=[];DGX.chests=[];DGX.gate=null;DGX.lever=null;
   DGX.light=new THREE.PointLight(0xffb060,1.6,20,1.5);scene.add(DGX.light);
   try{L.build(twlKit());}catch(e){console.error('Turmebene',lvl,e);}
   P.x=DGX.exit.x;P.z=DGX.exit.z-6;P.y=DG_Y+.05;P.vx=P.vy=P.vz=0;P.yaw=0;P.safe=null;curArea=null;setTimeout(checkArea,150);
+  if(L.enter)try{L.enter();}catch(e){console.error('Turmebene betreten',e);}
   try{Snd.chime();}catch(e){}setTimeout(()=>{showArea('Ebene '+lvl+': '+L.n);},300);}
 {const a=dgLeave;dgLeave=function(dead){const tw=DGX.d&&DGX.d.tower;a(dead);DGX.tw=null;if(tw&&!dead){P.x=TWC.x+TWC.R+9;P.z=TWC.z;P.y=getHeight(P.x,P.z)+.1;P.vx=P.vy=P.vz=0;P.yaw=Math.PI/2*-1;P.safe=[P.x,P.z];}};}
 {const a=playerDie;playerDie=function(){const was=DGX.on&&DGX.d&&DGX.d.tower;a();if(was&&state==='dead'){DGX.tw=null;toast('Der Turm hat dich besiegt. Du erwachst wieder draußen.');}};}
@@ -83,7 +66,7 @@ AREAS.in_tower='Der Große Turm';AREA_MUSIC.in_tower=AREA_MUSIC.in_dungeon||AREA
 function twlTick(dt){const T=DGX.tw;if(!T||!DGX.on)return;
   for(const e of DGX.ents)if(e.mates&&!e.dormant&&!e.dead)for(const m of e.mates)if(m.dormant&&!m.dead){m.dormant=false;}
   if(T.boss&&T.boss.dead&&!T.open){T.open=true;T.sS.off=true;DGX.d.st.boss=1;const F=twF();if(T.lvl>F.max){F.max=T.lvl;}saveGame();
-    setTimeout(()=>{showArea('Ebene '+T.lvl+' bezwungen!');toast('Das Siegel bricht! Die Treppe nach oben ist frei, und die große Truhe öffnet sich.');},900);try{Snd.fanfare?Snd.fanfare():Snd.levelUp();}catch(e){}}
+    setTimeout(()=>{showArea('Ebene '+T.lvl+' bezwungen!');if(T.seal&&T.seal.visible)toast('Das Siegel bricht! Der Weg nach oben ist frei, und die große Truhe öffnet sich.');},900);try{Snd.fanfare?Snd.fanfare():Snd.levelUp();}catch(e){}}
   if(T.open&&T.seal.visible){T.t+=dt;T.seal.material.opacity=Math.max(0,.55-T.t*.3);if(T.t>2)T.seal.visible=false;}
   if(T.seal.visible)T.seal.rotation.z+=dt*.2;}
 {const a=updateAnimals;updateAnimals=function(dt){a(dt);try{twlTick(dt);}catch(e){if(!twlTick.err){twlTick.err=1;console.error('Turmebene',e);}}};}

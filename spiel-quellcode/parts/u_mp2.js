@@ -23,7 +23,7 @@ function mpHostSnapshot(){const L=mpInterest(),full=time-mpFullT>4;if(full)mpFul
   for(const[g,get]of MG){const A=get();if(!A)continue;const S=MP_SENT[g]||(MP_SENT[g]=new Map()),out=[];for(let i=0;i<A.length;i++){const o=A[i];if(!o||typeof o.x!=='number'||typeof o.z!=='number')continue;if(!mpNear(L,o.x,o.z,230))continue;
       const d=mpDelta(S,i,mpPrims(o),full);if(d)out.push([i,d]);}if(out.length)msg.g[g]=out;}
   // Wesen mit Lebenszyklus: Nachtmonster, Candyland, Blue Lunar
-  const dem=[],ids=[];for(const e of DEM){if(e.mirror||e.ghost||e.proxy)continue;if(!(e.nm||e.candy||e.blue))continue;if(!mpNear(L,e.x,e.z,230))continue;e._u=e._u||++mpUid;ids.push(e._u);
+  const dem=[],ids=[];for(const e of DEM){if(e.mirror||e.ghost||e.proxy)continue;if(!(e.nm||e.candy||e.blue||e.msync))continue;if(!mpNear(L,e.x,e.z,230))continue;e._u=e._u||++mpUid;ids.push(e._u);
     const d=mpDelta(MP_SENTU.dem,e._u,mpPrims(e),full);if(d)dem.push([e._u,e.type,d]);}msg.dem=dem;msg.demIds=ids;
   // Wildtiere der Savanne und der Wildnis
   const wm=[],wids=[];for(const m of WM){if(!mpNear(L,m.x,m.z,230))continue;m._u=m._u||++mpUid;wids.push(m._u);const d=mpDelta(MP_SENTU.wm,m._u,mpPrims(m),full);if(d)wm.push([m._u,d]);}msg.wm=wm;msg.wmIds=wids;

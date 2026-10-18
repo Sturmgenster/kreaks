@@ -5275,7 +5275,7 @@ function updateDemons(dt){if(!demMesh)return;const run=state!=='cutscene'&&state
   const glow=(x,y,z,w,h,spr,tint)=>{if(m>=GLOW_N)return;const s=SPR[spr];G.offset.array[m*3]=x;G.offset.array[m*3+1]=y;G.offset.array[m*3+2]=z;G.size.array[m*2]=w;G.size.array[m*2+1]=h;
     G.uvr.array[m*4]=s.u;G.uvr.array[m*4+1]=s.v;G.uvr.array[m*4+2]=s.du;G.uvr.array[m*4+3]=s.dv;G.tint.array[m]=tint||1.4;G.rot.array[m]=0;m++;};
   for(const e of DEM){if(n>=DEM_N)break;if(Math.abs(e.x-cx)>220||Math.abs(e.z-cz)>220)continue;if(e.dormant&&!e.showDormant)continue;if(e.hidden)continue;
-    let f=e.dead?0:e.down?'k':e.frame;const sk=sprOf(e,f),s=SPR[sk],w=e.h*s.w/s.h;let yo=0,rot=0;
+    let f=e.dead?0:e.down?'k':e.frame;const sk=sprOf(e,f),s=SPR[sk],w=e.h*s.w/s.h;let yo=e.yo||0,rot=e.rot||0;
     if(e.dead){const k=Math.min(1,e.deadT/.5);rot=e.d.boss||e.d.fly?0:e.fallDir*k*k*Math.PI/2;yo=e.d.boss?-Math.min(1,Math.max(0,e.deadT-1.5)/4)*e.h:e.deadT>3?-(e.deadT-3)*.4:0;if(e.d.fly)yo=-Math.min(e.y-(e.gy||e.y),e.deadT*6);}
     if(e.sink){yo=-Math.min(1,e.sinkT/1.5)*e.h;}if(e.rise!=null){yo=-e.h*(1-e.rise);}
     const KM=e.ownMesh||(e===kreakE&&kreakMesh),ga=KM?KM.geometry.attributes:g,ni=KM?(e.ownI||0):n;ga.offset.array[ni*3]=e.x;ga.offset.array[ni*3+1]=e.y+yo-.03;ga.offset.array[ni*3+2]=e.z;ga.size.array[ni*2]=w;ga.size.array[ni*2+1]=e.h;ga.rot.array[ni]=rot;

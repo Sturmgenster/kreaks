@@ -86,8 +86,8 @@ const dgIn=(x,z)=>DGX.on&&DGX.d&&x>DGX.d.ox-2&&x<DGX.d.ox+DGX.d.W+2&&z>DGX.d.oz-
 {const a=mzBlocked;mzBlocked=function(){return DGX.on||a();};}
 {const a=renderer.render;renderer.render=function(s,c){if(!DGX.on)return a.call(renderer,s,c);const fn=scene.fog.near,ff=scene.fog.far,fc=scene.fog.color.clone(),hc=SKY_HOR.clone(),tc=SKY_TOP.clone(),sv=sky.visible,hi=hemi.intensity,si=sun.intensity;
   if(time-uwT>2){uwT=time;uwCollect();}const saved=UWM.map(m=>[m,m.uniforms.fogNear.value,m.uniforms.fogFar.value,m.uniforms.light?m.uniforms.light.value:null]);
-  scene.fog.color.setRGB(0,0,0);SKY_HOR.setRGB(0,0,0);SKY_TOP.setRGB(0,0,0);const FF=DGX.d&&DGX.d.far||34;scene.fog.near=2;scene.fog.far=FF;sky.visible=false;hemi.intensity=DGX.d&&DGX.d.hemi||.28;sun.intensity=0;
-  for(const[m,,,l]of saved){m.uniforms.fogNear.value=2;m.uniforms.fogFar.value=FF;if(l!=null)m.uniforms.light.value=.55;}
+  const FC=DGX.d&&DGX.d.fogC||[0,0,0],FN=DGX.d&&DGX.d.near||2;scene.fog.color.setRGB(FC[0],FC[1],FC[2]);SKY_HOR.setRGB(FC[0],FC[1],FC[2]);SKY_TOP.setRGB(FC[0],FC[1],FC[2]);const FF=DGX.d&&DGX.d.far||34;scene.fog.near=FN;scene.fog.far=FF;sky.visible=false;hemi.intensity=DGX.d&&DGX.d.hemi||.28;sun.intensity=0;
+  for(const[m,,,l]of saved){m.uniforms.fogNear.value=FN;m.uniforms.fogFar.value=FF;if(l!=null)m.uniforms.light.value=DGX.d&&DGX.d.bbl||.55;}
   try{a.call(renderer,s,c);}finally{scene.fog.near=fn;scene.fog.far=ff;scene.fog.color.copy(fc);SKY_HOR.copy(hc);SKY_TOP.copy(tc);sky.visible=sv;hemi.intensity=hi;sun.intensity=si;for(const[m,n0,f0,l]of saved){m.uniforms.fogNear.value=n0;m.uniforms.fogFar.value=f0;if(l!=null)m.uniforms.light.value=l;}}};}
 // ---------- Takt ----------
 function dgTick(dt){DGE.t-=dt;if(DGE.t<=0){DGE.t=1;if(P.x<60000&&WL_READY&&!DGX.on){const ci=Math.floor(P.x/WL_CELL),cj=Math.floor(P.z/WL_CELL);for(let a=-1;a<=1;a++)for(let b=-1;b<=1;b++){const g=dgOf(wlSite(ci+a,cj+b));if(g&&!DGE.built.has(g.id)&&Math.hypot(g.x-P.x,g.z-P.z)<160)dgEntBuild(g);}}
