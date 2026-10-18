@@ -1,7 +1,20 @@
 {
-  "latest": "0.0.127",
+  "latest": "0.0.128",
   "latestBeta": null,
   "versions": [
+    {
+      "id": "0.0.128",
+      "label": "Beta-4.2",
+      "name": "KREAKS Beta-4.2",
+      "channel": "release",
+      "date": "2026-10-18",
+      "notes": "Neue Währung Platinmünze (25 Kreaker = 1 Platin). Händler führen alle Gegenstände ihres Berufs, wertvolle Waffen und Rüstungen kosten mehr. Verzauberte Waffen, Werkzeuge und Rüstungen (Schärfe, Härte, Untotenbann, Feuer-, Gift-, Kälteschutz, Bann, Festigkeit). Info-Karte beim Drüberfahren: Schaden, Tempo, Haltbarkeit, Schutz, Verzauberung. Nachts keine Ratten mehr.",
+      "url": "https://raw.githubusercontent.com/Sturmgenster/kreaks/main/spiel/KREAKS-0.0.128.kreaks",
+      "size": 36743515,
+      "sha256": "c6e33ca6307ceb4a4ca1cb27f458591c5397e193090245977db713596de16591",
+      "encrypted": true,
+      "wrappedKey": "wcDMA0K3SMKDFFIYAQv/emORH25iVd+uLOngVqwMiW9cmqVrRQzPUbuqOnnBefItTNXCh4BryOF1xbbOXGfkM97O13kNro9FCNqgWvGnQYwqMfHqrLcNuyFiM2WgmKR2NHIih/ktgW5SKsCqbCEmUDidTRc+cKy0qmt+VR2eaal4StUwwXPAyBxslD3W7MgYaDyp9Ig3pLT+9Wx/B8aMu2jaw4uuzqhw1OoVS/AzxcEMOoqDnTHcQX3uQQNUXG0qA+obgdQYAPsfFeNwwnJO8OWMQw7wi2S0ITX97g3jihs4giHB/xOru3f0vQSZuv3yvqE5I/Q92HNsj32Sg+4+Ro1aWd5qD/DbkbeAjsXzdSopi4i5l07CYQeIUBHmXA5aZ36XKX7ZrwXl3UvSCS1fBA4PUc4lePH/BtoZJo5Un6Ncniciu0oFiIasmb6mOlYovWsGNWw3AGAwxWij3bnBeSxWdjf7mVphTFOR3EALPzIL5KFFzlRhbQ2zg9z32/huGXadA6vlyMQBTRtb+T/h0nEBCFCzhn9ls7klBxt1VfGV2FfnTC+mD+Old3LksrMjcaiR7/u3NRbKl8wokQe14Xy9JH2qOxQmdqShnvRb1pesEOsx+UxobUForaZUAhXnslxpWiC/rM/GBE49DWqr0fsPNm3w6szh9QwoLgIu+1B8FA=="
+    },
     {
       "id": "0.0.127",
       "label": "Beta-4.1",

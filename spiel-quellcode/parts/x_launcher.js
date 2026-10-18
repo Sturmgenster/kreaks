@@ -3,7 +3,7 @@
    - Das Spiel läuft nur mit freigeschaltetem KREAKS-Konto (Start über den Launcher)
    - Der Spielername ist der Kontoname, Spielstände gehören zum Konto
    ========================================================= */
-const KREAKS_VERSION={label:'Beta-4.1',build:'0.0.127'};
+const KREAKS_VERSION={label:'Beta-4.2',build:'0.0.128'};
 const KACC=(typeof window!=='undefined'&&window.KREAKS_ACCOUNT)||null;
 
 // Startbildschirm: Version anzeigen

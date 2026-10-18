@@ -30,12 +30,12 @@ function updateNightMobs(dt){
   if(state!=='playing'||!dark||peace||P.x>60000||(typeof inRealm==='function'&&inRealm(P.x))||(typeof FIN!=='undefined'&&FIN.on)||mqIs('coda')||nightSafe(P.x,P.z)||cheatOn())return;
   nmT-=dt;if(nmT>0)return;nmT=blood?1.6+Math.random()*2:3+Math.random()*3.5;
   const alive=NIGHTMOB.filter(e=>!e.dead).length,cap=blood?24:14;if(alive>=cap)return;const q=nmSpot();if(!q)return;const[x,z]=q;
-  const add=(type,ox,oz,ex)=>{const e=spawnEnt(type,x+ox,z+oz,Object.assign({nm:1,home:{x:P.x+(Math.random()-.5)*10,z:P.z+(Math.random()-.5)*10}},ex||{}));NIGHTMOB.push(e);return e;};
+  const add=(type,ox,oz,ex)=>{const e=spawnEnt(type,x+ox,z+oz,Object.assign({nm:1,home:{x:x+ox,z:z+oz}},ex||{}));NIGHTMOB.push(e);return e;};
   const r=Math.random();
   if(blood&&r<.55){const k=Math.random(),type=k<.45?'imp':k<.8?'hound':'warrior';const n=type==='warrior'?1:type==='hound'?2:2+(Math.random()*2|0);for(let i=0;i<n;i++)add(type,(Math.random()-.5)*4,(Math.random()-.5)*4,{blood:1});
     if(!FLAGS.bloodWarn){FLAGS.bloodWarn=1;toast('Dämonen streifen unter dem Blutmond umher!');}}
-  else if(r<.62){const n=Math.random()<.3?2:1;for(let i=0;i<n;i++)add('nskel',(Math.random()-.5)*3,(Math.random()-.5)*3);if(Math.hypot(x-P.x,z-P.z)<60)try{Snd.clink(.3);}catch(e){}}
-  else{const n=2+(Math.random()*2|0);for(let i=0;i<n;i++)add('nrat',(Math.random()-.5)*3,(Math.random()-.5)*3);}}
+  else{const n=Math.random()<.3?2:1;for(let i=0;i<n;i++)add('nskel',(Math.random()-.5)*3,(Math.random()-.5)*3);if(Math.hypot(x-P.x,z-P.z)<60)try{Snd.clink(.3);}catch(e){}}
+}
 {const u2=updateAnimals;updateAnimals=function(dt){u2(dt);try{updateNightMobs(dt);}catch(e){if(!updateNightMobs.err){updateNightMobs.err=1;console.error('Nacht',e);}}};}
 {const dn2=dangerNear;dangerNear=function(){if(dn2())return true;for(const e of NIGHTMOB)if(!e.dead&&Math.hypot(e.x-P.x,e.z-P.z)<25)return true;return false;};}
 // Bei Blue Lunar bleiben auch die Mumien im Sand
@@ -44,4 +44,4 @@ function updateNightMobs(dt){
 {const sg2=startGame;startGame=function(isNew,char){for(const e of NIGHTMOB.slice())nmVanish(e,true);NIGHTMOB.length=0;sg2(isNew,char);};}
 // Hinweis beim Einbruch der Nacht
 {let lastDark=null;const ud2=updateDayNight;updateDayNight=function(dt,nf){ud2(dt,nf);const d=isDark();if(lastDark===false&&d&&state==='playing'&&P.x<60000){const ev=tonightEv();
-    if(ev==='blue')setTimeout(()=>toast('Blue Lunar: Heute Nacht ist alles friedlich.'),1800);else if(ev!=='blood'&&!FLAGS.nightTip){FLAGS.nightTip=1;setTimeout(()=>toast('Es wird Nacht. Aus den Höhlen kriechen Skelette und Ratten.'),1800);}}lastDark=d;};}
+    if(ev==='blue')setTimeout(()=>toast('Blue Lunar: Heute Nacht ist alles friedlich.'),1800);else if(ev!=='blood'&&!FLAGS.nightTip){FLAGS.nightTip=1;setTimeout(()=>toast('Es wird Nacht. Aus den Höhlen kriechen Skelette.'),1800);}}lastDark=d;};}

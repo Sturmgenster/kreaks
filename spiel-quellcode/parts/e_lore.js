@@ -6,7 +6,7 @@
 function loreStage(){if(mqAt('end'))return'after';if(mqAt('ritual'))return'war';if(FLAGS.kreak||mqAt('find'))return'kreak';return'early';}
 const LORE_LINES={
   early:{adult:['Seit ein paar Wochen leuchten im Nordwald nachts Augen. Ich gehe da nicht mehr hin.','Corvin sagt, so hat es damals auch angefangen. Mit den Augen im Wald.','Dofra sieht in jedem Fremden ein bisschen Kreak. Dich hat er bestimmt auch schon so angeschaut.',
-      'Lutz hat am Waldrand einen komischen Kerl gesehen. Grüne Haare, sagt er. Und er wusste seinen Namen nicht.','Nachts kriechen Skelette und Ratten aus den Höhlen. Bleib im Dorf, wenn es dunkel wird.'],
+      'Lutz hat am Waldrand einen komischen Kerl gesehen. Grüne Haare, sagt er. Und er wusste seinen Namen nicht.','Nachts kriechen Skelette aus den Höhlen. Bleib im Dorf, wenn es dunkel wird.'],
     elder:['Meine Großmutter hat noch von den Dämonen erzählt. Ich dachte immer, das wären Märchen.','Kreak kommt wieder, wenn die Dunkelheit zurückkehrt. So sagt man seit hundert Jahren.','Ein roter Mond bringt Unheil. Ein blauer bringt Frieden. Merk dir das.'],
     kid:['Ich hab im Wald zwei leuchtende Augen gesehen! Ehrlich!','Wenn ich groß bin, werde ich wie Kreak!','Pip sagt, Kreak hatte ein Schwert so groß wie ein Haus.']},
   kreak:{adult:['Der Fremde mit den grünen Haaren … der sieht wirklich aus wie auf Corvins altem Bild.','Dofra lässt seine Esse seit Tagen nicht ausgehen. Er sagt, er wartet auf etwas Großes.',
@@ -45,7 +45,7 @@ function hagenNews(){const st=loreStage(),N=[];
   if(st==='war')N.push('Murgla hat den Blutmond gerufen, sagen die Fischer. Ich trinke heute selbst einen.','Seit die Dämonen wach sind, kommen nachts mehr Skelette aus den Höhlen als früher.');
   if(st==='after')N.push('Sturmburg schickt Boten mit Dankesbriefen. Einer hat drei Tage lang meinen Met getrunken.','Seit Shikaya fort ist, kommen sogar Händler aus der Kaiserstadt bis nach Coda.');
   N.push('Merten sagt, seine Mühle dreht sich nachts manchmal von allein. Gegen den Wind.',
-    'Nachts kriechen Skelette und Riesenratten aus den Höhlen. Bei Blue Lunar nicht, da bleibt alles ruhig. Aber beim Blutmond … da kommen Schlimmere.',
+    'Nachts kriechen Skelette aus den Höhlen. Bei Blue Lunar nicht, da bleibt alles ruhig. Aber beim Blutmond … da kommen Schlimmere.',
     'Ein Händler aus dem Osten erzählt von einer Riesenschlange im Dschungel. Natta nennen sie die Affenmenschen. Dick wie ein Fass, lang wie eine Brücke.',
     'Wer im Osten Mahagoni schlägt, kann es in der Kaiserstadt teuer verkaufen. Meister Wen auf dem Markt zahlt am besten.',
     'Auf dem Löwenfelsen in der Savanne hat ein Reisender ein ganzes Rudel gesehen. Mittags dösen sie in einer Höhle unter dem Felsen.',
