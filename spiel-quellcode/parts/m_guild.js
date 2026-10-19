@@ -186,7 +186,7 @@ function mShoot(e,q,dmg,o){o=o||{};MSHOTS.push({x:e.x,y:e.y+e.h*.62,z:e.z,q,dmg,
 function enemyPos(q){const o=q[0];return[o.x,(o.y||0)+(o.h||1.4)*.5,o.z];}
 function updateMShots(dt){for(let i=MSHOTS.length-1;i>=0;i--){const s=MSHOTS[i],o=s.q[0];s.t+=dt;if(!o||o.dead||o.alive===false||o.hp<=0||s.t>3){MSHOTS.splice(i,1);continue;}
   const[tx,ty,tz]=enemyPos(s.q),dx=tx-s.x,dy=ty-s.y,dz=tz-s.z,d=Math.hypot(dx,dy,dz);const st=s.spd*dt;
-  for(let k=0;k<3;k++){const f=k/3;spawnParticle(s.x+dx/d*st*f,s.y+dy/d*st*f,s.z+dz/d*st*f,0,0,0,s.col,.18,s.big?.24:.12);}
+  if(!s.arrow)for(let k=0;k<3;k++){const f=k/3;spawnParticle(s.x+dx/d*st*f,s.y+dy/d*st*f,s.z+dz/d*st*f,0,0,0,s.col,.18,s.big?.24:.12);}
   if(d<=st+.4){kreakHit(s.q,s.dmg);if(s.aoe){for(const e of DEM)if(e!==o&&e.fac==='demon'&&!e.dead&&!e.dormant&&Math.hypot(e.x-tx,e.z-tz)<s.aoe)hurtEnt(e,s.dmg*.6,'kreak');for(let k=0;k<26;k++)spawnParticle(tx,ty,tz,(Math.random()-.5)*5,Math.random()*4,(Math.random()-.5)*5,Math.random()<.5?0xff7a20:0xffd040,.6,.3);Snd.boom(.1);}
     if(s.burn&&s.q[1]==='dem'){o.burnT=4;o.burnD=s.burn;}MSHOTS.splice(i,1);continue;}
   s.x+=dx/d*st;s.y+=dy/d*st;s.z+=dz/d*st;}}

@@ -66,8 +66,8 @@ function dgBuild(g){const M=dgMats(),G=dgGen(g),[ox,oz]=dgOrigin(g,G),grp=new TH
 function dgGate(x,z,alongZ){const M=dgMats(),st=DGX.d.st,g=new THREE.Group();for(let k=-1;k<=1;k+=.4){const b=new THREE.Mesh(new THREE.BoxGeometry(.1,DG_H-1,.1),M.iron);b.position.set(alongZ?0:k,(DG_H-1)/2,alongZ?k:0);g.add(b);}
   const bar=new THREE.Mesh(new THREE.BoxGeometry(alongZ?.12:3,.12,alongZ?3:.12),M.iron);bar.position.y=1.6;g.add(bar);g.position.set(x,DG_Y+(st.lever?DG_H-1:0),z);DGX.grp.add(g);
   const s=solAdd({x,z,hw:alongZ?.3:1.5,hd:alongZ?1.5:.3,y0:DG_Y,y1:DG_Y+DG_H,rot:0,solid:1,off:!!st.lever,dg:1});DGX.sol.push(s);DGX.gate={g,s,open:!!st.lever,t:0};}
-function dgChest(x,z,key,boss){const M=dgMats(),g=new THREE.Group(),b=new THREE.Mesh(new THREE.BoxGeometry(boss?1.4:1,.7,boss?.9:.7),M.wood),l=new THREE.Mesh(new THREE.BoxGeometry(boss?1.5:1.1,.25,boss?1:.8),boss?M.gold:M.wood);b.position.y=.35;l.position.y=.82;g.add(b,l);g.position.set(x,DG_Y,z);DGX.grp.add(g);
-  const s=solAdd({x,z,hw:boss?.7:.5,hd:boss?.45:.35,y0:DG_Y,y1:DG_Y+.95,rot:0,solid:1,dg:1});DGX.sol.push(s);return{x,z,key,boss,g,s,lid:l,open:false};}
+function dgChest(x,z,key,boss){const M=dgMats(),g=new THREE.Group(),b=new THREE.Mesh(new THREE.BoxGeometry(boss?1.4:1,.7,boss?.9:.7),M.wood),l=new THREE.Mesh(new THREE.BoxGeometry(boss?1.5:1.1,.25,boss?1:.8),boss?M.gold:M.wood);b.position.y=.35;l.position.y=.82;g.add(b,l);const gy=(typeof CV!=='undefined'&&CV.on&&CV.fy&&cvFloor(x,z))||DG_Y;g.position.set(x,gy,z);DGX.grp.add(g);
+  const s=solAdd({x,z,hw:boss?.7:.5,hd:boss?.45:.35,y0:gy,y1:gy+.95,rot:0,solid:1,dg:1});DGX.sol.push(s);return{x,z,y:gy,key,boss,g,s,lid:l,open:false};}
 function dgLoot(c){const st=DGX.d.st;if(c.open)return;if(c.boss&&!st.boss){toast('Die Truhe ist versiegelt, solange der Wächter dieses Gewölbes lebt.');return;}c.open=true;c.lid.rotation.x=-1.1;c.lid.position.z-=.3;c.lid.position.y+=.25;
   const R=Math.random,L=c.boss?[['coin',2+((R()*3)|0)],['silver',25+((R()*20)|0)],['hpot2',2],['pmana',1]]:[['copper',10+((R()*25)|0)],['silver',2+((R()*6)|0)]];if(!c.boss&&R()<.4)L.push(['hpot',1]);if(!c.boss&&R()<.2)L.push(['arrow',8]);
   if(c.boss){const gems=['ruby','opal','sapphire','emerald','diamond'].filter(k=>ITEMS[k]);for(let i=0;i<2;i++)if(gems.length)L.push([gems[(R()*gems.length)|0],1]);const rare=['trident','cutlass','divehelm','bow','pregen'].filter(k=>ITEMS[k]);L.push([rare[(R()*rare.length)|0],1]);if(R()<.5)L.push(['sr_'+(SPELL_ORDER?SPELL_ORDER[(R()*SPELL_ORDER.length)|0]:''),1]);}
@@ -103,11 +103,11 @@ function dgTick(dt){DGE.t-=dt;if(DGE.t<=0){DGE.t=1;if(P.x<60000&&WL_READY&&!DGX.
 function dgUse(){if(!DGX.on){const g=dgEntLooked();if(g){dgEnter(g);return true;}return false;}
   if(DGX.exit&&Math.hypot(DGX.exit.x-P.x,DGX.exit.z-P.z)<3.2&&lookingAt(DGX.exit.x,DG_Y+1,DGX.exit.z,4,.6)){dgLeave(false);return true;}
   const L=DGX.lever;if(L&&Math.hypot(L.x-P.x,L.z-P.z)<2.6&&lookingAt(L.x,DG_Y+.6,L.z,3.4,.7)){if(!DGX.d.st.lever){DGX.d.st.lever=1;L.pv.rotation.z=-.7;if(DGX.gate){DGX.gate.open=true;DGX.gate.s.off=true;}try{Snd.clank?Snd.clank():Snd.click();}catch(e){}toast('Klack! Irgendwo hebt sich ein schweres Gitter …');saveGame();}else toast('Der Hebel ist schon umgelegt.');return true;}
-  for(const c of DGX.chests)if(!c.open&&Math.hypot(c.x-P.x,c.z-P.z)<2.4&&lookingAt(c.x,DG_Y+.6,c.z,3.4,.7)){dgLoot(c);return true;}return false;}
+  for(const c of DGX.chests)if(!c.open&&Math.hypot(c.x-P.x,c.z-P.z)<2.4&&lookingAt(c.x,(c.y||DG_Y)+.6,c.z,3.4,.7)){dgLoot(c);return true;}return false;}
 function dgPrompt(){if(!DGX.on)return dgEntLooked()?'Dungeon betreten':null;if(DGX.exit&&Math.hypot(DGX.exit.x-P.x,DGX.exit.z-P.z)<3.2&&lookingAt(DGX.exit.x,DG_Y+1,DGX.exit.z,4,.6))return'Nach oben steigen';
-  const L=DGX.lever;if(L&&Math.hypot(L.x-P.x,L.z-P.z)<2.6&&lookingAt(L.x,DG_Y+.6,L.z,3.4,.7))return DGX.d.st.lever?null:'Hebel umlegen';for(const c of DGX.chests)if(!c.open&&Math.hypot(c.x-P.x,c.z-P.z)<2.4&&lookingAt(c.x,DG_Y+.6,c.z,3.4,.7))return'Truhe öffnen';return null;}
-{const a=storyUse;storyUse=function(){if(state==='playing'&&(P.x<60000)&&dgUse())return true;return a();};}
-{const a=storyPrompt2;storyPrompt2=function(){if(P.x<60000){const t=dgPrompt();if(t)return t;}return a();};}
+  const L=DGX.lever;if(L&&Math.hypot(L.x-P.x,L.z-P.z)<2.6&&lookingAt(L.x,DG_Y+.6,L.z,3.4,.7))return DGX.d.st.lever?null:'Hebel umlegen';for(const c of DGX.chests)if(!c.open&&Math.hypot(c.x-P.x,c.z-P.z)<2.4&&lookingAt(c.x,(c.y||DG_Y)+.6,c.z,3.4,.7))return'Truhe öffnen';return null;}
+{const a=storyUse;storyUse=function(){if(state==='playing'&&(P.x<60000||DGX.on)&&dgUse())return true;return a();};}
+{const a=storyPrompt2;storyPrompt2=function(){if(P.x<60000||DGX.on){const t=dgPrompt();if(t)return t;}return a();};}
 {const a=playerDie;playerDie=function(){const was=DGX.on;a();if(was&&state==='dead'){dgFree();DGX.on=false;DGX.d=null;}};}
 {const a=startGame;startGame=function(isNew,char){if(DGX.on){dgFree();DGX.on=false;DGX.d=null;}for(const B of DGE.built.values())scene.remove(B.grp);DGE.built.clear();return a(isNew,char);};}
 {const a=petAI;petAI=function(e,dt){if(DGX.on&&Math.abs(e.y-P.y)>8){e.x=P.x+Math.sin(P.yaw)*2;e.z=P.z+Math.cos(P.yaw)*2;entGround(e);}return a(e,dt);};}

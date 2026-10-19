@@ -5222,13 +5222,13 @@ function shoot(e,tx,ty,tz,R,o={}){const sy=e.y+e.h*(R.sy||.62),n=R.n||1;for(let 
   SHOTS.push({x:e.x+dx/dh*.8,y:sy,z:e.z+dz/dh*.8,vx,vy,vz,t:0,life:R.life||4,dmg:R.dmg,fac:e.fac,orb:R.orb,size:R.size||(R.orb==='orb_big'?1.3:.7),col:R.col||0xff7a20,grav:R.arc?16:0,aoe:R.aoe||0,home:R.home||0,src:e});}
   Snd.whoosh(R.arc?400:900,.09);}
 function shotHit(s){const R=Math.max(1,s.aoe);{const cd=Math.hypot(s.x-camera.position.x,s.y-camera.position.y,s.z-camera.position.z);let px=s.x,py=s.y,pz=s.z,n=s.aoe?30:12;if(cd<3){const sx=s.src?s.src.x-s.x:0,sz=s.src?s.src.z-s.z:0,sl=Math.hypot(sx,sz)||1;px+=sx/sl*2.4;pz+=sz/sl*2.4;n=5;}
-  for(let k=0;k<n;k++)spawnParticle(px,py,pz,(Math.random()-.5)*5,Math.random()*4,(Math.random()-.5)*5,s.col,.7,.35);}if(s.aoe)Snd.boom(.14);
+  for(let k=0;k<n;k++)spawnParticle(px,py,pz,(Math.random()-.5)*5,Math.random()*4,(Math.random()-.5)*5,s.col,s.orb==='orb_arrow'?.22:.7,.35);}if(s.aoe)Snd.boom(.14);
   if(s.fac==='demon'){if(state==='playing'||state==='dialog'){const d=Math.hypot(P.x-s.x,P.z-s.z);if(d<R+.3&&Math.abs(P.y+1-s.y)<R+1.5){takeDamage(s.dmg);const k=s.aoe?6:3;P.vx+=(P.x-s.x)/(d||1)*k;P.vz+=(P.z-s.z)/(d||1)*k;}}
     for(const e of DEM)if(e.fac==='ally'&&!e.dead&&Math.hypot(e.x-s.x,e.z-s.z)<R+.4)hurtEnt(e,s.dmg*.7,'demon');}
   else for(const e of DEM)if(e.fac==='demon'&&!e.dead&&!e.dormant&&Math.hypot(e.x-s.x,e.z-s.z)<R+(e.d.rad||.4))hurtEnt(e,s.dmg,s.by||'ally');}
 function updateShots(dt){for(let i=SHOTS.length-1;i>=0;i--){const s=SHOTS[i];s.t+=dt;
   if(s.home&&s.fac==='demon'){const dx=P.x-s.x,dy=P.y+1-s.y,dz=P.z-s.z,d=Math.hypot(dx,dy,dz)||1,sp=Math.hypot(s.vx,s.vy,s.vz);s.vx+=(dx/d*sp-s.vx)*s.home*dt;s.vy+=(dy/d*sp-s.vy)*s.home*dt;s.vz+=(dz/d*sp-s.vz)*s.home*dt;}
-  s.vy-=s.grav*dt;s.x+=s.vx*dt;s.y+=s.vy*dt;s.z+=s.vz*dt;if(Math.random()<.7&&Math.hypot(s.x-camera.position.x,s.z-camera.position.z)>2.5)spawnParticle(s.x,s.y,s.z,(Math.random()-.5)*.6,(Math.random()-.5)*.6,(Math.random()-.5)*.6,s.col,.4,.3);
+  s.vy-=s.grav*dt;s.x+=s.vx*dt;s.y+=s.vy*dt;s.z+=s.vz*dt;if(s.orb!=='orb_arrow'&&Math.random()<.7&&Math.hypot(s.x-camera.position.x,s.z-camera.position.z)>2.5)spawnParticle(s.x,s.y,s.z,(Math.random()-.5)*.6,(Math.random()-.5)*.6,(Math.random()-.5)*.6,s.col,.4,.3);
   let hit=false;if(s.fac==='demon'){if(Math.hypot(P.x-s.x,P.z-s.z)<.8&&s.y>P.y-.2&&s.y<P.y+2)hit=true;for(const e of DEM)if(!hit&&e.fac==='ally'&&!e.dead&&Math.hypot(e.x-s.x,e.z-s.z)<.7&&s.y>e.y&&s.y<e.y+e.h)hit=true;}
   else for(const e of DEM)if(!hit&&e.fac==='demon'&&!e.dead&&!e.dormant&&Math.hypot(e.x-s.x,e.z-s.z)<(e.d.rad||.4)+.5&&s.y>e.y-.3&&s.y<e.y+e.h+.3)hit=true;
   const g=groundAt(s.x,s.z,s.y+1);if(hit||s.t>s.life||s.y<g||(P.x>CAVE_X0-400&&caveSolid(s.x,s.z))||(s.x>60000&&s.x<CAVE_X0-400&&collHitXZ(s.x,s.z))){if(s.y<g)s.y=g+.2;shotHit(s);SHOTS.splice(i,1);}}}
@@ -5284,7 +5284,7 @@ function updateDemons(dt){if(!demMesh)return;const run=state!=='cutscene'&&state
     // leuchtende Augen
     const ey=e.d.eyes;if(ey&&!e.dead&&!(e.sink)){const ex=cx-e.x,ez=cz-e.z,el=Math.hypot(ex,ez)||1,px=e.h/s.h,rx=ez/el,rz=-ex/el,yy=e.y+yo+e.h*(1-(ey.y+1)/s.h)+px*.5;
       for(const dx of ey.dx){const o=(dx+.5)*px;glow(e.x+ex/el*.12-rx*o,yy,e.z+ez/el*.12-rz*o,px*2.2,px*1.6,'geye_'+ey.c,1.6);}}}
-  for(const s of SHOTS)glow(s.x,s.y-s.size/2,s.z,s.size,s.size,s.orb,1.5);
+  for(const s of SHOTS)if(s.orb!=='orb_arrow')glow(s.x,s.y-s.size/2,s.z,s.size,s.size,s.orb,1.5);
   if(typeof storyGlow==='function')storyGlow(glow);
   demMesh.geometry.instanceCount=n;glowMesh.geometry.instanceCount=m;for(const k of['offset','size','uvr','tint','rot']){g[k].needsUpdate=true;G[k].needsUpdate=true;}
   glowMat.uniforms.fogNear.value=scene.fog.near;glowMat.uniforms.fogFar.value=scene.fog.far*1.4;glowMat.uniforms.fogColor.value.copy(scene.fog.color);glowMat.uniforms.time.value=time;demMat.uniforms.time.value=time;if(kreakMat)kreakMat.uniforms.time.value=time;}

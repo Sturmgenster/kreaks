@@ -131,6 +131,7 @@ function cvBuild(K,lvl,cfg){cfg=cfg||CV_L1;const seed=((WSEED|0)^0x7a11c3)+lvl*9
   const fy=new Float32Array(N*N),cy=new Float32Array(N*N);
   for(let j=0;j<N;j++)for(let i=0;i<N;i++){const k=j*N+i,hw=1.45+1.3*cvN(i*.21,j*.21,seed+5)+.35*cvN(i*.7,j*.7,seed+6);
     if(!open[k]){fy[k]=cy[k]=hw;continue;}fy[k]=0;const hh=Math.max(H[k],hw+1.2),PL=hh>9?2.6+(hh-7)*.5:2.6,t=clamp((d[k]-.6)/PL,0,1),v=1-(1-t)*(1-t);cy[k]=hw+(hh-hw)*v+(cvN(i*.33,j*.33,seed+7)-.5)*(hh>12?2.4:.9)*Math.min(1,d[k]/3);}
+  if(cfg.slope)cfg.slope({G,N,C,open,d,fy,cy,seed});
   if(cfg.shape)cfg.shape({G,N,C,open,d,fy,cy,seed});
   // Aufzugsschächte nach oben
   const shaft=(sx,sz)=>{sx=Math.round(sx);sz=Math.round(sz);for(let j=-6;j<=6;j++)for(let i=-6;i<=6;i++){const k=(sz+C+j)*N+sx+C+i,r=Math.hypot(i,j);if(r<=3.4)cy[k]=Math.max(cy[k],48);else if(r<=4.5)cy[k]=Math.max(cy[k],15);}};
@@ -167,12 +168,12 @@ function cvBuild(K,lvl,cfg){cfg=cfg||CV_L1;const seed=((WSEED|0)^0x7a11c3)+lvl*9
   const solids=[],keep=(i,j)=>!(G.keep||[]).some(q=>Math.hypot(i-C-q.x,j-C-q.z)<q.r);
   for(let t=0;t<9000;t++){const i=3+((rnd()*(N-6))|0),j=3+((rnd()*(N-6))|0),k=j*N+i;if(!open[k])continue;const[x,z]=at(i,j),tn=tint(i,j);
     if(d[k]>2.2&&rnd()<.045){const h=.6+rnd()*1.9,w=.18+rnd()*.3;part(RK,cone,x,Y+cy[k]-h/2+.1,z,Math.PI,rnd()*3,0,w,h,w,[tn[0]*.8,tn[1]*.8,tn[2]*.8]);}
-    if(d[k]>3.5&&d[k]<6&&rnd()<.006&&Math.hypot(i-C-G.S.x,j-C-G.S.z)>10&&keep(i,j)){const h=1.2+rnd()*2.2,w=.45+rnd()*.35;part(RK,cone,x,Y+h/2-.05,z,0,rnd()*3,0,w,h,w,[tn[0]*.85,tn[1]*.85,tn[2]*.85]);solids.push([x,z,w*.75,h]);}
-    if(d[k]>1&&d[k]<1.9&&rnd()<.03){const s=.35+rnd()*.7;part(RK,dod,x,Y+s*.55,z,rnd()*3,rnd()*3,rnd()*3,s,s*.75,s,[tn[0]*.75,tn[1]*.75,tn[2]*.75]);if(s>.6)solids.push([x,z,s*.8,s*1.1]);}}
+    if(d[k]>3.5&&d[k]<6&&rnd()<.006&&Math.hypot(i-C-G.S.x,j-C-G.S.z)>10&&keep(i,j)){const h=1.2+rnd()*2.2,w=.45+rnd()*.35;part(RK,cone,x,Y+fy[k]+h/2-.05,z,0,rnd()*3,0,w,h,w,[tn[0]*.85,tn[1]*.85,tn[2]*.85]);solids.push([x,z,w*.75,h,fy[k]]);}
+    if(d[k]>1&&d[k]<1.9&&rnd()<.03){const s=.35+rnd()*.7;part(RK,dod,x,Y+fy[k]+s*.55,z,rnd()*3,rnd()*3,rnd()*3,s,s*.75,s,[tn[0]*.75,tn[1]*.75,tn[2]*.75]);if(s>.6)solids.push([x,z,s*.8,s*1.1,fy[k]]);}}
   const ctx={K,G,X,Z,Y,N,C,ox,oz,open,d,fy,cy,part,flush,RK,rnd,at,tint,seed,lvl,geo:{oct,cone,dod,cyl,cap},solids};
   if(cfg.decor)cfg.decor(ctx);
   flush();
-  for(const[x,z,r,h]of solids)DGX.sol.push(solAdd({x,z,hw:r,hd:r,y0:Y-1,y1:Y+h,rot:0,solid:1,dg:1}));
+  for(const[x,z,r,h,f]of solids)DGX.sol.push(solAdd({x,z,hw:r,hd:r,y0:Y+(f||0)-1,y1:Y+(f||0)+h,rot:0,solid:1,dg:1}));
   // Aufzüge
   const WOOD=bMats().wood,IRON=new THREE.MeshLambertMaterial({color:0x34363c});
   const shaftFrame=(lx,lz)=>{for(const[a,b]of[[-2.55,-2.55],[2.55,-2.55],[-2.55,2.55],[2.55,2.55]]){K.mesh(new THREE.BoxGeometry(.35,46,.35),WOOD,lx+a,23,lz+b);}for(let y=4;y<46;y+=5){K.mesh(new THREE.BoxGeometry(5.4,.25,.25),WOOD,lx,y,lz-2.55);K.mesh(new THREE.BoxGeometry(5.4,.25,.25),WOOD,lx,y,lz+2.55);K.mesh(new THREE.BoxGeometry(.25,.25,5.4),WOOD,lx-2.55,y,lz);K.mesh(new THREE.BoxGeometry(.25,.25,5.4),WOOD,lx+2.55,y,lz);}

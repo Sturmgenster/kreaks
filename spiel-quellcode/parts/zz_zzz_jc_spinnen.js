@@ -112,13 +112,13 @@ let SPWT=null;function spWebTex(big){if(SPWT&&SPWT[big?1:0])return SPWT[big?1:0]
   x.globalCompositeOperation='destination-out';for(let k=0;k<(big?14:4);k++){x.beginPath();x.arc(r()*S,r()*S,S*(.03+r()*.06),0,6.283);x.fill();}x.globalCompositeOperation='source-over';
   const t=new THREE.CanvasTexture(c);t.magFilter=THREE.NearestFilter;t.minFilter=THREE.LinearMipmapLinearFilter;SPWT[big?1:0]=t;return t;}
 let SPWM=null;const spWebMat=()=>SPWM||(SPWM=new THREE.MeshBasicMaterial({map:spWebTex(false),transparent:true,alphaTest:.25,side:THREE.DoubleSide,depthWrite:false,color:0xe8e6e0}));
-function spWebAdd(K,w){const g=w.kind==='floor'?new THREE.CircleGeometry(w.r,14):new THREE.PlaneGeometry(w.hw*2,w.h);const m=new THREE.Mesh(g,spWebMat());
-  if(w.kind==='floor'){m.rotation.x=-Math.PI/2;m.rotation.z=Math.random()*6;m.position.set(w.x,DG_Y+.04,w.z);}else{m.position.set(w.x,DG_Y+w.y0+w.h/2,w.z);m.rotation.y=Math.atan2(w.nx,w.nz);}
+function spWebAdd(K,w){w.fy=((CV.on&&cvFloor(w.x,w.z))||DG_Y)-DG_Y;const g=w.kind==='floor'?new THREE.CircleGeometry(w.r,14):new THREE.PlaneGeometry(w.hw*2,w.h);const m=new THREE.Mesh(g,spWebMat());
+  if(w.kind==='floor'){m.rotation.x=-Math.PI/2;m.rotation.z=Math.random()*6;m.position.set(w.x,DG_Y+w.fy+.04,w.z);}else{m.position.set(w.x,DG_Y+w.fy+w.y0+w.h/2,w.z);m.rotation.y=Math.atan2(w.nx,w.nz);}
   K.grp.add(m);w.m=m;w.touch=0;w.alive=true;SPW.webs.push(w);}
-function spWebBreak(w,byHit){if(!w.alive)return;w.alive=false;w.m.visible=false;const n=w.kind==='floor'?14:24;for(let k=0;k<n;k++)spawnParticle(w.x+(Math.random()-.5)*(w.hw||w.r)*1.4,DG_Y+(w.kind==='floor'?.2:w.y0+Math.random()*w.h),w.z+(Math.random()-.5)*(w.hw||w.r)*1.4,(Math.random()-.5)*2,Math.random()*1.5,(Math.random()-.5)*2,0xf0f0ec,.9,.16);
+function spWebBreak(w,byHit){if(!w.alive)return;w.alive=false;w.m.visible=false;const n=w.kind==='floor'?14:24;for(let k=0;k<n;k++)spawnParticle(w.x+(Math.random()-.5)*(w.hw||w.r)*1.4,DG_Y+(w.fy||0)+(w.kind==='floor'?.2:w.y0+Math.random()*w.h),w.z+(Math.random()-.5)*(w.hw||w.r)*1.4,(Math.random()-.5)*2,Math.random()*1.5,(Math.random()-.5)*2,0xf0f0ec,.9,.16);
   try{Snd.whoosh(byHit?1200:700,.06);}catch(_){}}
-function spWebAt(x,z,y){if(y>DG_Y+3)return null;for(const w of SPW.webs){if(!w.alive||Math.abs(w.x-x)>6||Math.abs(w.z-z)>6)continue;if(w.kind==='floor'){if(Math.hypot(w.x-x,w.z-z)<w.r*.9)return w;continue;}
-    const dx=x-w.x,dz=z-w.z,dn=dx*w.nx+dz*w.nz,dl=-dx*w.nz+dz*w.nx;if(Math.abs(dn)<.6&&Math.abs(dl)<w.hw&&y<DG_Y+w.y0+w.h&&w.block)return w;}return null;}
+function spWebAt(x,z,y){for(const w of SPW.webs){if(!w.alive||Math.abs(w.x-x)>6||Math.abs(w.z-z)>6)continue;const fb=DG_Y+(w.fy||0);if(y>fb+(w.kind==='floor'?3:w.y0+w.h))continue;if(w.kind==='floor'){if(Math.hypot(w.x-x,w.z-z)<w.r*.9)return w;continue;}
+    const dx=x-w.x,dz=z-w.z,dn=dx*w.nx+dz*w.nz,dl=-dx*w.nz+dz*w.nx;if(Math.abs(dn)<.6&&Math.abs(dl)<w.hw&&y<fb+w.y0+w.h&&w.block)return w;}return null;}
 function spWebSwing(range){const fx=-Math.sin(P.yaw),fz=-Math.cos(P.yaw);let n=0;for(const w of SPW.webs){if(!w.alive)continue;const dx=w.x-P.x,dz=w.z-P.z,d=Math.hypot(dx,dz);
     let near=d<range+(w.kind==='floor'?w.r*.8:1.2)&&(d<1||(dx*fx+dz*fz)/d>.3);if(!near&&w.kind!=='floor'){const dn=(P.x-w.x)*w.nx+(P.z-w.z)*w.nz,dl=-(P.x-w.x)*w.nz+(P.z-w.z)*w.nx;near=Math.abs(dn)<range+.4&&Math.abs(dl)<w.hw&&(Math.abs(dn)<.5||Math.sign(-dn)===Math.sign(fx*w.nx+fz*w.nz));}
     if(near){spWebBreak(w,true);n++;}}if(n&&P.webStick)P.webStick=Math.max(0,P.webStick-.25);return n;}
@@ -162,7 +162,7 @@ const CV_L2={gen:s=>cvGen2(s),
         let gx=0,gz=0;for(const[a,b]of[[1,0],[-1,0],[0,1],[0,-1]])if(!open[(j+b)*N+i+a]){gx+=a;gz+=b;}if(!gx&&!gz)continue;const L=Math.hypot(gx,gz);const s=1.2+R()*1.6;spWebAdd(K,{kind:'deco',x:x+gx/L*.4,z:z+gz/L*.4,nx:gx/L,nz:gz/L,hw:s,h:s*1.4,y0:.4+R()*(Math.max(.5,cy[k]-s*1.4-.6)),block:false});}}
     // eingesponnene Opfer (Kokons) in der Tiefe
     const COC=new THREE.MeshLambertMaterial({color:0xe6e2d6,vertexColors:true});for(let t=0;t<5000;t++){const i=3+((R()*(N-6))|0),j=3+((R()*(N-6))|0),k=j*N+i;if(!open[k]||dep[k]<0||d[k]<1.2||d[k]>2.2)continue;const dq=dep[k]/mx;if(R()>dq*.03)continue;
-      part(COC,geo.dod,X+i-C,Y+.45,Z+j-C,(R()-.5)*.4,R()*3,Math.PI/2+(R()-.5)*.3,.42,1.1,.42,[.9+R()*.1,.88+R()*.1,.82+R()*.1]);}
+      part(COC,geo.dod,X+i-C,Y+c.fy[k]+.45,Z+j-C,(R()-.5)*.4,R()*3,Math.PI/2+(R()-.5)*.3,.42,1.1,.42,[.9+R()*.1,.88+R()*.1,.82+R()*.1]);}
     // Hohlraum: großes Netz, Felsvorsprünge, Stufen, Kokons
     const HR=G.HR,cyAt=(x,z)=>{const k=(Math.round(z)+C)*N+Math.round(x)+C;return open[k]?cy[k]:0;};
     const rWall=(a,y)=>{for(let rr=10;rr<HR+6;rr+=.5){if(cyAt(Math.cos(a)*rr,Math.sin(a)*rr)<y+3.2)return rr;}return HR;};

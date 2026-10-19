@@ -1,7 +1,20 @@
 {
-  "latest": "0.0.128",
+  "latest": "0.0.129",
   "latestBeta": null,
   "versions": [
+    {
+      "id": "0.0.129",
+      "label": "Beta-4.3",
+      "name": "KREAKS Beta-4.3",
+      "channel": "release",
+      "date": "2026-10-19",
+      "notes": "Mehrspieler: In Gewölben und auf den Turm-Ebenen 1 und 2 kämpfen alle gegen dieselben Monster. Geheimräume hinter rissigen Wänden in den Wildnis-Gewölben. Verzauberter Runenstahl in den Turmtruhen. Patrizierhäuser haben jetzt ein begehbares Obergeschoss mit Treppe.",
+      "url": "https://raw.githubusercontent.com/Sturmgenster/kreaks/main/spiel/KREAKS-0.0.129.kreaks",
+      "size": 36794999,
+      "sha256": "e1d7a454cd938c4cfec0a03ded35bbdcbd9497304ac243533b1e1a6ff2bb4c3b",
+      "encrypted": true,
+      "wrappedKey": "wcDMA0K3SMKDFFIYAQwAwyVs1ZEUxYTAg/NO+Y0xs+wva1RQVI7J/6HggQ8Aepn3ay0hpa/OrvXSklVCAuxBGQzV9TlzMZI2WRbSb4BtYW1Cm2wSFFg13j6SuuHE+6BwI0Xhb2zFxt/lSVX67wE46meO/LJTQvIbLakkqRRAB/icqubJCucxwIZ2gBn57xGZK6wWRRqbQz2IqJRyyZY3lTlDOD0qmrdvYwK5QEzLcCSpyhWDg5C/wdGtVK+ythvyW8lxTp7y72wNQ9vuxCFG6RVGMtJF8Ts+TjvTqEldM+1jzMrPSlnyIQo0715KTilxwP+mZ6i4nbdn98MuugG32+DqLIKfxPXIQHKovrmFEQpdZRrfuodE5FajFhVm60Phfv9Gh4iBSvaqVhi6dSsyeStkU0xpFuhoNXowb1hx+mJ82VxvxKCieUSjTvYaGkh3Bk1VbJySSy+jqr4bf0lpx8aXxOiY4Jf3LN5eW7wOSDIJz5iJhTDAt+WyDXmpp08pzjx2IJ7c53f4RFPZyDbY0nEBEGhYALoVZTV4Yk8MIIW0ANZKKZ/puyCU0qjOUE0v/02MuKA9u3BYT8oBXwjjkXBn4Z80J7KHlwdkcKppQ5Fg/9uP7lZY/hKUXqUsN1sifEj2fnR0ToY9pO7kk9T4hNGEKHLSD1pSXhbSxTArnCRfhg=="
+    },
     {
       "id": "0.0.128",
       "label": "Beta-4.2",

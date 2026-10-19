@@ -17,7 +17,9 @@ function twlMats(){if(TWLM)return TWLM;const T=(c,rx,ry)=>{const t=new THREE.Can
     rune:new THREE.MeshBasicMaterial({color:0x4ad8f0}),fire:new THREE.MeshBasicMaterial({color:0xffa030}),iron:new THREE.MeshLambertMaterial({color:0x2a2a30}),gold:new THREE.MeshLambertMaterial({color:0xc8a030}),
     red:new THREE.MeshLambertMaterial({color:0x6a1414}),seal:new THREE.MeshBasicMaterial({color:0x4ad8f0,transparent:true,opacity:.55,side:THREE.DoubleSide,depthWrite:false})};return TWLM;}
 // Bauhelfer für Ebenen: alles in Turmkoordinaten (lx,lz) relativ zur Turmmitte, Norden = -z
-function twlKit(){const M=twlMats(),grp=DGX.grp,X=TWC.x,Z=TWC.z,Y=DG_Y;
+// Jede Ebene liegt an ihrem eigenen Ort (siehe zz_zzz_v_ebenen.js); TWL_O ist die Mitte der aktuellen Ebene
+const TWL_O={x:TWC.x,z:TWC.z};
+function twlKit(){const M=twlMats(),grp=DGX.grp,X=TWL_O.x,Z=TWL_O.z,Y=DG_Y;
   const K={M,X,Z,Y,grp,
     mesh(geo,mat,lx,y,lz,ry){const m=new THREE.Mesh(geo,mat);m.position.set(X+lx,Y+y,Z+lz);if(ry)m.rotation.y=ry;grp.add(m);return m;},
     box(w,h,d,mat,lx,y,lz,ry,solid){const m=K.mesh(new THREE.BoxGeometry(w,h,d),mat,lx,y+h/2,lz,ry);if(solid){const s=solAdd({x:X+lx,z:Z+lz,hw:w/2,hd:d/2,y0:Y-1,y1:Y+y+h,rot:-(ry||0),solid:1,walk:solid==='walk'?1:0,dg:1});DGX.sol.push(s);m.userData.sol=s;}return m;},
@@ -49,8 +51,8 @@ TOWER_LEVELS.push(null);
 // Betreten, Verlassen
 // =========================================================
 function twlEnter(lvl){const L=TOWER_LEVELS[lvl-1];if(!L){toast('Diese Ebene ist noch versiegelt.');return;}if(P.riding){toast('Steig erst ab');return;}if(dlg)closeDialog();
-  if(DGX.on){dgFree();DGX.on=false;}const W=L.W||TWC.R*2+8;
-  DGX.d={tower:1,lvl,ox:TWC.x-W/2,oz:TWC.z-W/2,W,st:{},far:L.far||62,hemi:L.hemi||.42,fogC:L.fogC||null,near:L.near||2,bbl:L.bbl||null,g:null};DGX.on=true;DGX.grp=new THREE.Group();scene.add(DGX.grp);DGX.sol=[];DGX.ents=[];DGX.traps=[];DGX.chests=[];DGX.gate=null;DGX.lever=null;
+  if(DGX.on){dgFree();DGX.on=false;}const W=L.W||TWC.R*2+8;Object.assign(TWL_O,lvOrigin(lvl));
+  DGX.d={tower:1,lvl,ox:TWL_O.x-W/2,oz:TWL_O.z-W/2,W,st:{},far:L.far||62,hemi:L.hemi||.42,fogC:L.fogC||null,near:L.near||2,bbl:L.bbl||null,g:null};DGX.on=true;DGX.grp=new THREE.Group();scene.add(DGX.grp);DGX.sol=[];DGX.ents=[];DGX.traps=[];DGX.chests=[];DGX.gate=null;DGX.lever=null;
   DGX.light=new THREE.PointLight(0xffb060,1.6,20,1.5);scene.add(DGX.light);
   try{L.build(twlKit());}catch(e){console.error('Turmebene',lvl,e);}
   P.x=DGX.exit.x;P.z=DGX.exit.z-6;P.y=DG_Y+.05;P.vx=P.vy=P.vz=0;P.yaw=0;P.safe=null;curArea=null;setTimeout(checkArea,150);
