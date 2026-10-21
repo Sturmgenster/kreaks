@@ -1,7 +1,20 @@
 {
-  "latest": "0.0.129",
+  "latest": "0.0.132",
   "latestBeta": null,
   "versions": [
+    {
+      "id": "0.0.132",
+      "label": "Beta-4.4",
+      "name": "KREAKS Beta-4.4",
+      "channel": "release",
+      "date": "2026-10-21",
+      "notes": "Neue Turm-Ebene 4: Der Schlund mit dem Gehirn als Endboss. Eigene Bosskampf-Musik für Minotaurus, Tarantula, Big Lunar und das Gehirn. Reparieren beim Schmied und am Amboss. Mehrspieler: Bosse greifen alle Spieler an, besiegte Gewölbe-Wächter gelten für alle, Big Lunar ist gemeinsam. Big Lunar trifft jetzt wirklich mit seinen Angriffen.",
+      "url": "https://raw.githubusercontent.com/Sturmgenster/kreaks/main/spiel/KREAKS-0.0.132.kreaks",
+      "size": 53774041,
+      "sha256": "1102802e5b96977744b031d8487b198cc7414a058ce0f9766558afef926a088e",
+      "encrypted": true,
+      "wrappedKey": "wcDMA0K3SMKDFFIYAQwAhjHCVg3sQ+CmVyUYottXfj+W7Ebwd9l/f1JD1VFQTlfVK8rhPzXqgyPySChyqxHyUbuxpQh1sB9MP4+Jwwq4thcn5eZfXsb/6H5dZBp4ySqaY9RRd3vK4+Qfuu8Gt8qJUPO9xW6g3CnbREnx9TSlJPT5Rgx0pdEEUiauZDawqJNC40t2XILbcCh+19Pzkmxz/Y6VA4YRzaPB/ZrRcjeSb9OjhuIHn1TG1qPiR0HQPT45EgRu8AauCyR7UTYqH6zushmNXNaRQb6WcHtYfEufSEXPeAGkhSRYg3pF3jwgqDAg5loCTs9O5f2Z0w3NqCDXAPBuBNYBkiaY481HIDKDf4Wa72x9w8lkaYLLaY/loV+rFOe8xmyx0BYYS3aT6p5bpTdCbtfeynXhpL97YMrfU6JGh46cD5tM4NEgYXOZ51NjhKz80VqZ9aESW1szEBmNQkfBrJVsQUGDDSA54t96XMG04BP9HduGkszyEK0UyKf5vp8YdFzlk3kuJS6Nt5nH0nEB8tVUOIq7r/rfMmUgbNYJCKl0sX2HmJVxMavaEsAtvcoUUtEPyQdRf/fDZTDRFBto2ThOEYw3yktJFHJm/99FpNtOLSLQqwO0KqWpZfIiW2iYAViKaVL8uCt6gM6pyw+rvIy13QjXzrEb9nm3xkvc3w=="
+    },
     {
       "id": "0.0.129",
       "label": "Beta-4.3",

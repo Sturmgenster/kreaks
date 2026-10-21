@@ -149,7 +149,7 @@ function sxHouse(K,l,C){const{M,put,sol,H,X,Z}=K,B=(w,h,d)=>new THREE.BoxGeometr
   // Schornsteine
   if(l.chim){const n=l.big?2:1;for(let k=0;k<n;k++){const lx=(k?-1:1)*(w/2-1.1),ch=1.6+R()*1.2;at(C.brick,B(.8,ch+hr*.5,.8),lx,H+h+hr*.5+ch/2,-dd*.35);at(C.ashlarD,B(1,.18,1),lx,H+h+hr*.5+ch+.09,-dd*.35);}}
   // Erkertürmchen an großen Häusern
-  if(l.tower){const sx=R()<.5?-1:1,tx=sx*(w/2-.9),tz=dd-.9,ty=H+h1+1;const[px,pz]=L2W(tx,tz);{const tg=new THREE.CylinderGeometry(1.25,1.25,hu+1.2,10,1,true),tu=tg.attributes.uv;for(let i=0;i<tu.count;i++)tu.setXY(i,tu.getX(i)*3,tu.getY(i)*(hu+1.2)/3.2);tg.userData.uvOK=1;put(C.facs[up],tg,px,ty+(hu+1.2)/2-1,pz);}
+  if(l.tower&&!l.open){const sx=R()<.5?-1:1,tx=sx*(w/2-.9),tz=dd-.9,ty=H+h1+1;const[px,pz]=L2W(tx,tz);{const tg=new THREE.CylinderGeometry(1.25,1.25,hu+1.2,10,1,true),tu=tg.attributes.uv;for(let i=0;i<tu.count;i++)tu.setXY(i,tu.getX(i)*3,tu.getY(i)*(hu+1.2)/3.2);tg.userData.uvOK=1;put(C.facs[up],tg,px,ty+(hu+1.2)/2-1,pz);}
     put(C.light,new THREE.CylinderGeometry(1.35,.4,1.1,10),px,ty-1.5,pz);put(rm,new THREE.ConeGeometry(1.6,3.4,10),px,ty+hu+1.9,pz);put(M.gold,new THREE.SphereGeometry(.18,6,4),px,ty+hu+3.7,pz);}
   // Tür mit Rahmen und Stufe, Schild, Lampe
   const fz=d/2+.04,dw=l.open?2.2:l.big?1.8:1.15,dh=l.open?2.8:l.big?2.8:2.25;if(!l.open)at(M.dark,B(dw,dh,.1),0,H+dh/2,fz);at(C.beam,B(dw+.3,.2,.16),0,H+dh+.1,fz+.02);for(const sx of[-1,1])at(C.beam,B(.15,dh,.14),sx*(dw/2+.08),H+dh/2,fz+.02);
