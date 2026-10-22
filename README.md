@@ -15,6 +15,6 @@ Ein 3D-Open-World-Spiel im Pixel-Stil – allein oder mit bis zu 6 Freunden.
 | Ordner / Datei | Inhalt |
 |---|---|
 | `versions.json` | Liste aller Spielversionen, die der Launcher anzeigt |
-| `spiel/` | Die Spielversionen als Zip |
+| Releases (`v<Version>`) | Die Spielversionen als verschlüsselte `.kreaks`-Dateien (hochgeladen über `.github/workflows/spiel-release.yml`) |
 | `launcher-update/` | Installer und Update-Infos für den Launcher |
 | `launcher/` | Quellcode des Launchers (Electron) mit `ANLEITUNG.md` |

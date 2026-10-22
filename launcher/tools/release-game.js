@@ -79,7 +79,7 @@ const AdmZip = require('adm-zip');
   const entry = {
     id, label, name: opt.name || `KREAKS ${label || id}`, channel: opt.channel || 'release',
     date: opt.date || new Date().toISOString().slice(0, 10), notes: opt.notes || '',
-    url: CONFIG.GAME_DOWNLOAD_BASE + fileName, size: file.length,
+    url: `${CONFIG.GAME_RELEASE_BASE}v${id}/${fileName}`, size: file.length,
     sha256: crypto.createHash('sha256').update(file).digest('hex'),
     encrypted: true, wrappedKey
   };

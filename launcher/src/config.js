@@ -11,11 +11,13 @@ module.exports = {
 
   // Alles liegt als Dateien im GitHub-Repository Sturmgenster/kreaks (Zweig main):
   //  - versions.json              Liste aller Spielversionen
-  //  - spiel/KREAKS-<Version>.zip  die Spielversionen
+  //  - die Spielversionen liegen als GitHub Releases (Tag v<Version>, Datei KREAKS-<Version>.kreaks),
+  //    hochgeladen über den Workflow .github/workflows/spiel-release.yml
   //  - launcher-update/            Launcher-Updates (latest.yml + Installer)
   GITHUB: 'Sturmgenster/kreaks',
   VERSIONS_URL: 'https://raw.githubusercontent.com/Sturmgenster/kreaks/main/versions.json',
   GAME_DOWNLOAD_BASE: 'https://raw.githubusercontent.com/Sturmgenster/kreaks/main/spiel/',
+  GAME_RELEASE_BASE: 'https://github.com/Sturmgenster/kreaks/releases/download/',
 
   // Kaufseite (z. B. Lemon Squeezy). Solange leer, zeigt der Launcher „Kauf bald verfügbar“.
   SHOP_URL: '',

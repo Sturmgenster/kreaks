@@ -35,10 +35,11 @@ Solange in `src/config.js` noch Platzhalter stehen, läuft der Launcher im **Dem
 
 Alles liegt im GitHub-Repository **Sturmgenster/kreaks**, Zweig `main`:
 - `versions.json`: die Liste aller Spielversionen
-- `spiel/KREAKS-<Version>.zip`: die Spielversionen
 - `launcher-update/`: der Installer und `latest.yml` für die Launcher-Updates
 
-Der Launcher lädt diese Dateien direkt von `raw.githubusercontent.com`. Releases werden nicht gebraucht.
+Die Spielversionen selbst liegen als **GitHub Releases** (Tag `v<Version>`, Datei `KREAKS-<Version>.kreaks`).
+Dort darf eine Datei bis zu 2 GB groß sein, und das Repository wird nicht mit jeder Version größer.
+In `versions.json` steht bei jeder Version die Download-Adresse des Releases; der Launcher lädt von dort.
 
 ## 3. Neue Spielversion veröffentlichen
 
@@ -48,8 +49,11 @@ Versionsnummern: Die ersten beiden Stellen und den Namen (z. B. „Beta-1.0“) 
 npm run release-game -- <Spielordner> 0.0.76 --label Beta-1.0 --notes "Was ist neu?"
 ```
 1. Vorher die aktuelle `versions.json` aus dem Repository in den Ordner `dist-game` legen, damit die alten Einträge erhalten bleiben.
-2. Danach `dist-game/KREAKS-0.0.76.kreaks` nach `spiel/` kopieren und `dist-game/versions.json` ins Hauptverzeichnis des Repositorys.
-3. Committen und pushen.
+2. Die Spieldatei als Release hochladen: einen Zweig `upload/<Version>` anlegen, darin den Ordner `spiel-upload/` mit
+   `KREAKS-<Version>.kreaks` und `meta.txt` (eine Zeile `<Version>|<Name>`, z. B. `0.0.133|Beta-4.5`), committen und pushen.
+   Der Workflow `.github/workflows/spiel-release.yml` legt das Release `v<Version>` an und löscht den Zweig wieder.
+   (Alternativ auf github.com unter „Releases“ von Hand ein Release mit genau diesem Tag und dieser Datei anlegen.)
+3. Erst wenn das Release da ist: `dist-game/versions.json` ins Hauptverzeichnis des Repositorys kopieren, committen und pushen.
 
 Jede Version wird **verschlüsselt**. Den Schlüssel bekommt der Launcher nur von der Datenbank, und nur für freigeschaltete Konten. Mit `--revoke "0.0.74"` nimmst du alte Versionen aus der Liste. Launcher löschen sie dann auch von der Festplatte.
 
