@@ -1,7 +1,20 @@
 {
-  "latest": "0.0.132",
+  "latest": "0.0.133",
   "latestBeta": null,
   "versions": [
+    {
+      "id": "0.0.133",
+      "label": "Beta-4.5",
+      "name": "KREAKS Beta-4.5",
+      "channel": "release",
+      "date": "2026-10-22",
+      "notes": "Die Engel: Wesen aus Licht wachen über die Welt. Mit viel Glück rettet dich einer in höchster Not. Kreuz bei Corvin kaufen und beten: Gebet stärkt die Regeneration, nachts kann ein Engel dich segnen und ganz selten dein Schutzengel werden. An Feiertagen zieht manchmal ein Engel über den Himmel. Im Mehrspieler sehen alle dieselben Engel.",
+      "url": "https://github.com/Sturmgenster/kreaks/releases/download/v0.0.133/KREAKS-0.0.133.kreaks",
+      "size": 53784866,
+      "sha256": "2f318fea3b077754f9aea84c4ce117a6161ceedd89cc28edeadb3c75964d968c",
+      "encrypted": true,
+      "wrappedKey": "wcDMA0K3SMKDFFIYAQv/elO39GLNNMLQcGGO+Vp3r0A52LpROEe1U0zm93WIOAlItJn72CsCYbsgnghL7QKS33k5L0c06annmsYgGQ5MabTbAVUhTowaxY3izC6Ur27SO/J/hhLqdxeMcknkHSUIGVS1Y53Eo2a72WinKfuIdC9vf8uWEldJDpk6HjqKu5CbjTIf+TOI0rAd9K7sA4OifdXoAP571AakV6VzfL4s9onLntvvR8lFzXm8n+Lyq8/qU6rmtBdGKsFgevZ2eKJv7/4AaWJF0e58VCyxZ8xXbHYBgBI+WvMCEdpY6LQBNXOy6ar4jOT5ImI1eJxRBH+hks36HUeGCUHc7iGhlj30zwpPQSy/zbY7P7lRMBxu2CLJRvSgVLWhoeDzrKcEZhy2Z3HB7M3QW+2Qkxn3E5Zja+JFT5J2CQWG+qu4mcHUJl5/O6FbhRe2vRSBfn7Bq5bxJtO2K0Srxya2AXxJ6fF+Qzn8ND0b3rWA2MtC/pHndg2FLNY5UWijpeGDBWomsvxq0nEB+b++CLm81W/C5+l56YTT1fHnMn0XhajYoX6z4tpCewsh+S98sYOght+zNygyYB6PbF90n+maYA/ZH0gB/p0Kow1PEq+Rx2RwHFq+HoMaDLSyX1cQ7PeE5MdvXeYuQ7ujXLq0qgUYmPqEp+ONmc8ETQ=="
+    },
     {
       "id": "0.0.132",
       "label": "Beta-4.4",
