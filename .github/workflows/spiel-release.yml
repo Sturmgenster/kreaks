@@ -1,0 +1,34 @@
+# Lädt Spieldateien als GitHub Release hoch.
+# Ablauf: Ein Zweig "upload/<irgendwas>" mit dem Ordner spiel-upload/ wird gepusht.
+#   spiel-upload/KREAKS-<Version>.kreaks   die Spieldateien
+#   spiel-upload/meta.txt                  Zeilen "Version|Name", z. B. "0.0.132|Beta-4.4"
+# Für jede Datei entsteht das Release v<Version> mit der Datei als Anhang. Danach wird der Zweig gelöscht.
+name: Spieldateien als Release
+on:
+  push:
+    branches: ['upload/**']
+permissions:
+  contents: write
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Releases anlegen
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          for f in spiel-upload/KREAKS-*.kreaks; do
+            id=$(basename "$f" .kreaks); id=${id#KREAKS-}
+            label=$(grep "^$id|" spiel-upload/meta.txt | cut -d'|' -f2 || true)
+            if gh release view "v$id" >/dev/null 2>&1; then
+              gh release upload "v$id" "$f" --clobber
+            else
+              gh release create "v$id" "$f" --target main --title "KREAKS ${label:-$id} ($id)" --notes "Spieldatei für den KREAKS-Launcher (${label:-$id}). Verschlüsselt, nur über den Launcher spielbar."
+            fi
+            echo "fertig: v$id"
+          done
+      - name: Upload-Zweig löschen
+        if: always()
+        run: git push origin --delete "${GITHUB_REF_NAME}"
