@@ -36,33 +36,7 @@ function dgGen(g){const r=mulberry32(g.seed>>>0),N=DG_N,vis=new Set(),edges=new 
   const rooms=[];for(let c=0;c<N*N;c++){const k=r();rooms.push({c,i:Math.floor(c/N),j:c%N,mob:c!==start&&c!==boss&&k<.65,trap:c!==start&&c!==boss&&r()<.35,chest:c!==start&&c!==boss&&r()<.22,lever:c===lever});}
   return{N,edges,start,boss,gate,lever,rooms,r};}
 function dgOrigin(g,G){const sx=(G.start/G.N|0),sz=G.start%G.N;return[g.x-(sx+.5)*DG_C,g.z-(sz+.5)*DG_C];}
-function dgBuild(g){const M=dgMats(),G=dgGen(g),[ox,oz]=dgOrigin(g,G),grp=new THREE.Group(),N=G.N,W=N*DG_C,st=(FLAGS.dgs=FLAGS.dgs||{})[g.id]=FLAGS.dgs[g.id]||{};
-  DGX.d={g,G,ox,oz,W,st};DGX.grp=grp;DGX.sol=[];DGX.ents=[];DGX.traps=[];DGX.chests=[];
-  const box=(w,h,d,m,x,y,z)=>{const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);o.position.set(x,y,z);grp.add(o);return o;};
-  const sol=(x,z,hw,hd,y0,y1)=>{const b=solAdd({x,z,hw,hd,y0,y1,rot:0,solid:1,dg:1});DGX.sol.push(b);return b;};
-  const fl=new THREE.Mesh(new THREE.PlaneGeometry(W,W),M.floor);fl.rotation.x=-Math.PI/2;fl.position.set(ox+W/2,DG_Y,oz+W/2);grp.add(fl);
-  const ce=new THREE.Mesh(new THREE.PlaneGeometry(W,W),M.ceil);ce.rotation.x=Math.PI/2;ce.position.set(ox+W/2,DG_Y+DG_H,oz+W/2);grp.add(ce);
-  const cc=(i,j)=>[ox+(i+.5)*DG_C,oz+(j+.5)*DG_C],has=(a,b)=>G.edges.has(a<b?a+','+b:b+','+a);
-  // Wände (Außenrand und zwischen nicht verbundenen Räumen, Türöffnungen 3 m)
-  const wallX=(x,z0,z1,door)=>{const L=z1-z0,y=DG_Y+DG_H/2;if(!door){box(1,DG_H,L,M.wall,x,y,(z0+z1)/2);sol(x,(z0+z1)/2,.5,L/2,DG_Y,DG_Y+DG_H);return;}const s=(L-3)/2;box(1,DG_H,s,M.wall,x,y,z0+s/2);box(1,DG_H,s,M.wall,x,y,z1-s/2);sol(x,z0+s/2,.5,s/2,DG_Y,DG_Y+DG_H);sol(x,z1-s/2,.5,s/2,DG_Y,DG_Y+DG_H);box(1,1,3,M.wall,x,DG_Y+DG_H-.5,(z0+z1)/2);};
-  const wallZ=(z,x0,x1,door)=>{const L=x1-x0,y=DG_Y+DG_H/2;if(!door){box(L,DG_H,1,M.wall,(x0+x1)/2,y,z);sol((x0+x1)/2,z,L/2,.5,DG_Y,DG_Y+DG_H);return;}const s=(L-3)/2;box(s,DG_H,1,M.wall,x0+s/2,y,z);box(s,DG_H,1,M.wall,x1-s/2,y,z);sol(x0+s/2,z,s/2,.5,DG_Y,DG_Y+DG_H);sol(x1-s/2,z,s/2,.5,DG_Y,DG_Y+DG_H);box(3,1,1,M.wall,(x0+x1)/2,DG_Y+DG_H-.5,z);};
-  for(let i=0;i<=N;i++)for(let j=0;j<N;j++){const x=ox+i*DG_C,z0=oz+j*DG_C,z1=z0+DG_C;if(i===0||i===N){wallX(x,z0,z1,false);continue;}const a=(i-1)*N+j,b=i*N+j;wallX(x,z0,z1,has(a,b));
-    if(G.gate===(a<b?a+','+b:b+','+a))dgGate(x,(z0+z1)/2,true);}
-  for(let j=0;j<=N;j++)for(let i=0;i<N;i++){const z=oz+j*DG_C,x0=ox+i*DG_C,x1=x0+DG_C;if(j===0||j===N){wallZ(z,x0,x1,false);continue;}const a=i*N+j-1,b=i*N+j;wallZ(z,x0,x1,has(a,b));
-    if(G.gate===(a<b?a+','+b:b+','+a))dgGate((x0+x1)/2,z,false);}
-  // Räume
-  const r=mulberry32((g.seed^0x5bd1)>>>0);
-  for(const R of G.rooms){const[cx,cz]=cc(R.i,R.j);
-    for(const[dx,dz]of[[-DG_C/2+.6,0],[DG_C/2-.6,0]]){box(.15,.5,.15,M.wood,cx+dx,DG_Y+2.6,cz+dz);const f=box(.22,.3,.22,M.fire,cx+dx,DG_Y+2.95,cz+dz);DGX.traps.push({fire:f,x:cx+dx,z:cz+dz});}
-    if(R.c===G.start){const s=new THREE.Group();for(let k=0;k<6;k++){const m=new THREE.Mesh(new THREE.BoxGeometry(2.4,.4*(k+1),.6),M.stone);m.position.set(0,.2*(k+1),-k*.6);s.add(m);}s.position.set(cx,DG_Y,cz-2);grp.add(s);DGX.exit={x:cx,z:cz-3.5};continue;}
-    if(R.lever){const L=new THREE.Group(),base=new THREE.Mesh(new THREE.BoxGeometry(.6,.4,.4),M.stone),arm=new THREE.Mesh(new THREE.BoxGeometry(.12,1,.12),M.iron);arm.position.y=.5;const pv=new THREE.Group();pv.add(arm);pv.rotation.z=st.lever?-.7:.7;pv.position.y=.2;L.add(base,pv);L.position.set(cx+DG_C/2-1.3,DG_Y,cz);grp.add(L);DGX.lever={x:cx+DG_C/2-1.3,z:cz,pv};}
-    if(R.trap){for(let k=0;k<2;k++){const tx=cx+(r()-.5)*6,tz=cz+(r()-.5)*6,plate=box(2,.08,2,M.iron,tx,DG_Y+.04,tz),sp=new THREE.Group();for(let a=0;a<4;a++)for(let b=0;b<4;b++){const s2=new THREE.Mesh(new THREE.ConeGeometry(.12,.7,4),M.spike);s2.position.set(-.75+a*.5,0,-.75+b*.5);sp.add(s2);}
-      sp.position.set(tx,DG_Y-.4,tz);grp.add(sp);DGX.traps.push({plate:1,x:tx,z:tz,sp,ph:r()*3});}}
-    if(R.chest&&!(st.ch&&st.ch[R.c]))DGX.chests.push(dgChest(cx+(r()-.5)*5,cz+(r()-.5)*5,R.c,false));
-    if(R.mob&&!st.boss){const n=1+((r()*3)|0),T=['zombie','usks','uska','uskb','uskh','usksa','nskel'];for(let k=0;k<n;k++){const t=r()<.08&&DT.troll?'troll':T[(r()*T.length)|0];if(!DT[t])continue;const e=spawnEnt(t,cx+(r()-.5)*7,cz+(r()-.5)*7,{home:{x:cx,z:cz},cmd:1,aggroT:0});if(t==='troll')e.special=mzTrollAI;e.dormant=true;e.showDormant=true;e.wakeR=12;DGX.ents.push(e);}}
-    if(R.c===G.boss){if(!st.boss){let e;if(r()<.5&&typeof mzSpawnLich==='function'){e=mzSpawnLich(cx,cz,true);e.cmd=1;}else{e=spawnEnt('dgboss',cx,cz,{home:{x:cx,z:cz},cmd:1});}e.dgBoss=1;e.dormant=true;e.showDormant=true;e.wakeR=13;DGX.ents.push(e);}
-      if(!st.loot)DGX.chests.push(dgChest(cx,cz+DG_C/2-2,'boss',true));}}
-  scene.add(grp);DGX.light=new THREE.PointLight(0xffb060,1.6,20,1.5);scene.add(DGX.light);}
+function dgBuild(g){return dg2Build(g);}
 function dgGate(x,z,alongZ){const M=dgMats(),st=DGX.d.st,g=new THREE.Group();for(let k=-1;k<=1;k+=.4){const b=new THREE.Mesh(new THREE.BoxGeometry(.1,DG_H-1,.1),M.iron);b.position.set(alongZ?0:k,(DG_H-1)/2,alongZ?k:0);g.add(b);}
   const bar=new THREE.Mesh(new THREE.BoxGeometry(alongZ?.12:3,.12,alongZ?3:.12),M.iron);bar.position.y=1.6;g.add(bar);g.position.set(x,DG_Y+(st.lever?DG_H-1:0),z);DGX.grp.add(g);
   const s=solAdd({x,z,hw:alongZ?.3:1.5,hd:alongZ?1.5:.3,y0:DG_Y,y1:DG_Y+DG_H,rot:0,solid:1,off:!!st.lever,dg:1});DGX.sol.push(s);DGX.gate={g,s,open:!!st.lever,t:0};}
@@ -75,9 +49,9 @@ function dgLoot(c){const st=DGX.d.st;if(c.open)return;if(c.boss&&!st.boss){toast
   if(c.boss)st.loot=1;else{st.ch=st.ch||{};st.ch[c.key]=1;}renderInv();saveGame();}
 function dgFree(){if(DGX.grp){scene.remove(DGX.grp);DGX.grp.traverse(o=>{if(o.geometry)o.geometry.dispose();});}for(const b of DGX.sol)solDel(b);for(const e of DGX.ents)if(DEM.includes(e))removeEnt(e);
   for(const e of DEM.slice())if(e.fac==='demon'&&e.y<DG_Y+30&&e.y>DG_Y-30)removeEnt(e);if(DGX.light)scene.remove(DGX.light);DGX.grp=null;DGX.sol=[];DGX.ents=[];DGX.traps=[];DGX.chests=[];DGX.gate=null;DGX.lever=null;DGX.light=null;}
-function dgEnter(g){if(P.riding){toast('Steig erst ab');return;}dgBuild(g);DGX.on=true;const s=DGX.exit;P.x=s.x;P.z=s.z+2;P.y=DG_Y+.05;P.vx=P.vy=P.vz=0;P.yaw=0;P.safe=null;curArea=null;setTimeout(checkArea,150);
+function dgEnter(g){if(P.riding){toast('Steig erst ab');return;}dgBuild(g);DGX.on=true;const s=DGX.spawn||{x:DGX.exit.x,z:DGX.exit.z+2,yaw:0};P.x=s.x;P.z=s.z;P.y=DG_Y+.05;P.vx=P.vy=P.vz=0;P.yaw=s.yaw||0;P.safe=null;curArea=null;setTimeout(checkArea,150);
   Snd.click();toast(DGX.d.st.boss?'Das Gewölbe ist still. Der Wächter ist besiegt.':'Ein kalter Hauch zieht durch das Gewölbe …');}
-function dgLeave(dead){const g=DGX.d&&DGX.d.g;dgFree();DGX.on=false;DGX.d=null;if(!dead&&g){const c=Math.cos(g.rot),s=Math.sin(g.rot);P.x=g.x+s*-0+c*0;P.z=g.z+2.5;P.y=getHeight(P.x,P.z)+.1;P.vx=P.vy=P.vz=0;P.safe=[P.x,P.z];}curArea=null;setTimeout(checkArea,150);}
+function dgLeave(dead){const g=DGX.d&&DGX.d.g;dgFree();DGX.on=false;DGX.d=null;if(!dead&&g){const c=Math.cos(g.rot),s=Math.sin(g.rot);P.x=g.x-s*(g.ed||2.8);P.z=g.z+c*(g.ed||2.8);P.yaw=Math.atan2(s,-c);P.y=getHeight(P.x,P.z)+.1;P.vx=P.vy=P.vz=0;P.safe=[P.x,P.z];}curArea=null;setTimeout(checkArea,150);}
 // ---------- Boden, Gebiet, Licht ----------
 const dgIn=(x,z)=>DGX.on&&DGX.d&&x>DGX.d.ox-2&&x<DGX.d.ox+DGX.d.W+2&&z>DGX.d.oz-2&&z<DGX.d.oz+DGX.d.W+2;
 {const a=groundAt;groundAt=function(x,z,feet){if(DGX.on&&dgIn(x,z)&&(feet==null||feet<DG_Y+40)){let g=DG_Y;for(const b of solNear(x,z)){if(b.off||!b.walk)continue;const[lx,lz]=solLoc(b,x,z);if(Math.abs(lx)<=b.hw&&Math.abs(lz)<=b.hd){const t=solTop(b,lz);if(t>g&&(feet==null||t<=feet+.65))g=t;}}return g;}return a(x,z,feet);};}

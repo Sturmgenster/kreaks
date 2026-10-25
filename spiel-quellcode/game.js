@@ -5382,7 +5382,7 @@ function bloodTonight(){const clk=FLAGS.clock||0,n=clk<720?FLAGS.day-1:FLAGS.day
 let mqHudT=0;
 function renderMQ(force){const box=$('mqHud');if(!box)return;const o=mqObjective();box.hidden=!o||state==='menu'||mqStage()<0;if(box.hidden){positionQuests();return;}
   const s=MQ[mqStage()],key=s.id+'|'+o.t+'|'+(o.list?o.list.map(l=>(l.done?1:0)+(l.step?l.step[0]:'')).join(','):'');
-  if(force||box.dataset.k!==key){box.dataset.k=key;box.innerHTML=`<h4>Kapitel ${['I','II','III','IV','V'][s.ch]} · ${CHAPTERS[s.ch]}</h4><div class="mq-o"><span id="mqArrow">▲</span><b>${o.t}</b><em id="mqDist"></em></div>`+
+  if(force||box.dataset.k!==key){box.dataset.k=key;box.innerHTML=`<h4>Kapitel ${['I','II','III','IV','V','VI','VII','VIII'][s.ch]} · ${CHAPTERS[s.ch]}</h4><div class="mq-o"><span id="mqArrow">▲</span><b>${o.t}</b><em id="mqDist"></em></div>`+
     (o.list?'<ul>'+o.list.map(l=>`<li class="${l.done?'done':''}"><i>${l.done?'✓':'•'}</i><span><b>${l.n}</b> · ${l.done?'gefunden':l.step?l.step[0]:l.w}</span></li>`).join('')+'</ul>':'');positionQuests();}
   {const bb=!$('bossBar').hidden,t=bb?'128px':'';if(box.style.top!==t){box.style.top=t;positionQuests();}}
   const ar=$('mqArrow'),di=$('mqDist');if(!ar)return;
@@ -5390,7 +5390,7 @@ function renderMQ(force){const box=$('mqHud');if(!box)return;const o=mqObjective
   else{ar.style.visibility='hidden';di.textContent='';}}
 function positionQuests(){const q=$('quests'),m=$('mqHud');if(!q||!m)return;q.style.top=m.hidden?'':(m.offsetTop+m.offsetHeight+10)+'px';}
 function mqSet(n,quiet){const old=mqStage();FLAGS.mq=n;const s=MQ[n];if(!s)return;if(old<0||MQ[old].ch!==s.ch)chapterCard(s.ch);else if(!quiet){toast('Neues Ziel: '+(mqObjective()||{t:''}).t);Snd.chime();}renderMQ(true);saveGame();}
-function chapterCard(ch){const el=$('chapterCard');$('ccNum').textContent='Kapitel '+['I','II','III','IV','V'][ch];$('ccTitle').textContent=CHAPTERS[ch];el.hidden=false;el.classList.remove('on');void el.offsetWidth;el.classList.add('on');Snd.chime();
+function chapterCard(ch){const el=$('chapterCard');$('ccNum').textContent='Kapitel '+['I','II','III','IV','V','VI','VII','VIII'][ch];$('ccTitle').textContent=CHAPTERS[ch];el.hidden=false;el.classList.remove('on');void el.offsetWidth;el.classList.add('on');Snd.chime();
   clearTimeout(el._t);el._t=setTimeout(()=>{el.hidden=true;},5200);}
 
 /* ---- Zwischensequenzen ---- */
@@ -5407,7 +5407,7 @@ function openJournal(){if(state!=='playing')return;state='journal';keys.clear();
 function closeJournal(){show('journal',false);state='playing';lock();updateLockHint();}
 function renderJournal(){const st=mqStage(),o=mqObjective(),L=FLAGS.letters||[];
   let h='';if(st<0)h='<p class="jr-empty">Noch hat deine Geschichte nicht begonnen.</p>';
-  else{for(let c=0;c<=MQ[st].ch;c++){h+=`<h3>Kapitel ${['I','II','III','IV','V'][c]} · ${CHAPTERS[c]}</h3>`;const done=JR_DONE.filter(x=>x[0]===c&&mqAt(x[1]));
+  else{for(let c=0;c<=MQ[st].ch;c++){h+=`<h3>Kapitel ${['I','II','III','IV','V','VI','VII','VIII'][c]} · ${CHAPTERS[c]}</h3>`;const done=JR_DONE.filter(x=>x[0]===c&&mqAt(x[1]));
       h+='<ul>'+done.map(x=>`<li class="done"><i>✓</i>${x[2]}</li>`).join('')+(c===MQ[st].ch&&o?`<li class="cur"><i>➜</i>${o.t}</li>`+(o.list?o.list.map(l=>`<li class="sub ${l.done?'done':''}"><i>${l.done?'✓':'•'}</i>${l.n}: ${l.done?'gefunden':l.step?l.step[0]:l.w}</li>`).join(''):''):'')+'</ul>';}}
   $('jrQuest').innerHTML=h;
   const F=found(),items=[['q_hilt','Griff',F.hilt],['q_blade','Klinge',F.blade],['q_heart','Mondherz',F.heart],['q_ember','Höllenglut',F.ember],['q_dheart',`Dämonenherzen ×${FLAGS.hearts||0}`,FLAGS.hearts>0]].filter(x=>x[2]);

@@ -1,7 +1,20 @@
 {
-  "latest": "0.0.133",
+  "latest": "0.0.140",
   "latestBeta": null,
   "versions": [
+    {
+      "id": "0.0.140",
+      "label": "Beta-5.0",
+      "name": "KREAKS Beta-5.0",
+      "channel": "release",
+      "date": "2026-10-25",
+      "notes": "Akt II – Der Schlafende: Die Geschichte geht nach Shikaya weiter. Belausche die Schweigenden, hol die drei Siegelsteine aus den Gewölben und stell dich an der Stillen Senke Hohepriester Morvek und Vorgrath. Neu: Schwarze Bretter mit täglichen Aufträgen in Dörfern, Coda und Sturmburg. Bestiarium und 34 Errungenschaften (auch schwere) in der Chronik (J). Außerdem: lebendigere Dörfer mit Straßen, überarbeitete Gewölbe mit mehreren Ebenen und begehbaren Eingängen, Fallschaden, PvP im Mehrspieler und ein neues Treffer-Gefühl.",
+      "url": "https://github.com/Sturmgenster/kreaks/releases/download/v0.0.140/KREAKS-0.0.140.kreaks",
+      "size": 53864549,
+      "sha256": "ef42409edf2205ff4522e6e4f5ccc651d6de89e0d9bd6c67b34370cf04571a9e",
+      "encrypted": true,
+      "wrappedKey": "wcDMA0K3SMKDFFIYAQv+JQ0fnkcQmtNYCjG9L+cyD5KbM9OqLVZ0k1rmCaX1+EhGu+/rr5D2g33k32p5Rm0WHzW78OMJqMffL5AptP9phhowT7xcJKpWJOX2K+qFJy47f15mQRCasu/v/MKXsTkXZBZXy97AscI23y15gCpPFr+F87rddEehfZe/eJarzjVZeSG9AZSnzOLn0z76TByrUkVf07mI7WZtGhts64z4IlUN643L91teo0SKnX3jQia60S4W4snH2srnDuNESlLbT+MctfVeFAaBmhGnAO0S+x6zvzFy38WXLovo0pevc2rh497VldMVPu101ahTYrU8SFAbyWm/H/sCgaQfAQCwcyxEeSglwFgfZJEyxv4FbZsoFmy0rQvFS1SbfMFvsa/zw9Jh7Lb374Avp12GwkLJfUA+8QY9FtN7beQQTYTrymcgZGou/wriulgAF4BigvseNXC/xZtGYDFebQ/h/zAN752T39e6Vn6jGln3XIushkRGAMqG0tboryqnvVQh0V1q0nEBVHRALjd1Lx1ptkMen6VQUZlTWItKF2YSZgk6QKS+VhBqqG5nmnB4QvlFTmwbHer7lw+vHw/+Js4hOu56SoY8kfVSuGK0cUBTp8EdSH/Cc8vfjFDeltcWSh+wocd9T2Djgg27caZOwXN/PpjjFuYIAg=="
+    },
     {
       "id": "0.0.133",
       "label": "Beta-4.5",
